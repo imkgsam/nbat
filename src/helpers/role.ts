@@ -1,8 +1,8 @@
-import { RoleCode } from '../database/model/Role';
+import { RoleCodeEnum } from '../database/model/Role';
 import { RoleRequest } from 'app-request';
 import { Response, NextFunction } from 'express';
 
-export default (...roleCodes: RoleCode[]) =>
+export default (...roleCodes: RoleCodeEnum[]) =>
   (req: RoleRequest, res: Response, next: NextFunction) => {
     req.currentRoleCodes = roleCodes;
     next();

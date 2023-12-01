@@ -9,7 +9,7 @@ import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
 import bcrypt from 'bcrypt';
 import _ from 'lodash';
-import { RoleCode } from '../../database/model/Role';
+import { RoleCodeEnum } from '../../database/model/Role';
 import role from '../../helpers/role';
 import authorization from '../../auth/authorization';
 import authentication from '../../auth/authentication';
@@ -17,13 +17,17 @@ import KeystoreRepo from '../../database/repository/KeystoreRepo';
 const router = express.Router();
 
 //----------------------------------------------------------------
-router.use(authentication, role(RoleCode.ADMIN), authorization);
+router.use(authentication, role(RoleCodeEnum.ADMIN), authorization);
 //----------------------------------------------------------------
 
 router.post(
   '/user/assign',
   validator(schema.credential),
   asyncHandler(async (req: RoleRequest, res) => {
+    /*
+     * #swagger.description = 'admin reset password for any user'
+     * #swagger.tags = ['admin']
+     */
     const user = await UserRepo.findByEmail(req.body.email);
     if (!user) throw new BadRequestError('User do not exists');
 

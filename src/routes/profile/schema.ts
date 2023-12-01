@@ -6,7 +6,6 @@ export default {
     id: JoiObjectId().required(),
   }),
   profile: Joi.object().keys({
-    name: Joi.string().min(1).max(200).optional(),
-    profilePicUrl: Joi.string().uri().optional(),
+    name: Joi.string().min(1).max(200).optional()
   }),
 };

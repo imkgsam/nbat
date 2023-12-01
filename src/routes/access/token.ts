@@ -12,7 +12,7 @@ import {
   createTokens,
   getAccessToken,
 } from '../../auth/authUtils';
-import validator, { ValidationSource } from '../../helpers/validator';
+import validator, { ValidationSourceEnum } from '../../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
 
@@ -20,7 +20,7 @@ const router = express.Router();
 
 router.post(
   '/refresh',
-  validator(schema.auth, ValidationSource.HEADER),
+  validator(schema.auth, ValidationSourceEnum.HEADER),
   validator(schema.refreshToken),
   asyncHandler(async (req: ProtectedRequest, res) => {
     req.accessToken = getAccessToken(req.headers.authorization); // Express headers are auto converted to lowercase

@@ -18,7 +18,12 @@ const doc = {
             bearerAuth: {
                 type: 'http',
                 scheme: 'bearer',
-            }
+            },
+            apiKey : {
+              type: 'apiKey',
+              name: 'x-api-key',
+              in: 'header',
+          },
         }
     }
 };

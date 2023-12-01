@@ -9,7 +9,7 @@ import {
   ForbiddenResponse,
 } from './ApiResponse';
 
-export enum ErrorType {
+export enum ErrorTypeEnum {
   BAD_TOKEN = 'BadTokenError',
   TOKEN_EXPIRED = 'TokenExpiredError',
   UNAUTHORIZED = 'AuthFailureError',
@@ -23,27 +23,27 @@ export enum ErrorType {
 }
 
 export abstract class ApiError extends Error {
-  constructor(public type: ErrorType, public message: string = 'error') {
+  constructor(public type: ErrorTypeEnum, public message: string = 'error') {
     super(type);
   }
 
   public static handle(err: ApiError, res: Response): Response {
     switch (err.type) {
-      case ErrorType.BAD_TOKEN:
-      case ErrorType.TOKEN_EXPIRED:
-      case ErrorType.UNAUTHORIZED:
+      case ErrorTypeEnum.BAD_TOKEN:
+      case ErrorTypeEnum.TOKEN_EXPIRED:
+      case ErrorTypeEnum.UNAUTHORIZED:
         return new AuthFailureResponse(err.message).send(res);
-      case ErrorType.ACCESS_TOKEN:
+      case ErrorTypeEnum.ACCESS_TOKEN:
         return new AccessTokenErrorResponse(err.message).send(res);
-      case ErrorType.INTERNAL:
+      case ErrorTypeEnum.INTERNAL:
         return new InternalErrorResponse(err.message).send(res);
-      case ErrorType.NOT_FOUND:
-      case ErrorType.NO_ENTRY:
-      case ErrorType.NO_DATA:
+      case ErrorTypeEnum.NOT_FOUND:
+      case ErrorTypeEnum.NO_ENTRY:
+      case ErrorTypeEnum.NO_DATA:
         return new NotFoundResponse(err.message).send(res);
-      case ErrorType.BAD_REQUEST:
+      case ErrorTypeEnum.BAD_REQUEST:
         return new BadRequestResponse(err.message).send(res);
-      case ErrorType.FORBIDDEN:
+      case ErrorTypeEnum.FORBIDDEN:
         return new ForbiddenResponse(err.message).send(res);
       default: {
         let message = err.message;
@@ -57,60 +57,60 @@ export abstract class ApiError extends Error {
 
 export class AuthFailureError extends ApiError {
   constructor(message = 'Invalid Credentials') {
-    super(ErrorType.UNAUTHORIZED, message);
+    super(ErrorTypeEnum.UNAUTHORIZED, message);
   }
 }
 
 export class InternalError extends ApiError {
   constructor(message = 'Internal error') {
-    super(ErrorType.INTERNAL, message);
+    super(ErrorTypeEnum.INTERNAL, message);
   }
 }
 
 export class BadRequestError extends ApiError {
   constructor(message = 'Bad Request') {
-    super(ErrorType.BAD_REQUEST, message);
+    super(ErrorTypeEnum.BAD_REQUEST, message);
   }
 }
 
 export class NotFoundError extends ApiError {
   constructor(message = 'Not Found') {
-    super(ErrorType.NOT_FOUND, message);
+    super(ErrorTypeEnum.NOT_FOUND, message);
   }
 }
 
 export class ForbiddenError extends ApiError {
   constructor(message = 'Permission denied') {
-    super(ErrorType.FORBIDDEN, message);
+    super(ErrorTypeEnum.FORBIDDEN, message);
   }
 }
 
 export class NoEntryError extends ApiError {
   constructor(message = "Entry don't exists") {
-    super(ErrorType.NO_ENTRY, message);
+    super(ErrorTypeEnum.NO_ENTRY, message);
   }
 }
 
 export class BadTokenError extends ApiError {
   constructor(message = 'Token is not valid') {
-    super(ErrorType.BAD_TOKEN, message);
+    super(ErrorTypeEnum.BAD_TOKEN, message);
   }
 }
 
 export class TokenExpiredError extends ApiError {
   constructor(message = 'Token is expired') {
-    super(ErrorType.TOKEN_EXPIRED, message);
+    super(ErrorTypeEnum.TOKEN_EXPIRED, message);
   }
 }
 
 export class NoDataError extends ApiError {
   constructor(message = 'No data available') {
-    super(ErrorType.NO_DATA, message);
+    super(ErrorTypeEnum.NO_DATA, message);
   }
 }
 
 export class AccessTokenError extends ApiError {
   constructor(message = 'Invalid access token') {
-    super(ErrorType.ACCESS_TOKEN, message);
+    super(ErrorTypeEnum.ACCESS_TOKEN, message);
   }
 }

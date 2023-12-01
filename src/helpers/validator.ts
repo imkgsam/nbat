@@ -4,7 +4,7 @@ import Logger from '../core/Logger';
 import { BadRequestError } from '../core/ApiError';
 import { Types } from 'mongoose';
 
-export enum ValidationSource {
+export enum ValidationSourceEnum {
   BODY = 'body',
   HEADER = 'headers',
   QUERY = 'query',
@@ -32,7 +32,7 @@ export const JoiAuthBearer = () =>
 
 export default (
     schema: Joi.AnySchema,
-    source: ValidationSource = ValidationSource.BODY,
+    source: ValidationSourceEnum = ValidationSourceEnum.BODY,
   ) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {

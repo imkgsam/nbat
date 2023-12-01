@@ -11,6 +11,7 @@ import Logger from './Logger';
  * audience 	— Basically identity of the intended recipient of the token.
  * expiresIn	— Expiration time after which the token will be invalid.
  * algorithm 	— Encryption algorithm to be used to protect the token.
+ * issuedAt   — token issued at
  */
 
 export class JwtPayload {
@@ -37,13 +38,14 @@ export class JwtPayload {
   }
 }
 
+//ace,11.15,读取本地公钥
 async function readPublicKey(): Promise<string> {
   return promisify(readFile)(
     path.join(__dirname, '../../keys/public.pem'),
     'utf8',
   );
 }
-
+//ace,11.15,读取本地密钥
 async function readPrivateKey(): Promise<string> {
   return promisify(readFile)(
     path.join(__dirname, '../../keys/private.pem'),

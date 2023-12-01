@@ -1,7 +1,7 @@
 import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
 import asyncHandler from '../../helpers/asyncHandler';
-import validator, { ValidationSource } from '../../helpers/validator';
+import validator, { ValidationSourceEnum } from '../../helpers/validator';
 import schema from './schema';
 import { NotFoundError } from '../../core/ApiError';
 import BlogRepo from '../../database/repository/BlogRepo';
@@ -17,7 +17,7 @@ router.use('/editor', editor);
 
 router.get(
   '/url',
-  validator(schema.blogUrl, ValidationSource.QUERY),
+  validator(schema.blogUrl, ValidationSourceEnum.QUERY),
   asyncHandler(async (req, res) => {
     const blogUrl = req.query.endpoint as string;
     let blog = await BlogCache.fetchByUrl(blogUrl);
@@ -34,7 +34,7 @@ router.get(
 
 router.get(
   '/id/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req, res) => {
     const blogId = new Types.ObjectId(req.params.id);
     let blog = await BlogCache.fetchById(blogId);

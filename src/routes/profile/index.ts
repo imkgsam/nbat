@@ -23,11 +23,12 @@ router.get(
 
     return new SuccessResponse(
       'success',
-      _.pick(user, ['name', 'email', 'profilePicUrl', 'roles']),
+      _.pick(user, ['name', 'email', 'roles']),
     ).send(res);
   }),
 );
 
+// ace,11.17,put route hanle update userprofile
 router.put(
   '/',
   validator(schema.profile),
@@ -35,12 +36,11 @@ router.put(
     const user = await UserRepo.findPrivateProfileById(req.user._id);
     if (!user) throw new BadRequestError('User not registered');
 
-    if (req.body.name) user.name = req.body.name;
-    if (req.body.profilePicUrl) user.profilePicUrl = req.body.profilePicUrl;
+    if (req.body.name) user.accountName = req.body.name;
 
     await UserRepo.updateInfo(user);
 
-    const data = _.pick(user, ['name', 'profilePicUrl']);
+    const data = _.pick(user, ['name']);
 
     return new SuccessResponse('Profile updated', data).send(res);
   }),

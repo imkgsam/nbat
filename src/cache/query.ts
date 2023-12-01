@@ -1,7 +1,7 @@
 import cache from '.';
 import { DynamicKeyType, Key } from './keys';
 
-export enum TYPES {
+export enum RedisTypesEnum {
   LIST = 'list',
   STRING = 'string',
   HASH = 'hash',
@@ -41,7 +41,7 @@ export async function setJson(
 
 export async function getJson<T>(key: Key | DynamicKeyType) {
   const type = await cache.type(key);
-  if (type !== TYPES.STRING) return null;
+  if (type !== RedisTypesEnum.STRING) return null;
 
   const json = await getValue(key);
   if (json) return JSON.parse(json) as T;
@@ -67,7 +67,7 @@ export async function setList(
 
 export async function addToList(key: Key | DynamicKeyType, value: any) {
   const type = await cache.type(key);
-  if (type !== TYPES.LIST) return null;
+  if (type !== RedisTypesEnum.LIST) return null;
 
   const item = JSON.stringify(value);
   return await cache.rPushX(key, item);
@@ -79,7 +79,7 @@ export async function getListRange<T>(
   end = -1,
 ) {
   const type = await cache.type(key);
-  if (type !== TYPES.LIST) return null;
+  if (type !== RedisTypesEnum.LIST) return null;
 
   const list = await cache.lRange(key, start, end);
   if (!list) return null;
@@ -108,7 +108,7 @@ export async function addToOrderedSet(
   items: Array<{ score: number; value: any }>,
 ) {
   const type = await cache.type(key);
-  if (type !== TYPES.ZSET) return null;
+  if (type !== RedisTypesEnum.ZSET) return null;
 
   for (const item of items) {
     item.value = JSON.stringify(item.value);
@@ -118,7 +118,7 @@ export async function addToOrderedSet(
 
 export async function removeFromOrderedSet(key: Key, ...items: any[]) {
   const type = await cache.type(key);
-  if (type !== TYPES.ZSET) return null;
+  if (type !== RedisTypesEnum.ZSET) return null;
 
   items = items.map((item) => JSON.stringify(item));
   return await cache.zRem(key, items);
@@ -126,7 +126,7 @@ export async function removeFromOrderedSet(key: Key, ...items: any[]) {
 
 export async function getOrderedSetRange<T>(key: Key, start = 0, end = -1) {
   const type = await cache.type(key);
-  if (type !== TYPES.ZSET) return null;
+  if (type !== RedisTypesEnum.ZSET) return null;
 
   const set = await cache.zRangeWithScores(key, start, end);
 
@@ -139,7 +139,7 @@ export async function getOrderedSetRange<T>(key: Key, start = 0, end = -1) {
 
 export async function getOrderedSetMemberScore(key: Key, member: any) {
   const type = await cache.type(key);
-  if (type !== TYPES.ZSET) return null;
+  if (type !== RedisTypesEnum.ZSET) return null;
 
   return await cache.zScore(key, JSON.stringify(member));
 }

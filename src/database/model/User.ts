@@ -6,27 +6,24 @@ export const COLLECTION_NAME = 'users';
 
 export default interface User {
   _id: Types.ObjectId;
-  name?: string;
-  profilePicUrl?: string;
+  accountName?: string;
   email?: string;
   password?: string;
   roles: Role[];
-  verified?: boolean;
-  status?: boolean;
+  meta:{
+    verified?: boolean;
+    disabled?: boolean;
+  },
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 const schema = new Schema<User>(
   {
-    name: {
+    accountName: {
       type: Schema.Types.String,
       trim: true,
       maxlength: 200,
-    },
-    profilePicUrl: {
-      type: Schema.Types.String,
-      trim: true,
     },
     email: {
       type: Schema.Types.String,
@@ -49,13 +46,15 @@ const schema = new Schema<User>(
       required: true,
       select: false,
     },
-    verified: {
-      type: Schema.Types.Boolean,
-      default: false,
-    },
-    status: {
-      type: Schema.Types.Boolean,
-      default: true,
+    meta:{
+      verified: {
+        type: Schema.Types.Boolean,
+        default: false,
+      },
+      disabled: {
+        type: Schema.Types.Boolean,
+        default: true,
+      },
     },
     createdAt: {
       type: Schema.Types.Date,

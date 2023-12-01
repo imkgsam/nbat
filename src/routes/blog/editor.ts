@@ -3,9 +3,9 @@ import { SuccessResponse, SuccessMsgResponse } from '../../core/ApiResponse';
 import { ProtectedRequest } from 'app-request';
 import { BadRequestError, ForbiddenError } from '../../core/ApiError';
 import BlogRepo from '../../database/repository/BlogRepo';
-import { RoleCode } from '../../database/model/Role';
+import { RoleCodeEnum } from '../../database/model/Role';
 import { Types } from 'mongoose';
-import validator, { ValidationSource } from '../../helpers/validator';
+import validator, { ValidationSourceEnum } from '../../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
 import authentication from '../../auth/authentication';
@@ -17,14 +17,14 @@ const router = express.Router();
 /*-------------------------------------------------------------------------*/
 router.use(
   authentication,
-  role(RoleCode.ADMIN, RoleCode.EDITOR),
+  role(RoleCodeEnum.ADMIN, RoleCodeEnum.EDITOR),
   authorization,
 );
 /*-------------------------------------------------------------------------*/
 
 router.put(
   '/publish/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const blog = await BlogRepo.findBlogAllDataById(
       new Types.ObjectId(req.params.id),
@@ -44,7 +44,7 @@ router.put(
 
 router.put(
   '/unpublish/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const blog = await BlogRepo.findBlogAllDataById(
       new Types.ObjectId(req.params.id),
@@ -62,7 +62,7 @@ router.put(
 
 router.delete(
   '/id/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const blog = await BlogRepo.findBlogAllDataById(
       new Types.ObjectId(req.params.id),
@@ -102,7 +102,7 @@ router.get(
 
 router.get(
   '/id/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const blog = await BlogRepo.findBlogAllDataById(
       new Types.ObjectId(req.params.id),

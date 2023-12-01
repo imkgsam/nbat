@@ -1,7 +1,7 @@
 import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
 import asyncHandler from '../../helpers/asyncHandler';
-import validator, { ValidationSource } from '../../helpers/validator';
+import validator, { ValidationSourceEnum } from '../../helpers/validator';
 import schema from './schema';
 import { BadRequestError } from '../../core/ApiError';
 import BlogRepo from '../../database/repository/BlogRepo';
@@ -13,8 +13,8 @@ const router = express.Router();
 
 router.get(
   '/tag/:tag',
-  validator(schema.blogTag, ValidationSource.PARAM),
-  validator(schema.pagination, ValidationSource.QUERY),
+  validator(schema.blogTag, ValidationSourceEnum.PARAM),
+  validator(schema.pagination, ValidationSourceEnum.QUERY),
   asyncHandler(async (req, res) => {
     const blogs = await BlogRepo.findByTagAndPaginated(
       req.params.tag,
@@ -27,7 +27,7 @@ router.get(
 
 router.get(
   '/author/id/:id',
-  validator(schema.authorId, ValidationSource.PARAM),
+  validator(schema.authorId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req, res) => {
     const blogs = await BlogRepo.findAllPublishedForAuthor({
       _id: new Types.ObjectId(req.params.id),
@@ -38,7 +38,7 @@ router.get(
 
 router.get(
   '/latest',
-  validator(schema.pagination, ValidationSource.QUERY),
+  validator(schema.pagination, ValidationSourceEnum.QUERY),
   asyncHandler(async (req, res) => {
     const blogs = await BlogRepo.findLatestBlogs(
       parseInt(req.query.pageNumber as string),
@@ -50,7 +50,7 @@ router.get(
 
 router.get(
   '/similar/id/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req, res) => {
     const blogId = new Types.ObjectId(req.params.id);
     let blogs = await BlogsCache.fetchSimilarBlogs(blogId);

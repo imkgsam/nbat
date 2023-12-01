@@ -3,7 +3,7 @@ import { Schema, model, Types } from 'mongoose';
 export const DOCUMENT_NAME = 'Role';
 export const COLLECTION_NAME = 'roles';
 
-export enum RoleCode {
+export enum RoleCodeEnum {
   LEARNER = 'LEARNER',
   WRITER = 'WRITER',
   EDITOR = 'EDITOR',
@@ -23,7 +23,7 @@ const schema = new Schema<Role>(
     code: {
       type: Schema.Types.String,
       required: true,
-      enum: Object.values(RoleCode),
+      enum: Object.values(RoleCodeEnum),
     },
     status: {
       type: Schema.Types.Boolean,

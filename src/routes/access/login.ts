@@ -11,15 +11,16 @@ import asyncHandler from '../../helpers/asyncHandler';
 import bcrypt from 'bcrypt';
 import { getUserData } from './utils';
 import { PublicRequest } from '../../types/app-request';
+import Logger from '../../core/Logger'
 
 const router = express.Router();
 
 router.post(
-  '/basic',
+  '/email',
   validator(schema.credential),
   asyncHandler(async (req: PublicRequest, res) => {
      /*
-     * #swagger.description = 'user signin'
+     * #swagger.description = 'user login with email and credential'
      * #swagger.tags = ['auth']
      */
     const user = await UserRepo.findByEmail(req.body.email);
@@ -32,6 +33,7 @@ router.post(
     await KeystoreRepo.create(user, accessTokenKey, refreshTokenKey);
     const tokens = await createTokens(user, accessTokenKey, refreshTokenKey);
     const userData = await getUserData(user);
+    Logger.info(`User Login as ${user.accountName}`)
     new SuccessResponse('Login Success', {
       user: userData,
       tokens: tokens,

@@ -4,9 +4,9 @@ import { ProtectedRequest } from 'app-request';
 import { BadRequestError, ForbiddenError } from '../../core/ApiError';
 import BlogRepo from '../../database/repository/BlogRepo';
 import Blog from '../../database/model/Blog';
-import { RoleCode } from '../../database/model/Role';
+import { RoleCodeEnum } from '../../database/model/Role';
 import { Types } from 'mongoose';
-import validator, { ValidationSource } from '../../helpers/validator';
+import validator, { ValidationSourceEnum } from '../../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
 import authentication from '../../auth/authentication';
@@ -16,7 +16,7 @@ import role from '../../helpers/role';
 const router = express.Router();
 
 /*-------------------------------------------------------------------------*/
-router.use(authentication, role(RoleCode.WRITER), authorization);
+router.use(authentication, role(RoleCodeEnum.WRITER), authorization);
 /*-------------------------------------------------------------------------*/
 
 const formatEndpoint = (endpoint: string) =>
@@ -50,7 +50,7 @@ router.post(
 
 router.put(
   '/id/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   validator(schema.blogUpdate),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const blog = await BlogRepo.findBlogAllDataById(
@@ -81,7 +81,7 @@ router.put(
 
 router.put(
   '/submit/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const blog = await BlogRepo.findBlogAllDataById(
       new Types.ObjectId(req.params.id),
@@ -100,7 +100,7 @@ router.put(
 
 router.put(
   '/withdraw/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const blog = await BlogRepo.findBlogAllDataById(
       new Types.ObjectId(req.params.id),
@@ -119,7 +119,7 @@ router.put(
 
 router.delete(
   '/id/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const blog = await BlogRepo.findBlogAllDataById(
       new Types.ObjectId(req.params.id),
@@ -167,7 +167,7 @@ router.get(
 
 router.get(
   '/id/:id',
-  validator(schema.blogId, ValidationSource.PARAM),
+  validator(schema.blogId, ValidationSourceEnum.PARAM),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const blog = await BlogRepo.findBlogAllDataById(
       new Types.ObjectId(req.params.id),

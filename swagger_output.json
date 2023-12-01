@@ -32,7 +32,7 @@
                   "password": {
                     "example": "any"
                   },
-                  "name": {
+                  "accountName": {
                     "example": "any"
                   },
                   "profilePicUrl": {
@@ -120,7 +120,10 @@
     },
     "/credential/user/assign": {
       "post": {
-        "description": "",
+        "tags": [
+          "admin"
+        ],
+        "description": "admin reset password for any user",
         "responses": {
           "default": {
             "description": ""
@@ -635,6 +638,11 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer"
+      },
+      "apiKey": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
       }
     }
   }

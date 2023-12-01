@@ -10,7 +10,7 @@ import validator from '../../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
 import bcrypt from 'bcrypt';
-import { RoleCode } from '../../database/model/Role';
+import { RoleCodeEnum } from '../../database/model/Role';
 import { getUserData } from './utils';
 
 const router = express.Router();
@@ -28,14 +28,13 @@ router.post(
 
     const { user: createdUser, keystore } = await UserRepo.create(
       {
-        name: req.body.name,
+        accountName: req.body.accountName,
         email: req.body.email,
-        profilePicUrl: req.body.profilePicUrl,
         password: passwordHash,
       } as User,
       accessTokenKey,
       refreshTokenKey,
-      RoleCode.LEARNER,
+      RoleCodeEnum.LEARNER,
     );
 
     const tokens = await createTokens(

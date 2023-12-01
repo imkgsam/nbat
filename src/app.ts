@@ -12,7 +12,7 @@ import {
   NotFoundError,
   ApiError,
   InternalError,
-  ErrorType,
+  ErrorTypeEnum,
 } from './core/ApiError';
 import routes from './routes';
 
@@ -42,7 +42,7 @@ app.use((req, res, next) => next(new NotFoundError()));
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ApiError) {
     ApiError.handle(err, res);
-    if (err.type === ErrorType.INTERNAL)
+    if (err.type === ErrorTypeEnum.INTERNAL)
       Logger.error(
         `500 - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`,
       );
