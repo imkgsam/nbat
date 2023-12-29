@@ -4,6 +4,7 @@ import JWT, { JwtPayload } from '../core/JWT';
 import { Types } from 'mongoose';
 import User from '../database/model/User';
 import { tokenInfo } from '../config';
+import { addMillisToCurrentDate } from '../helpers/utils'
 
 export const getAccessToken = (authorization?: string) => {
   if (!authorization) throw new AuthFailureError('Invalid Authorization');
@@ -54,9 +55,10 @@ export const createTokens = async (
   );
 
   if (!refreshToken) throw new InternalError();
-
+  const accessTokenExpiredAt = addMillisToCurrentDate(tokenInfo.accessTokenValidity*1000)
   return {
     accessToken: accessToken,
     refreshToken: refreshToken,
+    expires:accessTokenExpiredAt
   } as Tokens;
 };

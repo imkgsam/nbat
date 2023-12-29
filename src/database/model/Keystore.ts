@@ -1,5 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 import User from './User';
+import { tokenInfo } from '../../config'
 
 export const DOCUMENT_NAME = 'Keystore';
 export const COLLECTION_NAME = 'keystores';
@@ -37,17 +38,21 @@ const schema = new Schema<Keystore>(
     },
     createdAt: {
       type: Schema.Types.Date,
+      default: new Date(),
       required: true,
       select: false,
+      expires: tokenInfo.accessTokenValidity + tokenInfo.refreshTokenValidity
     },
     updatedAt: {
       type: Schema.Types.Date,
+      default: new Date(),
       required: true,
-      select: false,
+      select: false
     },
   },
   {
     versionKey: false,
+    timestamps: true
   },
 );
 

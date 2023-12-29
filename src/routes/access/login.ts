@@ -24,7 +24,9 @@ router.post(
      * #swagger.tags = ['auth']
      */
     const user = await UserRepo.findByEmail(req.body.email);
-    if (!user) throw new BadRequestError('User not registered');
+    if (!user) throw new BadRequestError('User not registered/ not verified');
+    if (!user.meta.enabled) throw new BadRequestError('User not allowed to login');
+    if (!user.meta.verified) throw new BadRequestError('User not verified, please contact admin');
     if (!user.password) throw new BadRequestError('Credential not set');
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) throw new AuthFailureError('Authentication failure');
@@ -35,8 +37,11 @@ router.post(
     const userData = await getUserData(user);
     Logger.info(`User Login as ${user.accountName}`)
     new SuccessResponse('Login Success', {
-      user: userData,
-      tokens: tokens,
+      user:{
+        ...userData,
+        roles: userData.roles.map(each=> each.code)
+      },
+      ...tokens,
     }).send(res);
   }),
 );

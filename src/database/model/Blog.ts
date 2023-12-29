@@ -107,8 +107,9 @@ const schema = new Schema<Blog>(
     },
     publishedAt: {
       type: Schema.Types.Date,
+      default: new Date(),
       required: false,
-      index: true,
+      index: true
     },
     status: {
       type: Schema.Types.Boolean,
@@ -141,6 +142,7 @@ const schema = new Schema<Blog>(
   },
   {
     versionKey: false,
+    timestamps: true
   },
 );
 

@@ -1,21 +1,20 @@
-import express from 'express';
 import { ProtectedRequest } from 'app-request';
 import { AuthFailureError } from '../core/ApiError';
 import RoleRepo from '../database/repository/RoleRepo';
 import asyncHandler from '../helpers/asyncHandler';
+import authentication from './authentication';
 
-const router = express.Router();
+import { RoleCodeEnum } from '../database/model/Role';
+import { Response, NextFunction } from 'express';
 
-export default router.use(
-  asyncHandler(async (req: ProtectedRequest, res, next) => {
-    if (!req.user || !req.user.roles || !req.currentRoleCodes)
+const authorization = (...roleCodes: RoleCodeEnum[]) =>
+  [authentication,asyncHandler(async (req: ProtectedRequest, res: Response, next: NextFunction) => {
+    if (!req.user || !req.user.roles || !roleCodes)
       throw new AuthFailureError('Permission denied');
 
-    const roles = await RoleRepo.findByCodes(req.currentRoleCodes);
+    const roles = await RoleRepo.findByCodes(roleCodes);
     if (roles.length === 0) throw new AuthFailureError('Permission denied');
-
     let authorized = false;
-
     for (const userRole of req.user.roles) {
       if (authorized) break;
       for (const role of roles) {
@@ -29,8 +28,6 @@ export default router.use(
     if (!authorized) throw new AuthFailureError('Permission denied');
 
     return next();
-  }),
-);
+  })];
 
-
-
+  export default authorization;

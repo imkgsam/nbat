@@ -6,19 +6,19 @@ import KeystoreRepo from './KeystoreRepo';
 import Keystore from '../model/Keystore';
 
 async function exists(id: Types.ObjectId): Promise<boolean> {
-  const user = await UserModel.exists({ _id: id, status: true });
+  const user = await UserModel.exists({ _id: id, 'meta.enabled': true });
   return user !== null && user !== undefined;
 }
 
 async function findPrivateProfileById(
   id: Types.ObjectId,
 ): Promise<User | null> {
-  return UserModel.findOne({ _id: id, status: true })
+  return UserModel.findOne({ _id: id, 'meta.enabled': true ,'meta.verified':true })
     .select('+email')
     .populate({
       path: 'roles',
-      match: { status: true },
-      select: { code: 1 },
+      match: { 'meta.enabled': true },
+      select: "+code -_id -meta",
     })
     .lean<User>()
     .exec();
@@ -26,25 +26,25 @@ async function findPrivateProfileById(
 
 // contains critical information of the user
 async function findById(id: Types.ObjectId): Promise<User | null> {
-  return UserModel.findOne({ _id: id, status: true })
+  return UserModel.findOne({ _id: id, 'meta.enabled': true })
     .select('+email +password +roles')
     .populate({
       path: 'roles',
-      match: { status: true },
+      match: { 'meta.enabled': true },
     })
     .lean()
     .exec();
 }
 
 async function findByEmail(email: string): Promise<User | null> {
-  return UserModel.findOne({ email: email })
+  return UserModel.findOne({ email: email})
     .select(
-      '+email +password +roles +gender +dob +grade +country +state +city +school +bio +hobbies',
+      '+email +password +roles +_id +entity',
     )
     .populate({
       path: 'roles',
-      match: { status: true },
-      select: { code: 1 },
+      match: { 'meta.enabled': true },
+      select: { code: 1, _id: 0 },
     })
     .lean()
     .exec();
@@ -54,13 +54,13 @@ async function findFieldsById(
   id: Types.ObjectId,
   ...fields: string[]
 ): Promise<User | null> {
-  return UserModel.findOne({ _id: id, status: true }, [...fields])
+  return UserModel.findOne({ _id: id, 'meta.enabled': true }, [...fields])
     .lean()
     .exec();
 }
 
 async function findPublicProfileById(id: Types.ObjectId): Promise<User | null> {
-  return UserModel.findOne({ _id: id, status: true }).lean().exec();
+  return UserModel.findOne({ _id: id, 'meta.enabled': true }).lean().exec();
 }
 
 async function create(
@@ -70,7 +70,6 @@ async function create(
   roleCode: string,
 ): Promise<{ user: User; keystore: Keystore }> {
   const now = new Date();
-
   const role = await RoleModel.findOne({ code: roleCode })
     .select('+code')
     .lean()
@@ -78,7 +77,6 @@ async function create(
   if (!role) throw new InternalError('Role must be defined');
 
   user.roles = [role];
-  user.createdAt = user.updatedAt = now;
   const createdUser = await UserModel.create(user);
   const keystore = await KeystoreRepo.create(
     createdUser,
@@ -115,6 +113,10 @@ async function updateInfo(user: User): Promise<any> {
     .exec();
 }
 
+async function changePassword(email: string,newPassword: string,): Promise< User | null> {
+  return UserModel.findOneAndUpdate({ email: email }, { $set: { password: newPassword } }, {new: true}).lean().exec();
+}
+
 export default {
   exists,
   findPrivateProfileById,
@@ -125,4 +127,5 @@ export default {
   create,
   update,
   updateInfo,
+  changePassword
 };

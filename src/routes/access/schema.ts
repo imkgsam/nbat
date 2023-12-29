@@ -9,6 +9,11 @@ export default {
   refreshToken: Joi.object().keys({
     refreshToken: Joi.string().required().min(1),
   }),
+  changePassword: Joi.object().keys({
+    email: Joi.string().required().email(),
+    oldPassword: Joi.string().required().min(6),
+    newPassword: Joi.string().required().min(6)
+  }),
   auth: Joi.object()
     .keys({
       authorization: JoiAuthBearer().required(),

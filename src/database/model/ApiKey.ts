@@ -60,17 +60,20 @@ const schema = new Schema<ApiKey>(
     },
     createdAt: {
       type: Schema.Types.Date,
+      default: new Date(),
       required: true,
       select: false,
     },
     updatedAt: {
       type: Schema.Types.Date,
+      default: new Date(),
       required: true,
       select: false,
     },
   },
   {
     versionKey: false,
+    timestamps: true
   },
 );
 

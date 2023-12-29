@@ -34,9 +34,6 @@
                   },
                   "accountName": {
                     "example": "any"
-                  },
-                  "profilePicUrl": {
-                    "example": "any"
                   }
                 }
               }
@@ -45,12 +42,12 @@
         }
       }
     },
-    "/login/basic": {
+    "/login/email": {
       "post": {
         "tags": [
           "auth"
         ],
-        "description": "user signin",
+        "description": "user login with email and credential",
         "responses": {
           "default": {
             "description": ""
@@ -173,9 +170,6 @@
                 "type": "object",
                 "properties": {
                   "name": {
-                    "example": "any"
-                  },
-                  "profilePicUrl": {
                     "example": "any"
                   }
                 }

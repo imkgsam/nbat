@@ -10,18 +10,16 @@ import asyncHandler from '../../helpers/asyncHandler';
 import bcrypt from 'bcrypt';
 import _ from 'lodash';
 import { RoleCodeEnum } from '../../database/model/Role';
-import role from '../../helpers/role';
 import authorization from '../../auth/authorization';
 import authentication from '../../auth/authentication';
 import KeystoreRepo from '../../database/repository/KeystoreRepo';
 const router = express.Router();
 
 //----------------------------------------------------------------
-router.use(authentication, role(RoleCodeEnum.ADMIN), authorization);
+router.use(authentication, authorization(RoleCodeEnum.ADMIN));
 //----------------------------------------------------------------
 
-router.post(
-  '/user/assign',
+router.post( '/user/assign', 
   validator(schema.credential),
   asyncHandler(async (req: RoleRequest, res) => {
     /*

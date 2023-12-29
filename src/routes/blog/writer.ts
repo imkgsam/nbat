@@ -9,14 +9,12 @@ import { Types } from 'mongoose';
 import validator, { ValidationSourceEnum } from '../../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
-import authentication from '../../auth/authentication';
 import authorization from '../../auth/authorization';
-import role from '../../helpers/role';
 
 const router = express.Router();
 
 /*-------------------------------------------------------------------------*/
-router.use(authentication, role(RoleCodeEnum.WRITER), authorization);
+router.use(authorization(RoleCodeEnum.WRITER));
 /*-------------------------------------------------------------------------*/
 
 const formatEndpoint = (endpoint: string) =>

@@ -26,7 +26,7 @@ export default router.use(
       validateTokenData(payload);
 
       const user = await UserRepo.findById(new Types.ObjectId(payload.sub));
-      if (!user) throw new AuthFailureError('User not registered');
+      if (!user) throw new AuthFailureError('User not registered 1');
       req.user = user;
 
       const keystore = await KeystoreRepo.findforKey(req.user, payload.prm);

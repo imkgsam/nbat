@@ -1,18 +1,15 @@
 import { Schema, model, Types } from 'mongoose';
+const { String, Boolean, ObjectId, Number } = Schema.Types
 
-export const DOCUMENT_NAME = 'Role';
-export const COLLECTION_NAME = 'roles';
+export const DOCUMENT_NAME = 'Department';
+export const COLLECTION_NAME = 'departments';
 
-export enum RoleCodeEnum {
-  LEARNER = 'learner',
-  WRITER = 'writer',
-  EDITOR = 'editor',
-  ADMIN = 'admin',
-}
-
-export default interface Role {
+export default interface Department {
   _id: Types.ObjectId;
-  code: string;
+  // 部门名称
+  name: string;
+  manager?: Types.ObjectId | string;
+  parent?: Types.ObjectId | string;
   meta:{
     enabled: boolean;
   };
@@ -20,11 +17,22 @@ export default interface Role {
   updatedAt?: Date;
 }
 
-const schema = new Schema<Role>(
+const schema = new Schema<Department>(
   {
-    code: {
+    name: {
       type: Schema.Types.String,
       required: true,
+      unique: true,
+      trim:true,
+      index:true
+    },
+    manager:{
+      type: ObjectId,
+      ref: 'Entity'
+    },
+    parent:{
+      type: ObjectId,
+      ref: 'Department'
     },
     meta:{
       enabled: {
@@ -53,4 +61,4 @@ const schema = new Schema<Role>(
 
 schema.index({ code: 1, 'meta.enabled': 1 });
 
-export const RoleModel = model<Role>(DOCUMENT_NAME, schema, COLLECTION_NAME);
+export const DepartmentModel = model<Department>(DOCUMENT_NAME, schema, COLLECTION_NAME);

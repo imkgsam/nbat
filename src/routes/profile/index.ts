@@ -20,10 +20,9 @@ router.get(
   asyncHandler(async (req: ProtectedRequest, res) => {
     const user = await UserRepo.findPrivateProfileById(req.user._id);
     if (!user) throw new BadRequestError('User not registered');
-
     return new SuccessResponse(
       'success',
-      _.pick(user, ['name', 'email', 'roles']),
+      user
     ).send(res);
   }),
 );
@@ -35,13 +34,9 @@ router.put(
   asyncHandler(async (req: ProtectedRequest, res) => {
     const user = await UserRepo.findPrivateProfileById(req.user._id);
     if (!user) throw new BadRequestError('User not registered');
-
     if (req.body.name) user.accountName = req.body.name;
-
     await UserRepo.updateInfo(user);
-
     const data = _.pick(user, ['name']);
-
     return new SuccessResponse('Profile updated', data).send(res);
   }),
 );
