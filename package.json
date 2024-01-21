@@ -16,7 +16,10 @@
     "upgrade": "npm update --save-dev && npm update --save",
     "test": "jest --forceExit --detectOpenHandles --coverage --verbose",
     "dev": "nodemon -r dotenv/config src/server.ts -e ts,tsx --watch src",
-    "swagger": "ts-node ./src/swagger.ts"
+    "swagger": "ts-node ./src/swagger.ts",
+    "rmdump":"rmdir ./dump",
+    "dump":"mongodump -u dbuser -p imkgsam6593 --host localhost:27017 --db=blogs-db --authenticationDatabase admin",
+    "dbexport":"rmdir -r ./dump"
   },
   "repository": {
     "type": "git",
@@ -31,6 +34,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "joi": "^17.7.0",
+    "js-md5": "^0.8.3",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
@@ -39,6 +43,7 @@
     "newrelic": "^9.7.2",
     "qs": "^6.11.0",
     "redis": "^4.5.1",
+    "ts-md5": "^1.3.1",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1"
   },

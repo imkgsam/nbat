@@ -1,7 +1,6 @@
 import Employee, { EmployeeModel } from '../model/Employee';
 import Entity, { EntityModel } from '../model/Entity';
 import { Types } from 'mongoose';
-import EntityRepo from './EntityRepo';
 import User, {UserModel} from '../model/User';
 import bcrypt from 'bcrypt';
 import RoleRepo from './RoleRepo';

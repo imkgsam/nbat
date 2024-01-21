@@ -9,9 +9,9 @@ import { ProtectedRequest } from 'app-request';
 import EmployeeRepo from '../../../database/repository/EmployeeRepo';
 import EntityRepo from '../../../database/repository/EntityRepo';
 import Entity, { EntityTypeEnum } from '../../../database/model/Entity';
-import Employee, { EmployeeTypeEnum } from '../../../database/model/Employee'
+import Employee from '../../../database/model/Employee'
 import User from '../../../database/model/User';
-
+import { genEID } from '../../../helpers/utils'
 
 const router = express.Router();
 
@@ -61,10 +61,13 @@ router.post( '/',
       workPhone: req.body.employee.workPhone,
       workMobile: req.body.employee.workMobile,
       workEmail: req.body.employee.workEmail,
+      EID: genEID(req.body.entity.name, req.body.employee.inauguratiionDate,req.body.entity.personal?.sex),
+      ETL: req.body.employee.ETL,
+      inauguratiionDate: req.body.employee.inauguratiionDate,
       probation:{
-        isNeeded: req.body.employee.probation?.isNeeded,
-        period: req.body.employee.probation?.period,
-        startAt: req.body.employee.probation?.startAt,
+        period:90,
+        startDate:req.body.employee.probation?.startDate,
+        actualEndDate:req.body.employee.probation?.actualEndDate,
       },
       privacy:{
         family:{

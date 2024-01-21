@@ -13,7 +13,26 @@ export enum EmployeeTypeEnum {
   // 零时工，或是 parttime
   TEMPORARY = 'Temporary',
   //合同工
-  CONTRACT = 'Contract'
+  CONTRACT = 'Contract',
+  //试用工
+  PROBATIONARY = "Probationary" 
+}
+// 试用结果类型
+export enum probationResultTypeEnum {
+  // 免试通过
+  PPASS = 'Pass Pass',
+  // 到期通过
+  RPASS = 'Regular Pass',
+  // 提前通过
+  EPASS = 'Ealier Pass',
+  // 延期通过
+  DPASS = 'Delayed Pass',
+  // 到期不通过
+  FAIL = 'Regular Fail',
+  // 提前不通过
+  EFAIL = 'Ealier Fail',
+  // 延期不通过
+  DFAIL = 'Delayed Fail'
 }
 //学历类型
 export enum EducationTypeEnum {
@@ -62,14 +81,24 @@ export default interface Employee {
   workMobile?: string;
   //工作邮箱
   workEmail?: string;
+  //员工编号-(唯一识别号, [年]-[h3/1]-[月]-[h3/2]-[日]-[h3/3]-[性别] md5-hash后三位975 陈双鹏2024年01月01日入职男 2490170151 )
+  EID?: string;
+  //ETL 员工职称等级(K为管理体系，P为普通员工体系 K1-9 P1-9 如有细分则为 K1.1 K3.2 P7.4 ...)
+  ETL?: string;
+  //入职日期 = 试用期起始日期 = 进入公司的日期
+  inauguratiionDate?: Date;
   //试用期
   probation?:{
-    //是否需要试用期
-    isNeeded?: boolean;
-    //试用时间，days
+    //试用期开始时间
+    startDate?: boolean;
+    //计划试用时间 按天算
     period?: number;
-    //试用期起始日期
-    startAt?: Date;
+    //试用期实际结束日期：提前转正，延期试用
+    actualEndDate?: Date;
+    //试用期结果
+    result?: EmployeeTypeEnum;
+    //试用期结果备注
+    note?: string;
   },
   //个人隐私
   privacy?:{
@@ -92,6 +121,10 @@ export default interface Employee {
       ID?: string,
       //护照
       passport?: string
+      //税号
+      taxNo?: string;
+      //驾照号
+      driverLicense?: string;
     },
     //紧急联系
     emergency?:{
@@ -108,10 +141,12 @@ export default interface Employee {
     //毕业院校
     school?: string,
     //毕业日期
-    graduatedAt?: Date
+    graduatedAt?: Date,
+    //专业
+    major?: string
   },
   meta:{
-    //是否开启
+    //是否有效，当试用期结束时，1.如果通过则开启，如果不通过则关闭
     enabled: boolean;
   };
   createdAt?: Date;
@@ -149,19 +184,36 @@ const schema = new Schema<Employee>(
     workEmail:{
       type: String
     },
+    EID: {
+      type: String,
+      trim:true
+    },
+    ETL: {
+      type: String,
+      trim:true
+    },
+    inauguratiionDate: {
+      type: Schema.Types.Date,
+    },
     probation:{
-      isNeeded:{
-        type: Boolean,
-        default: true
-      },
       period:{
         type: Number,
         // 默认试用期是90天
         default: 90
       },
-      startAt:{
+      startDate:{
         type: Schema.Types.Date
       },
+      actualEndDate:{
+        type: Schema.Types.Date
+      },
+      result:{
+        type: String,
+        enum: Object.values(probationResultTypeEnum)
+      },
+      note:{
+        type: String
+      }
     },
     privacy:{
       family:{
