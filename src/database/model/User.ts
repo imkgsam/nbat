@@ -5,6 +5,11 @@ import Entity from './Entity';
 export const DOCUMENT_NAME = 'User';
 export const COLLECTION_NAME = 'users';
 
+export interface Question {
+  question: string;
+  answer: string;
+}
+
 export default interface User {
   _id: Types.ObjectId;
   accountName?: string;
@@ -18,6 +23,14 @@ export default interface User {
   meta:{
     verified?: boolean;
     enabled?: boolean;
+  },
+  security:{
+    questions?:{
+      one: Question,
+      two: Question,
+      three: Question
+    },
+    bindedPhone?: string
   },
   createdAt?: Date;
   updatedAt?: Date;
@@ -70,6 +83,45 @@ const schema = new Schema<User>(
         type: Schema.Types.Boolean,
         default: false,
       },
+    },
+    security:{
+      questions:{
+        one: {
+          question: {
+            type: Schema.Types.String,
+            trim:true
+          },
+          answer:{
+            type: Schema.Types.String,
+            trim:true
+          }
+        },
+        two: {
+          question: {
+            type: Schema.Types.String,
+            trim:true
+          },
+          answer:{
+            type: Schema.Types.String,
+            trim:true
+          }
+        },
+        three: {
+          question: {
+            type: Schema.Types.String,
+            trim:true
+          },
+          answer:{
+            type: Schema.Types.String,
+            trim:true
+          }
+        }
+      },
+      bindedPhone: {
+          type: Schema.Types.String,
+          trim: true,
+          unique: true
+      }
     },
     createdAt: {
       type: Schema.Types.Date,
