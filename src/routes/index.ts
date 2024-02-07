@@ -28,6 +28,7 @@ router.use(requestInsepctor)
 /*---------------------------------------------------------*/
 
 router.use('/user', user);
+
 router.use('/token', token);
 router.use('/credential', credential);
 router.use('/profile', profile);
@@ -38,5 +39,4 @@ router.use('/roles',roles);
 router.use('/entity',entity);
 router.use('/department',department)
 router.use('/employee',employee)
-
 export default router;

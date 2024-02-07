@@ -42,7 +42,6 @@ export async function setJson(
 export async function getJson<T>(key: Key | DynamicKeyType) {
   const type = await cache.type(key);
   if (type !== RedisTypesEnum.STRING) return null;
-
   const json = await getValue(key);
   if (json) return JSON.parse(json) as T;
 

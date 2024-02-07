@@ -144,4 +144,5 @@ const schema = new Schema<User>(
 
 schema.index({ email: 1 });
 
+
 export const UserModel = model<User>(DOCUMENT_NAME, schema, COLLECTION_NAME);

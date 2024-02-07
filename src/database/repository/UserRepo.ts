@@ -77,6 +77,7 @@ async function create(
   if (!role) throw new InternalError('Role must be defined');
 
   user.roles = [role];
+  // user.createdAt = user.updatedAt = now;
   const createdUser = await UserModel.create(user);
   const keystore = await KeystoreRepo.create(
     createdUser,
@@ -116,7 +117,6 @@ async function updateInfo(user: User): Promise<any> {
 async function changePassword(email: string,newPassword: string,): Promise< User | null> {
   return UserModel.findOneAndUpdate({ email: email }, { $set: { password: newPassword } }, {new: true}).lean().exec();
 }
-
 export default {
   exists,
   findPrivateProfileById,

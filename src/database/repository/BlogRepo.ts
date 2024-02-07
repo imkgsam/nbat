@@ -5,12 +5,15 @@ import User from '../model/User';
 const AUTHOR_DETAIL = 'name profilePicUrl';
 
 async function create(blog: Blog): Promise<Blog> {
+  const now = new Date();
+  blog.createdAt = now;
+  blog.updatedAt = now;
   const createdBlog = await BlogModel.create(blog);
   return createdBlog.toObject();
 }
 
 async function update(blog: Blog): Promise<Blog | null> {
-  // blog.updatedAt = new Date();
+  blog.updatedAt = new Date();
   return BlogModel.findByIdAndUpdate(blog._id, blog, { new: true })
     .lean()
     .exec();
