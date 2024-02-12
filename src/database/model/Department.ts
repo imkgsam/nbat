@@ -10,9 +10,13 @@ export default interface Department {
   name: string;
   manager?: Types.ObjectId | string;
   parent?: Types.ObjectId | string;
-  meta:{
+  meta?:{
     enabled: boolean;
   };
+  //部门颜色
+  color: string;
+  //所属公司
+	company?: Types.ObjectId | string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -28,7 +32,8 @@ const schema = new Schema<Department>(
     },
     manager:{
       type: ObjectId,
-      ref: 'Entity'
+      ref: 'Entity',
+      required:true
     },
     parent:{
       type: ObjectId,
@@ -38,7 +43,17 @@ const schema = new Schema<Department>(
       enabled: {
         type: Schema.Types.Boolean,
         default: false,
-      },
+      }
+    },
+    color: {
+      type: String,
+      trim: true,
+      required:true
+    },
+    company: {
+      type: ObjectId,
+      ref: 'Entity',
+      required:true
     },
     createdAt: {
       type: Schema.Types.Date,
@@ -59,6 +74,6 @@ const schema = new Schema<Department>(
   },
 );
 
-schema.index({ code: 1, 'meta.enabled': 1 });
+schema.index({ name: 1,company:1, 'meta.enabled': 1 });
 
 export const DepartmentModel = model<Department>(DOCUMENT_NAME, schema, COLLECTION_NAME);

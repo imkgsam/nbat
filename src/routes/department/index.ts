@@ -3,7 +3,7 @@ import { SuccessResponse, FailureMsgResponse } from '../../core/ApiResponse';
 import asyncHandler from '../../helpers/asyncHandler';
 import authorization from '../../auth/authorization';
 import { RoleCodeEnum } from '../../database/model/Role';
-import validator from '../../helpers/validator';
+import validator, { ValidationSourceEnum } from '../../helpers/validator';
 import schema from './schema';
 import { ProtectedRequest } from 'app-request';
 import DepartmentRepo from '../../database/repository/DepartmentRepo';
@@ -19,6 +19,17 @@ router.get( '/all',
   }),
 );
 
+router.get( '/detail',
+  validator(schema.departmentId, ValidationSourceEnum.QUERY),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const {_id}  = req.query
+    console.log(_id)
+    const departmentObj = await DepartmentRepo.getDetailsById(_id as string);
+    return new SuccessResponse('success',departmentObj).send(res);
+  }),
+);
+
 router.post( '/',
   validator(schema.departmentCreate),
   authorization(RoleCodeEnum.ADMIN),
@@ -26,7 +37,9 @@ router.post( '/',
     const createdOne = await DepartmentRepo.create({
       name: req.body.name,
       parent: req.body.parent,
-      manager: req.body.manager
+      manager: req.body.manager,
+      color: req.body.color,
+      company: req.body.company || "657d0fc01222912e8b7d5ac7" //ML
     } as Department);
     new SuccessResponse('Department created successfully', createdOne).send(res);
   }),
@@ -36,7 +49,7 @@ router.post( '/enable',
   validator(schema.departmentId),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await DepartmentRepo.enable(req.body.id)
+    const updatedOne = await DepartmentRepo.enable(req.body._id)
     if(updatedOne){
       new SuccessResponse('Department enabled successfully', updatedOne).send(res);
     }else{
@@ -48,13 +61,7 @@ router.post( '/enable',
 router.put('/',
   validator(schema.departmentUpdate),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedDepartment = await DepartmentRepo.update({
-      name: req.body.name,
-      _id: req.body.id,
-      parent: req.body.parent,
-      manager: req.body.manager
-    } as Department);
-
+    const updatedDepartment = await DepartmentRepo.update({...req.body} as Department);
     return new SuccessResponse('Department updated', updatedDepartment).send(res);
   }),
 );

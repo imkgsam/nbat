@@ -41,7 +41,6 @@ app.use((req, res, next) => next(new NotFoundError()));
 // Middleware Error Handler
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log('im here')
   console.log(err)
   if (err instanceof ApiError) {
     ApiError.handle(err, res);

@@ -6,6 +6,14 @@ async function findByName(name: string): Promise<Department | null> {
   return DepartmentModel.findOne({ name: name, 'meta.enabled': true }).lean().exec();
 }
 
+async function getDetailsById(id: string): Promise<Department | null> {
+  return DepartmentModel.findOne({ _id: id})
+  .populate('manager')
+  .populate('company')
+  .populate('parent')
+  .lean().exec();
+}
+
 async function findAll(): Promise<Department[]> {
   return DepartmentModel.find({})
     // .select("-_id")
@@ -32,7 +40,7 @@ async function create(newDepartment: Department): Promise<Department> {
     if(newDepartment.manager){
       const manager = await EntityRepo.findOneByIdOrName(newDepartment.manager)
       if(manager)
-        newDepartment.manager = manager._id
+      newDepartment.manager = manager._id
     }
     if(newDepartment.parent){
       const parent = await findOneByIdOrName(newDepartment.parent)
@@ -54,7 +62,7 @@ async function update(updatedOne: Department): Promise<Department | null> {
     if(parent)
       updatedOne.parent = parent._id
   }
-  return DepartmentModel.findByIdAndUpdate(updatedOne._id,updatedOne,{ new: true }).lean().exec();
+  return DepartmentModel.findByIdAndUpdate(updatedOne._id,{$set: updatedOne},{ new: true }).lean().exec();
 }
 
 async function removeOneById(id: Types.ObjectId): Promise<Department | null> {
@@ -70,6 +78,7 @@ async function disable(id: Types.ObjectId): Promise<Department | null> {
 }
 
 export default {
+  getDetailsById,
   create,
   enable,
   update,
