@@ -7,17 +7,23 @@ export default {
   }),
   departmentCreate: Joi.object().keys({
     name: Joi.string().required().min(3).max(60),
-    manager: Joi.alternatives(Joi.string().min(3).max(60), JoiObjectId()),
-    parent: Joi.alternatives(Joi.string().min(3).max(60), JoiObjectId()),
+    manager: JoiObjectId().allow(null).allow(''),
+    parent: JoiObjectId().allow(null).allow(''),
     company: Joi.alternatives(Joi.string().min(3).max(60), JoiObjectId()),
-    color: Joi.string().required(),
+    color: Joi.string().allow(null).allow(''),
+    meta: Joi.object().keys({
+      enabled: Joi.boolean()
+    })
   }),
   departmentUpdate: Joi.object().keys({
     _id: JoiObjectId().required(),
     name: Joi.string().min(3).max(60),
-    manager: JoiObjectId(),
-    parent: JoiObjectId(),
-    color: Joi.string(),
-    company: JoiObjectId(),
+    manager: JoiObjectId().allow(null).allow(''),
+    parent: JoiObjectId().allow(null).allow(''),
+    color: Joi.string().allow("").allow(null),
+    company: JoiObjectId().allow(null),
+    meta: Joi.object().keys({
+      enabled: Joi.boolean()
+    })
   }),
 };

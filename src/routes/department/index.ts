@@ -39,9 +39,19 @@ router.post( '/',
       parent: req.body.parent,
       manager: req.body.manager,
       color: req.body.color,
-      company: req.body.company || "657d0fc01222912e8b7d5ac7" //ML
+      company: req.body.company || "657d0fc01222912e8b7d5ac7", //ML
+      meta: { enabled: req.body.meta?.enabled }
     } as Department);
     new SuccessResponse('Department created successfully', createdOne).send(res);
+  }),
+);
+
+router.post( '/delete',
+  validator(schema.departmentId),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const findOneAndDelete = await DepartmentRepo.removeOneById(req.body._id);
+    new SuccessResponse('Department deleted successfully', findOneAndDelete).send(res);
   }),
 );
 
@@ -70,7 +80,7 @@ router.post( '/disable',
   validator(schema.departmentId),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await DepartmentRepo.disable(req.body.id)
+    const updatedOne = await DepartmentRepo.disable(req.body._id)
     if(updatedOne){
       new SuccessResponse('Department disabled successfully', updatedOne).send(res)
     }else{

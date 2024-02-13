@@ -66,7 +66,12 @@ async function update(updatedOne: Department): Promise<Department | null> {
 }
 
 async function removeOneById(id: Types.ObjectId): Promise<Department | null> {
-  return DepartmentModel.findOneAndDelete({_id: id}).lean().exec();
+  const deletedOne = await DepartmentModel.findOneAndDelete({_id: id}).lean().exec()
+  const children = await DepartmentModel.find({parent: id}).lean().exec()
+  if(children.length){
+    await DepartmentModel.updateMany({$in: children.map(each=> each._id)},{$set:{parent: deletedOne?.parent || null }})
+  }
+  return deletedOne
 }
 
 async function enable(id: Types.ObjectId): Promise<Department | null> {
@@ -74,7 +79,8 @@ async function enable(id: Types.ObjectId): Promise<Department | null> {
 }
 
 async function disable(id: Types.ObjectId): Promise<Department | null> {
-  return DepartmentModel.findOneAndUpdate({_id:id,'meta.enabled':true},{'meta.enabled':false},{ new: true }).lean().exec();
+  console.log(id)
+  return DepartmentModel.findOneAndUpdate({ _id: id, 'meta.enabled': true},{'meta.enabled':false},{ new: true }).lean().exec();
 }
 
 export default {

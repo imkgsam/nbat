@@ -14,7 +14,7 @@ export default interface Department {
     enabled: boolean;
   };
   //部门颜色
-  color: string;
+  color?: string;
   //所属公司
 	company?: Types.ObjectId | string;
   createdAt?: Date;
@@ -32,8 +32,7 @@ const schema = new Schema<Department>(
     },
     manager:{
       type: ObjectId,
-      ref: 'Entity',
-      required:true
+      ref: 'Entity'
     },
     parent:{
       type: ObjectId,
@@ -47,8 +46,7 @@ const schema = new Schema<Department>(
     },
     color: {
       type: String,
-      trim: true,
-      required:true
+      trim: true
     },
     company: {
       type: ObjectId,
