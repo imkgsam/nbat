@@ -44,6 +44,14 @@ router.get( '/person/all',
   }),
 );
 
+router.get( '/employee/all',
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const entities = await EntityRepo.findAllwithFilters({employee: {$ne:null}});
+    return new SuccessResponse('success', entities).send(res);
+  }),
+);
+
 router.post( '/company',
   validator(schema.createCompany),
   authorization(RoleCodeEnum.ADMIN),

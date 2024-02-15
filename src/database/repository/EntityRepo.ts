@@ -49,7 +49,7 @@ async function findOneOrCreate( input : Entity): Promise<Entity> {
 async function findAllwithFilters(filters: object={}): Promise<Entity[]> {
   return (
     EntityModel.find(filters)
-      // .select("-_id")
+      .select("name")
       .lean()
       .exec()
   );

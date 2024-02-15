@@ -15,7 +15,7 @@ async function getDetailsById(id: string): Promise<Department | null> {
 }
 
 async function findAll(): Promise<Department[]> {
-  return DepartmentModel.find({})
+  return DepartmentModel.find({}).populate('manager','name').populate('company','name')
     // .select("-_id")
     .lean()
     .exec();
@@ -52,6 +52,7 @@ async function create(newDepartment: Department): Promise<Department> {
 }
 
 async function update(updatedOne: Department): Promise<Department | null> {
+  console.log('in update department ', updatedOne)
   if(updatedOne.manager){
     const manager = await EntityRepo.findOneByIdOrName(updatedOne.manager)
     if(manager)
@@ -69,13 +70,13 @@ async function removeOneById(id: Types.ObjectId): Promise<Department | null> {
   const deletedOne = await DepartmentModel.findOneAndDelete({_id: id}).lean().exec()
   const children = await DepartmentModel.find({parent: id}).lean().exec()
   if(children.length){
-    await DepartmentModel.updateMany({$in: children.map(each=> each._id)},{$set:{parent: deletedOne?.parent || null }})
+    await DepartmentModel.updateMany({"_id":{$in: children.map(each=> each._id)}},{ $set:{parent: deletedOne?.parent || null }})
   }
   return deletedOne
 }
 
 async function enable(id: Types.ObjectId): Promise<Department | null> {
-  return DepartmentModel.findOneAndUpdate({_id:id, manager:{ $ne:null }, 'meta.enabled':false},{'meta.enabled':true },{ new: true }).lean().exec();
+  return DepartmentModel.findOneAndUpdate({_id:id /**manager:{ $ne:null }, */,  'meta.enabled':false},{'meta.enabled':true },{ new: true }).lean().exec();
 }
 
 async function disable(id: Types.ObjectId): Promise<Department | null> {

@@ -50,8 +50,8 @@ router.post( '/delete',
   validator(schema.departmentId),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const findOneAndDelete = await DepartmentRepo.removeOneById(req.body._id);
-    new SuccessResponse('Department deleted successfully', findOneAndDelete).send(res);
+    const deletedOne = await DepartmentRepo.removeOneById(req.body._id);
+    new SuccessResponse('Department deleted successfully', deletedOne).send(res);
   }),
 );
 

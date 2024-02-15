@@ -20,7 +20,7 @@ export default {
     name: Joi.string().min(3).max(60),
     manager: JoiObjectId().allow(null).allow(''),
     parent: JoiObjectId().allow(null).allow(''),
-    color: Joi.string().allow("").allow(null),
+    color: Joi.string().allow(""),
     company: JoiObjectId().allow(null),
     meta: Joi.object().keys({
       enabled: Joi.boolean()
