@@ -20,4 +20,5 @@ declare interface ProtectedRequest extends RoleRequest {
 declare interface Tokens {
   accessToken: string;
   refreshToken: string;
+  expires: Date
 }

@@ -60,5 +60,5 @@ export const createTokens = async (
     accessToken: accessToken,
     refreshToken: refreshToken,
     expires:accessTokenExpiredAt
-  } as Tokens;
+  }
 };

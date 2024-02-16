@@ -28,9 +28,8 @@ router.post(
 
     const { user: createdUser, keystore } = await UserRepo.create(
       {
-        name: req.body.name,
+        accountName: req.body.name,
         email: req.body.email,
-        profilePicUrl: req.body.profilePicUrl,
         password: passwordHash,
       } as User,
       accessTokenKey,

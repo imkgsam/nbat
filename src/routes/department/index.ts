@@ -24,7 +24,6 @@ router.get( '/detail',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
     const {_id}  = req.query
-    console.log(_id)
     const departmentObj = await DepartmentRepo.getDetailsById(_id as string);
     return new SuccessResponse('success',departmentObj).send(res);
   }),

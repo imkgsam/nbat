@@ -1,4 +1,6 @@
 import { Response } from 'express';
+import { Tokens } from 'app-request';
+
 
 // Helper code for the API consumer to understand the error and handle is accordingly
 enum StatusCodeEnum {
@@ -125,11 +127,11 @@ export class AccessTokenErrorResponse extends ApiResponse {
   }
 }
 
+
 export class TokenRefreshResponse extends ApiResponse {
   constructor(
     message: string,
-    private accessToken: string,
-    private refreshToken: string,
+    private data: Tokens
   ) {
     super(StatusCodeEnum.SUCCESS, ResponseStatusEnum.SUCCESS, message);
   }

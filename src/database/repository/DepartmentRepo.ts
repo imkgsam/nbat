@@ -52,7 +52,6 @@ async function create(newDepartment: Department): Promise<Department> {
 }
 
 async function update(updatedOne: Department): Promise<Department | null> {
-  console.log('in update department ', updatedOne)
   if(updatedOne.manager){
     const manager = await EntityRepo.findOneByIdOrName(updatedOne.manager)
     if(manager)
@@ -80,7 +79,6 @@ async function enable(id: Types.ObjectId): Promise<Department | null> {
 }
 
 async function disable(id: Types.ObjectId): Promise<Department | null> {
-  console.log(id)
   return DepartmentModel.findOneAndUpdate({ _id: id, 'meta.enabled': true},{'meta.enabled':false},{ new: true }).lean().exec();
 }
 
