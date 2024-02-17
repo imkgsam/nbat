@@ -22,14 +22,15 @@ async function createRoute(newOne: Route): Promise<Route>{
     const roles = await RoleRepo.findByCodes(k)
     newOne.meta.roles = roles.map(each=>each._id)
   }
-  const createdOne = await RouteModel.create(newOne);
+  let parent = null
   if(newOne.parent){
-    const parent = await RouteModel.findById(newOne.parent)
-    if(parent){
-      parent.children?.push(createdOne._id)
-      await parent.save()
+    const parentObj = await RouteModel.findById(newOne.parent)
+    if(parentObj){
+      parent = parentObj._id
     }
   }
+    
+  const createdOne = await RouteModel.create({...newOne,parent});
   return createdOne.toObject();
 }
 

@@ -26,7 +26,8 @@ router.get(
   asyncHandler(async (req, res) => {
     try{
       const data = await RouteRepo.findAll()
-      return new SuccessResponse('success', data).send(res);
+      const rt = JSON.parse(JSON.stringify(data).replaceAll('6550a08eb41da1257eda92d2','admin').replaceAll('6577ce21fd6e31603d5f3389','common'))
+      return new SuccessResponse('success', rt).send(res);
     }catch(e){
       console.log(e)
     }

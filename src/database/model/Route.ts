@@ -56,7 +56,6 @@ export default interface Route {
   // meta
   meta: RouteMeta;
 
-  children?: Array<Types.ObjectId>;
   parent?: Route; 
   createdAt?: Date;
   updatedAt?: Date;
@@ -246,8 +245,11 @@ const routeSchema = new Schema<Route>(
       }
     },
     // 子路由配置项
-    children: [{ type: ObjectId, ref: DOCUMENT_NAME }],
-    parent: { type: ObjectId, ref:DOCUMENT_NAME}
+    parent: { 
+      type: ObjectId, 
+      ref:DOCUMENT_NAME, 
+      default: null
+    }
   },
   {
     versionKey: false,
