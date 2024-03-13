@@ -6,7 +6,7 @@ export default {
     _id: JoiObjectId().required(),
   }),
   departmentCreate: Joi.object().keys({
-    name: Joi.string().required().min(3).max(60),
+    name: Joi.string().required().max(50),
     manager: JoiObjectId().allow(null).allow(''),
     parent: JoiObjectId().allow(null).allow(''),
     company: Joi.alternatives(Joi.string().min(3).max(60), JoiObjectId()),

@@ -1,5 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
-const { String, Boolean, ObjectId, Number } = Schema.Types
+const { String,  ObjectId } = Schema.Types
 
 export const DOCUMENT_NAME = 'Department';
 export const COLLECTION_NAME = 'departments';

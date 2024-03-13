@@ -17,10 +17,12 @@
     "test": "jest --forceExit --detectOpenHandles --coverage --verbose",
     "dev": "nodemon -r dotenv/config src/server.ts -e ts,tsx --watch src",
     "swagger": "ts-node ./src/swagger.ts",
-    "rmdump":"rmdir ./dump",
+    "rmdump":"del-cli --force ./dump",
     "dump":"mongodump -u dbuser -p imkgsam6593 --host localhost:27017 --db=blogs-db --authenticationDatabase admin",
-    "dbexport":"rmdir -r ./dump",
+    "dbexport":"npm run rmdump && npm run dump",
     "check": "tsc --noEmit",
+    "git:prepare":"git add ./*",
+    "push:prepare":"npm run dbexport && npm run git:prepare",
     "upgrade-latest": "npx npm-check-updates -u && npm install "
   },
   "repository": {
