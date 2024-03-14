@@ -1,5 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
 
+const { Boolean, String, Date: SDate} = Schema.Types
+
 export const DOCUMENT_NAME = 'Role';
 export const COLLECTION_NAME = 'roles';
 
@@ -23,23 +25,25 @@ export default interface Role {
 const schema = new Schema<Role>(
   {
     code: {
-      type: Schema.Types.String,
+      type: String,
       required: true,
+      trim: true,
+      unique: true
     },
     meta:{
       enabled: {
-        type: Schema.Types.Boolean,
+        type: Boolean,
         default: false,
       },
     },
     createdAt: {
-      type: Schema.Types.Date,
+      type: Date,
       required: true,
       default: new Date(),
       select: false
     },
     updatedAt: {
-      type: Schema.Types.Date,
+      type: SDate,
       required: true,
       default: new Date(),
       select: false

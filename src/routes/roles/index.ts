@@ -4,7 +4,7 @@ import asyncHandler from '../../helpers/asyncHandler';
 import authorization from '../../auth/authorization';
 import { RoleCodeEnum } from '../../database/model/Role';
 import validator from '../../helpers/validator';
-import schema from './schema';
+import roleSchema from './schema';
 import { ProtectedRequest } from 'app-request';
 import RoleRepo from '../../database/repository/RoleRepo';
 import Role from '../../database/model/Role';
@@ -20,7 +20,7 @@ router.get( '/all',
 );
 
 router.post( '/',
-  validator(schema.roleCreate),
+  validator(roleSchema.create),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const createdRole = await RoleRepo.create({
@@ -34,7 +34,7 @@ router.post( '/',
 );
 
 router.post( '/enable',
-  validator(schema.roleId),
+  validator(roleSchema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const updatedOne = await RoleRepo.enable(req.body.id)
@@ -43,12 +43,43 @@ router.post( '/enable',
 );
 
 router.post( '/disable',
-  validator(schema.roleId),
+  validator(roleSchema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const updatedOne = await RoleRepo.disable(req.body.id)
     new SuccessResponse('Role disabled successfully', updatedOne).send(res);
   }),
 );
+
+router.post( '/filters',
+  validator(roleSchema.filters),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    interface Filters {
+      code?: string,
+      meta?:{
+        enabled: boolean
+      }
+    }
+    const { filters  } = req.body
+    console.log(filters)
+    const datas = await RoleRepo.filter(filters as Filters)
+    let {currentPage, pageSize} = req.body
+    if(!currentPage || currentPage<=0){
+      currentPage = 1
+    }
+    if(!pageSize || pageSize <=0){
+      pageSize = 10
+    }
+    const rt = datas.slice(pageSize*(currentPage-1),currentPage*pageSize)
+    new SuccessResponse('success', {
+      list: rt,
+      total: datas.length,
+      pageSize: pageSize,
+      currentPage: currentPage 
+    }).send(res);
+  }),
+);
+
 
 export default router;

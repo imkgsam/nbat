@@ -31,6 +31,10 @@ async function disable(roleId: Types.ObjectId): Promise<Role | null> {
   return RoleModel.findByIdAndUpdate(roleId,{'meta.enabled':false},{ new: true }).lean().exec();
 }
 
+async function filter(filters: object) : Promise<Role[]>{
+  return RoleModel.find(filters).lean().exec()
+}
+
 export default {
   create,
   enable,
@@ -38,4 +42,5 @@ export default {
   findAll,
   findByCode,
   findByCodes,
+  filter
 };
