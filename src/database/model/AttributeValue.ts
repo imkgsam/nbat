@@ -6,7 +6,7 @@ export const COLLECTION_NAME = 'attributeValues';
 
 export default interface AttributeValue {
   _id: Types.ObjectId;
-  value: string;
+  name: string;
   abbr: string;
   attribute: Types.ObjectId;
   createdAt?: Date;
@@ -15,29 +15,30 @@ export default interface AttributeValue {
 
 const schema = new Schema<AttributeValue>(
   {
-    value: {
+    name: {
       type: String,
-      trim: true
+      trim: true,
+      required:true
     },
     abbr:{
       type: String,
-      trim: true
+      trim: true,
+      required: true
     },
     attribute: {
       type: ObjectId,
-      ref: 'Attribute'
+      ref: 'Attribute',
+      required:true
     },
     createdAt: {
       type: Schema.Types.Date,
       required: true,
       default: new Date(),
-      select: false
     },
     updatedAt: {
       type: Schema.Types.Date,
       required: true,
       default: new Date(),
-      select: false
     },
   },
   {
@@ -46,9 +47,9 @@ const schema = new Schema<AttributeValue>(
   },
 );
 
-schema.index({ value:1, attribute: 1});
+schema.index({ name:1, attribute: 1});
 schema.index({ abbr:1, attribute: 1});
-schema.index({ abbr:1,value:1,attribute: 1});
+schema.index({ abbr:1,name:1,attribute: 1});
 
 
 export const AttributeValueModel = model<AttributeValue>(DOCUMENT_NAME, schema, COLLECTION_NAME);

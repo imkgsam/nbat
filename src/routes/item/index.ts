@@ -9,6 +9,7 @@ import validator, { ValidationSourceEnum } from '../../helpers/validator';
 import { ProtectedRequest } from 'app-request';
 import Item from '../../database/model/Item';
 import CategoryRoute from './category'
+import AttributeRoute from './attribute'
 
 const router = express.Router();
 
@@ -45,6 +46,6 @@ router.post( '/',
 );
 
 router.use('/category',CategoryRoute)
-
+router.use('/attribute',AttributeRoute)
 
 export default router;

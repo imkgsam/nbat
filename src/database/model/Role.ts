@@ -39,14 +39,12 @@ const schema = new Schema<Role>(
     createdAt: {
       type: Date,
       required: true,
-      default: new Date(),
-      select: false
+      default: new Date()
     },
     updatedAt: {
       type: SDate,
       required: true,
-      default: new Date(),
-      select: false
+      default: new Date()
     },
   },
   {

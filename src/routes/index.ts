@@ -14,7 +14,7 @@ import roles from './roles';
 import department from './department';
 import entity from './entities/entity';
 import employee from './entities/employee';
-import attribute from './attribute';
+import attribute from './item/attribute';
 import item from './item';
 
 const router = express.Router();

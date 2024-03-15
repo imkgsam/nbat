@@ -4,7 +4,7 @@ import asyncHandler from '../../helpers/asyncHandler';
 import authorization from '../../auth/authorization';
 import { RoleCodeEnum } from '../../database/model/Role';
 import validator, { ValidationSourceEnum } from '../../helpers/validator';
-import schema from './schema';
+import DepartmentSchema from './schema';
 import { ProtectedRequest } from 'app-request';
 import DepartmentRepo from '../../database/repository/DepartmentRepo';
 import Department from '../../database/model/Department';
@@ -20,7 +20,7 @@ router.get( '/all',
 );
 
 router.get( '/detail',
-  validator(schema.departmentId, ValidationSourceEnum.QUERY),
+  validator(DepartmentSchema.Id, ValidationSourceEnum.QUERY),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
     const {_id}  = req.query
@@ -30,7 +30,7 @@ router.get( '/detail',
 );
 
 router.post( '/',
-  validator(schema.departmentCreate),
+  validator(DepartmentSchema.create),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const createdOne = await DepartmentRepo.create({
@@ -46,7 +46,7 @@ router.post( '/',
 );
 
 router.post( '/delete',
-  validator(schema.departmentId),
+  validator(DepartmentSchema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const deletedOne = await DepartmentRepo.removeOneById(req.body._id);
@@ -55,7 +55,7 @@ router.post( '/delete',
 );
 
 router.post( '/enable',
-  validator(schema.departmentId),
+  validator(DepartmentSchema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const updatedOne = await DepartmentRepo.enable(req.body._id)
@@ -68,7 +68,7 @@ router.post( '/enable',
 );
 
 router.put('/',
-  validator(schema.departmentUpdate),
+  validator(DepartmentSchema.update),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const updatedDepartment = await DepartmentRepo.update({...req.body} as Department);
     return new SuccessResponse('Department updated', updatedDepartment).send(res);
@@ -76,7 +76,7 @@ router.put('/',
 );
 
 router.post( '/disable',
-  validator(schema.departmentId),
+  validator(DepartmentSchema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const updatedOne = await DepartmentRepo.disable(req.body._id)

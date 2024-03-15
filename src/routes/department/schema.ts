@@ -2,10 +2,10 @@ import Joi from 'joi';
 import { JoiObjectId } from '../../helpers/validator';
 
 export default {
-  departmentId: Joi.object().keys({
+  Id: Joi.object().keys({
     _id: JoiObjectId().required(),
   }),
-  departmentCreate: Joi.object().keys({
+  create: Joi.object().keys({
     name: Joi.string().required().max(50),
     manager: JoiObjectId().allow(null).allow(''),
     parent: JoiObjectId().allow(null).allow(''),
@@ -15,7 +15,7 @@ export default {
       enabled: Joi.boolean()
     })
   }),
-  departmentUpdate: Joi.object().keys({
+  update: Joi.object().keys({
     _id: JoiObjectId().required(),
     name: Joi.string().min(3).max(60),
     manager: JoiObjectId().allow(null).allow(''),

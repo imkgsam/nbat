@@ -1,6 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
-const { String, Boolean } = Schema.Types
 import AttributeValue from './AttributeValue';
+const { String, Boolean } = Schema.Types
 export const DOCUMENT_NAME = 'Attribute';
 export const COLLECTION_NAME = 'attributes';
 
@@ -14,8 +14,10 @@ export const COLLECTION_NAME = 'attributes';
  */
 export default interface Attribute {
   _id: Types.ObjectId;
-  //属性名称，英文
+  //属性名称，可以用任何语言，取决与创建人
   name: string;
+  // code, 用于转换语言的，默认是英语
+  code: string;
   meta:{
     enabled: boolean
   },
@@ -32,6 +34,12 @@ const schema = new Schema<Attribute>(
       unique:true,
       trim: true
     },
+    code: {
+      type: String,
+      required: true,
+      unique:true,
+      trim: true
+    },
     meta:{
       enabled: {
         type: Boolean,
@@ -42,13 +50,11 @@ const schema = new Schema<Attribute>(
       type: Schema.Types.Date,
       required: true,
       default: new Date(),
-      select: false
     },
     updatedAt: {
       type: Schema.Types.Date,
       required: true,
       default: new Date(),
-      select: false
     },
   },
   {
@@ -58,6 +64,6 @@ const schema = new Schema<Attribute>(
 );
 
 schema.index({ name: 1 });
-
+schema.index({ code: 1 });
 
 export const AttributeModel = model<Attribute>(DOCUMENT_NAME, schema, COLLECTION_NAME);

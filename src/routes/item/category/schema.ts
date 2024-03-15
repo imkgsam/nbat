@@ -8,5 +8,10 @@ export default {
   create: Joi.object().keys({
     name: Joi.string().required(),
     parent: JoiObjectId()
+  }),
+  update: Joi.object().keys({
+    _id: JoiObjectId().required(),
+    name: Joi.string().required(),
+    parent: JoiObjectId()
   })
 };

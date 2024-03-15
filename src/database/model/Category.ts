@@ -28,14 +28,12 @@ const schema = new Schema<Category>(
     createdAt: {
       type: Schema.Types.Date,
       required: true,
-      default: new Date(),
-      select: false
+      default: new Date()
     },
     updatedAt: {
       type: Schema.Types.Date,
       required: true,
-      default: new Date(),
-      select: false
+      default: new Date()
     },
   },
   {
