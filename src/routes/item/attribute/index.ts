@@ -39,24 +39,14 @@ router.post( '/',
   asyncHandler(async (req: ProtectedRequest, res) => {
     const createdOne = await AttributeRepo.create({
       name: req.body.name,
+      code: req.body.code,
+      values: req.body.values,
       meta: { enabled: req.body.meta?.enabled }
     } as Attribute);
     new SuccessResponse('Attribute created successfully', createdOne).send(res);
   }),
 );
 
-router.post( '/value',
-  validator(AttributeSchema.value.create),
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    const createdOne = await AttributeRepo.value.create({
-      name: req.body.value,
-      abbr: req.body.abbr,
-      attribute: req.body.attribute
-    } as AttributeValue);
-    new SuccessResponse('AttributeValue created successfully', createdOne).send(res);
-  }),
-);
 
 router.post( '/filters',
   validator(AttributeSchema.attribute.filters),

@@ -9,6 +9,12 @@ export default {
     create: Joi.object().keys({
       name: Joi.string().required(),
       code: Joi.string().required(),
+      values: Joi.array().items(Joi.object().keys({
+        _id: JoiObjectId().allow(null),
+        name: Joi.string().required(),
+        code: Joi.string().required(),
+        abbr: Joi.string().required()
+      })),
       meta: {
         enabled: Joi.boolean()
       }
@@ -17,6 +23,13 @@ export default {
       _id: JoiObjectId().required(),
       name: Joi.string().required(),
       code: Joi.string().required(),
+      values: Joi.array().items(Joi.object().keys({
+        _id: JoiObjectId().allow(null),
+        name: Joi.string().required(),
+        code: Joi.string().required(),
+        abbr: Joi.string().required(),
+        attribute: JoiObjectId()
+      })),
       meta: {
         enabled: Joi.boolean().required()
       }
