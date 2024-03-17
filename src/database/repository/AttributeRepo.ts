@@ -11,7 +11,8 @@ async function create(attribute: Attribute): Promise<Attribute> {
   const {   hasntIds } = processValues(values as Array<AttributeValue>,createdOne._id)
   if(hasntIds){
     console.log('hasntIds',hasntIds)
-    await AttributeValueModel.insertMany(hasntIds)
+    const rt =await AttributeValueModel.insertMany(hasntIds)
+    console.log('rt',rt)
   }
   return createdOne.toObject();
 }
@@ -23,10 +24,13 @@ async function update(updateOne: Attribute): Promise<Attribute | null> {
     const validIds = []
     const {  hasIds, hasntIds } = processValues(values as Array<AttributeValue>,updatedOne._id)
     if(hasntIds){
+      console.log(hasntIds)
       const rt = await AttributeValueModel.insertMany(hasntIds)
+      console.log('rt',rt)
       validIds.push(...rt.map(each=>each._id))
     }
     if(hasIds){
+      console.log(hasIds)
       await AttributeValueModel.bulkWrite(hasIds.map(values=>({
         updateOne:{
           filter:{_id:values._id},
@@ -36,6 +40,7 @@ async function update(updateOne: Attribute): Promise<Attribute | null> {
       })))
       validIds.push(...hasIds.map(each=>each._id))
     }
+    console.log(validIds)
     //remove unlinked values
     await AttributeValueModel.deleteMany({attribute: updatedOne, _id:{$not:{$in:validIds}}})
   }
@@ -58,7 +63,11 @@ async function findOneById(id: Types.ObjectId | string): Promise<Attribute | nul
 }
 
 async function removeOneById(id: Types.ObjectId): Promise<Attribute | null> {
-  return AttributeModel.findOneAndDelete({ _id: id }).lean().exec()
+  const deletedOne = await AttributeModel.findOneAndDelete({ _id: id }).lean().exec()
+  if(deletedOne){
+    await AttributeValueModel.deleteMany({attribute: deletedOne._id})
+  }
+  return deletedOne
 }
 
 async function filter(filters: object): Promise<Attribute[]> {
@@ -80,6 +89,7 @@ function processValues(values: Array<AttributeValue>, attrId?: Types.ObjectId) {
     let hasntIds = values.filter(each => !each._id)
     if (attrId) {
       hasntIds = hasntIds.map(each => {
+        delete each._id;
         each.attribute = attrId;
         return each
       })
@@ -103,7 +113,7 @@ async function valueRemoveOneById(id: Types.ObjectId): Promise<AttributeValue | 
 async function detail(id: Types.ObjectId | string): Promise<Attribute | null> {
   let one = await AttributeModel.findById(id)
   if (one) {
-    const values = await AttributeValueModel.find({ attribute: one._id })
+    const values = await AttributeValueModel.find({ attribute: one._id }).select('-createdAt')
     one = one.toObject()
     one.values = values
   }

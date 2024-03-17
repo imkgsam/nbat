@@ -5,7 +5,7 @@ export const DOCUMENT_NAME = 'AttributeValue';
 export const COLLECTION_NAME = 'attributeValues';
 
 export default interface AttributeValue {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   name: string;
   code: string;
   abbr: string;

@@ -28,7 +28,8 @@ export default {
         name: Joi.string().required(),
         code: Joi.string().required(),
         abbr: Joi.string().required(),
-        attribute: JoiObjectId()
+        attribute: JoiObjectId().allow(null),
+        updatedAt: Joi.date()
       })),
       meta: {
         enabled: Joi.boolean().required()
@@ -42,7 +43,7 @@ export default {
         name: Joi.string(),
         code: Joi.string(),
         meta: Joi.object().keys({
-          enabled: Joi.boolean()
+          enabled: Joi.boolean().allow(null)
         })
       })
     })

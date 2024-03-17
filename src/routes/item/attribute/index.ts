@@ -52,15 +52,17 @@ router.post( '/filters',
   validator(AttributeSchema.attribute.filters),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    interface Filters {
-      code?: string,
-      meta?:{
-        enabled: boolean
-      }
-    }
-    const { filters  } = req.body
+    // interface Filters {
+    //   code?: string,
+    //   name?: string,
+    //   meta?:{
+    //     enabled: boolean
+    //   }
+    // }
+    const { filters } = req.body
     console.log(filters)
-    const datas = await AttributeRepo.filter(filters as Filters)
+    const datas = await AttributeRepo.filter(filters)
+    console.log(datas)
     let {currentPage, pageSize} = req.body
     if(!currentPage || currentPage<=0){
       currentPage = 1
@@ -112,6 +114,15 @@ router.post( '/disable',
     }else{
       new FailureMsgResponse('Attribute disabled failure').send(res)
     }
+  }),
+);
+
+router.post( '/delete',
+  validator(AttributeSchema.Id),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const deletedOne = await AttributeRepo.removeOneById(req.body.id);
+    new SuccessResponse('Attribute deleted successfully', deletedOne).send(res);
   }),
 );
 
