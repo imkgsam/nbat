@@ -10,13 +10,11 @@ async function findAll(): Promise<Route[]> {
     .exec();
 }
 
-// 通过path搜索单一路由
 async function findByPath(path: string): Promise<Route | null> {
   return RouteModel.findOne({ path: path, 'meta.enabled': true }).lean().exec();
 }
 
-// 创建新单一路由
-async function createRoute(newOne: Route): Promise<Route>{
+async function create(newOne: Route): Promise<Route>{
   if(newOne.meta.roles){
     const k = newOne.meta.roles.map(each=> each.toString())
     const roles = await RoleRepo.findByCodes(k)
@@ -29,7 +27,23 @@ async function createRoute(newOne: Route): Promise<Route>{
       parent = parentObj._id
     }
   }
-    
+  const createdOne = await RouteModel.create({...newOne,parent});
+  return createdOne.toObject();
+}
+
+async function update(newOne: Route): Promise<Route>{
+  if(newOne.meta.roles){
+    const k = newOne.meta.roles.map(each=> each.toString())
+    const roles = await RoleRepo.findByCodes(k)
+    newOne.meta.roles = roles.map(each=>each._id)
+  }
+  let parent = null
+  if(newOne.parent){
+    const parentObj = await RouteModel.findById(newOne.parent)
+    if(parentObj){
+      parent = parentObj._id
+    }
+  }
   const createdOne = await RouteModel.create({...newOne,parent});
   return createdOne.toObject();
 }
@@ -37,5 +51,6 @@ async function createRoute(newOne: Route): Promise<Route>{
 export default {
   findAll,
   findByPath,
-  createRoute,
+  create,
+  update
 };

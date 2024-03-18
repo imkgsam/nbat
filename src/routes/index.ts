@@ -16,6 +16,7 @@ import entity from './entities/entity';
 import employee from './entities/employee';
 import attribute from './item/attribute';
 import item from './item';
+import route from './routes';
 
 const router = express.Router();
 
@@ -36,12 +37,14 @@ router.use('/credential', credential);
 router.use('/profile', profile);
 router.use('/blog', blog);
 router.use('/blogs', blogs);
-router.use('/test',tests);
 router.use('/roles',roles);
 router.use('/entity',entity);
 router.use('/department',department)
 router.use('/employee',employee)
 router.use('/attribute',attribute)
 router.use('/item',item)
+router.use('/route',route)
+
+router.use('/test',tests);
 
 export default router;
