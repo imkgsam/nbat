@@ -41,6 +41,10 @@ interface RouteMeta {
   //（主要用于通过query或params传参的路由，当它们通过配置showLink: false后不在菜单中显示，就不会有任何菜单高亮，
   // 而通过设置activePath指定激活菜单即可获得高亮，activePath为指定激活菜单的path）
   activePath?: string;
+  //排序
+  rank?: number;
+  //是否启用
+  enabled: boolean;
 }
 
 export default interface Route {
@@ -162,6 +166,13 @@ const routeSchema = new Schema<Route>(
       // 而通过设置activePath指定激活菜单即可获得高亮，activePath为指定激活菜单的path）
       activePath: {
         type: String,
+      },
+      enabled: {
+        type: Boolean,
+        default: false
+      },
+      rank:{
+        type: Number
       }
     },
     // 子路由配置项

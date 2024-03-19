@@ -23,8 +23,8 @@ router.get( '/detail',
   validator(DepartmentSchema.Id, ValidationSourceEnum.QUERY),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const {_id}  = req.query
-    const departmentObj = await DepartmentRepo.getDetailsById(_id as string);
+    const {id}  = req.query
+    const departmentObj = await DepartmentRepo.getDetailsById(id as string);
     return new SuccessResponse('success',departmentObj).send(res);
   }),
 );
@@ -49,7 +49,7 @@ router.post( '/delete',
   validator(DepartmentSchema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const deletedOne = await DepartmentRepo.removeOneById(req.body._id);
+    const deletedOne = await DepartmentRepo.removeOneById(req.body.id);
     new SuccessResponse('Department deleted successfully', deletedOne).send(res);
   }),
 );
@@ -58,7 +58,7 @@ router.post( '/enable',
   validator(DepartmentSchema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await DepartmentRepo.enable(req.body._id)
+    const updatedOne = await DepartmentRepo.enable(req.body.id)
     if(updatedOne){
       new SuccessResponse('Department enabled successfully', updatedOne).send(res);
     }else{
@@ -79,7 +79,7 @@ router.post( '/disable',
   validator(DepartmentSchema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await DepartmentRepo.disable(req.body._id)
+    const updatedOne = await DepartmentRepo.disable(req.body.id)
     if(updatedOne){
       new SuccessResponse('Department disabled successfully', updatedOne).send(res)
     }else{

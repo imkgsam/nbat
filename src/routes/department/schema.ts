@@ -3,7 +3,7 @@ import { JoiObjectId } from '../../helpers/validator';
 
 export default {
   Id: Joi.object().keys({
-    _id: JoiObjectId().required(),
+    id: JoiObjectId().required(),
   }),
   create: Joi.object().keys({
     name: Joi.string().required().max(50),

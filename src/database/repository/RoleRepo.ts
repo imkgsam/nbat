@@ -11,6 +11,12 @@ async function findByCodes(codes: string[]): Promise<Role[]> {
     .exec();
 }
 
+async function findByIds(ids: string[]): Promise<Role[]> {
+  return RoleModel.find({ _id: { $in: ids }, 'meta.enabled': true })
+    .lean()
+    .exec();
+}
+
 async function findAll(): Promise<Role[]> {
   return RoleModel.find({})
     // .select("-_id")
@@ -42,5 +48,6 @@ export default {
   findAll,
   findByCode,
   findByCodes,
+  findByIds,
   filter
 };
