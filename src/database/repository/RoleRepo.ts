@@ -41,6 +41,9 @@ async function filter(filters: object) : Promise<Role[]>{
   return RoleModel.find(filters).lean().exec()
 }
 
+
+
+
 export default {
   create,
   enable,

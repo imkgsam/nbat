@@ -1,5 +1,6 @@
 // import Route, { RouteChildren, RouteModel, RouteChildrenModel } from '../model/Route';
 import Route, { RouteModel} from '../model/Route';
+import RouteAccess, { RouteAccessModel} from '../model/RouteAccess';
 import RoleRepo from './RoleRepo';
 import { Types } from 'mongoose'
 
@@ -72,6 +73,35 @@ async function removeOneById(id: Types.ObjectId): Promise<Route | null> {
   return deletedOne
 }
 
+
+
+
+const RouteAccess = {
+  findAll: async function findAll(): Promise<RouteAccess[]> {
+    return RouteAccessModel
+      .find({})
+      .lean()
+      .exec();
+  },
+  create: async function create(newOne: RouteAccess): Promise<RouteAccess> {
+    if(!newOne.user && !newOne.role){
+      const k = newOne.meta.roles.map(each=> each.toString())
+      const roles = await RoleRepo.findByCodes(k)
+      newOne.meta.roles = roles.map(each=>each._id)
+    }
+    let parent = null
+    if(newOne.parent){
+      const parentObj = await RouteModel.findById(newOne.parent)
+      if(parentObj){
+        parent = parentObj._id
+      }
+    }
+    const createdOne = await RouteModel.create({...newOne,parent});
+    return createdOne.toObject();
+  }
+}
+
+
 export default {
   findAll,
   fitler,
@@ -80,5 +110,6 @@ export default {
   update,
   enable,
   disable,
-  removeOneById
+  removeOneById,
+  RouteAccess
 };

@@ -17,8 +17,10 @@ interface RouteMeta {
   showParent?: boolean;
   // 页面级别权限设置，可选
   roles?: Array<Types.ObjectId>;
-  // 按钮级别权限设置，可选
+  // 按钮级别权限设置
   auths?: Array<string>;
+  // 所有可选按钮级别权限
+  auths_options?: Array<string>;
   // 路由组件缓存, 默认关闭 false，可选
   keepAlive?: boolean;
   // 内嵌的iframe链接，可选
@@ -95,10 +97,11 @@ const routeSchema = new Schema<Route>(
     meta:{
       title: {
         type: String,
-        required:false
+        required: true
       },
       icon: {
         type: String,
+        required: true
       },
       // 菜单名称右侧的额外图标，可选
       extraIcon: {
@@ -107,29 +110,34 @@ const routeSchema = new Schema<Route>(
       // 是否在菜单中显示,默认true，可选
       showLink: {
         type: Boolean,
+        default: true
       },
       // 是否显示父级菜单，可选
       showParent: {
         type: Boolean,
       },
       // 页面级别权限设置，可选
-      roles: [
-        {
-          type: ObjectId,
-          ref: 'Role',
-          required: true,
-        },
-      ],
+      // roles:{
+      //   type: [ 
+      //     {
+      //       type: ObjectId,
+      //       ref: 'Role',
+      //       required: true,
+      //     },
+      //   ],
+      //   default: () => { return null},
+      //   required: false
+      // },
       // 按钮级别权限设置，可选
-      auths: [
-        {
-          type: String,
-          required: true,
-        },
-      ],
+      auths_options: {
+        type:[String],
+        default: ()=> { return null },
+        required: false
+      },
       // 路由组件缓存, 默认关闭 false，可选
       keepAlive: {
         type: Boolean,
+        default: false
       },
       // 内嵌的iframe链接，可选
       frameSrc: {
@@ -138,6 +146,7 @@ const routeSchema = new Schema<Route>(
       // iframe页是否开启首次加载动画（默认true，可选
       frameLoading: {
         type: Boolean,
+        default: true
       },
       // 页面加载动画（有两种形式，一种直接采用vue内置的transitions动画，另一种是使用animate.css写进、离场动画，可选
       transition: {
@@ -156,6 +165,7 @@ const routeSchema = new Schema<Route>(
       // 是否不添加信息到标签页，（默认false）
       hiddenTag: {
         type: Boolean,
+        default: false
       },
       // 动态路由可打开的最大数量，可选
       dynamicLevel: {

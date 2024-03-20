@@ -8,6 +8,7 @@ import validator from '../../helpers/validator';
 import RouteSchema from './schema';
 import Route from '../../database/model/Route';
 import { ProtectedRequest } from 'app-request';
+import RouteAccess from './routeaccess';
 
 const router = express.Router();
 
@@ -94,5 +95,7 @@ router.post( '/disable',
     }
   }),
 );
+
+router.use('/access',RouteAccess)
 
 export default router;
