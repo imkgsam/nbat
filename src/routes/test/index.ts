@@ -3,10 +3,9 @@ import { SuccessResponse } from '../../core/ApiResponse';
 import asyncHandler from '../../helpers/asyncHandler';
 import authorization from '../../auth/authorization';
 import { RoleCodeEnum } from '../../database/model/Role';
-import RouteRepo  from '../../database/repository/RouteRepo';
-import validator from '../../helpers/validator';
-import schema from './schema';
-import Route from '../../database/model/Route';
+// import validator from '../../helpers/validator';
+// import schema from './schema';
+// import Route from '../../database/model/Route';
 
 const router = express.Router();
 

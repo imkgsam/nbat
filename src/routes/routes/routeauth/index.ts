@@ -7,18 +7,17 @@ import RouteRepo  from '../../../database/repository/RouteRepo';
 import validator from '../../../helpers/validator';
 import RouteSchema from '../schema';
 // import Route from '../../../database/model/Route';
-import RouteAccess from '../../../database/model/RouteAccess';
+import RouteAuth from '../../../database/model/RouteAuth';
 // import { ProtectedRequest } from 'app-request';
 
 const router = express.Router();
 
 
-router.get(
-  '/all',
+router.get('/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
     try{
-      const data = await RouteRepo.RouteAccess.findAll()
+      const data = await RouteRepo.RouteAuth.findAll()
       return new SuccessResponse('success', data).send(res);
     }catch(e){
       console.log(e)
@@ -27,14 +26,13 @@ router.get(
 );
 
 
-router.post(
-  '/',
-  validator(RouteSchema.RouteAccess.create),
+router.post('/',
+  validator(RouteSchema.RouteAuth.create),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-      const data = await RouteRepo.RouteAccess.create({
+      const data = await RouteRepo.RouteAuth.create({
         ...req.body
-      } as RouteAccess)
+      } as RouteAuth)
       return new SuccessResponse('success', data).send(res);
   }),
 );
