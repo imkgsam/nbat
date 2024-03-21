@@ -79,10 +79,53 @@ const Route = {
   },
 
 
-  // getAsyncRoutes: async function getAsyncRoutes(user?: Types.ObjectId, role?: Types.ObjectId) : Promise<Route[]>{
-  //   let ras = await RouteAccessModel.find()
-  //   return []
-  // }
+  getAsyncRoutes: async function getAsyncRoutes(user?: Types.ObjectId, roles?: Array<Types.ObjectId>) : Promise<Route[]>{
+    console.log(user,roles)
+    let filters = []
+    filters.push({$and:[{user:{$exists:false}},{role:{$exists:false}}]})
+    if(user){
+      filters.push({user:user})
+    }
+    if(roles && roles.length){
+      filters.push({role:{$in:roles}})
+    }
+    console.log(filters)
+    let ras = await RouteAccessModel.aggregate([
+      {
+        $match:{$or:filters}
+      }
+      ,{
+        $group: {
+          _id: "$route", role:{ $push: "$role" }, auths:{ $push: "$auths" }
+        }
+      },
+      {
+        $project: {
+          "auths": {
+            $reduce: {
+              input: '$auths',
+              initialValue: [],
+              in: {$concatArrays: ['$$value', '$$this']}
+            }
+          }
+        }
+      }
+
+      // ,{
+      //   $lookup:{
+      //     from : "routes",
+      //     localField:'route',
+      //     foreignField:"_id",
+      //     as: "RouteObj"
+      //   }
+      // }
+      // ,{
+      //   $unwind: "$RouteObj"
+      // }
+    ])
+    console.log(ras, ras.length)
+    return []
+  }
 }
 
 // ----------------------------- route access repo ops --------------------------------

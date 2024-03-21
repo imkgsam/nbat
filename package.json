@@ -18,12 +18,13 @@
     "dev": "nodemon -r dotenv/config src/server.ts -e ts,tsx --watch src",
     "swagger": "ts-node ./src/swagger.ts",
     "rmdump":"del-cli --force ./dump",
-    "dump":"mongodump -u dbuser -p imkgsam6593 --host localhost:27017 --db=blogs-db --authenticationDatabase admin",
-    "dbexport":"npm run rmdump && npm run dump",
+    "db:dump":"mongodump -u dbuser -p imkgsam6593 --host localhost:27017 --db=blogs-db --authenticationDatabase admin",
+    "db:restore":"mongorestore -u dbuser -p imkgsam6593 ./dump",
+    "dbexport":"npm run rmdump && npm run db:dump",
     "check": "tsc --noEmit",
     "git:prepare":"git add ./*",
     "push:prepare":"npm run dbexport && npm run git:prepare",
-    "upgrade-latest": "npx npm-check-updates -u && npm install "
+    "upgrade-latest": "npx npm-check-updates -u && npm install"
   },
   "repository": {
     "type": "git",

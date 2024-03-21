@@ -47,7 +47,7 @@ router.get('/get-async-routes2',
   authentication,
   asyncHandler(async (req: ProtectedRequest, res) => {
     console.log(req.user.roles)
-    let RouteRepo.
+    let k = await RouteRepo.Route.getAsyncRoutes(req.user._id, req.user.roles.map(each => each._id))
     return new SuccessResponse('ok',{}).send(res);
   }),
 );
