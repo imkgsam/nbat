@@ -101,7 +101,7 @@ const routeSchema = new Schema<Route>(
       },
       icon: {
         type: String,
-        required: true
+        required: false
       },
       // 菜单名称右侧的额外图标，可选
       extraIcon: {
@@ -130,7 +130,11 @@ const routeSchema = new Schema<Route>(
       // },
       // 按钮级别权限设置，可选
       auths_options: {
-        type:[String],
+        type:[{
+          type:ObjectId,
+          ref:'RouteAuth',
+          required:true
+        }],
         default: ()=> { return null },
         required: false
       },

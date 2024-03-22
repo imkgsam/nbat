@@ -23,6 +23,7 @@ export default {
         showParent: Joi.boolean(),
         roles: Joi.array(),
         auths: Joi.array(),
+        auths_options: Joi.array().items(Joi.string()),
         keepAlive: Joi.boolean(),
         frameSrc: Joi.string(),
         frameLoading: Joi.boolean(),
@@ -57,6 +58,7 @@ export default {
         showParent: Joi.boolean(),
         roles: Joi.array(),
         auths: Joi.array(),
+        auths_options: Joi.array().items(Joi.string()),
         keepAlive: Joi.boolean(),
         frameSrc: Joi.string(),
         frameLoading: Joi.boolean(),
@@ -71,7 +73,7 @@ export default {
         enabled: Joi.boolean()
       },
       children: Joi.array(),
-      parent: JoiObjectId(),
+      parent: JoiObjectId().allow(null),
     }),
   },
   RouteAuth:{

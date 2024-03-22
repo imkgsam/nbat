@@ -75,8 +75,14 @@ router.post('/delete',
   validator(RouteSchema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const deletedOne = await RouteRepo.Route.removeOneById(req.body.id);
-    new SuccessResponse('Route deleted successfully', deletedOne).send(res);
+    // const deletedOne = await RouteRepo.Route.removeOneById(req.body.id);
+    const count = await RouteRepo.Route.removeChildrenByParentId(req.body.id,true);
+    if(count){
+      new SuccessResponse(`Route and ${count -1 } children deleted successfully`, {count}).send(res);
+    }else{
+      new FailureMsgResponse('Route deleted failure').send(res)
+    }
+    
   }),
 );
 
