@@ -25,6 +25,10 @@ function processValues(arr: Array<string>) {
 // ----------------------------- route repo ops --------------------------------
 // 获取所有路由
 const Route = {
+  
+  detail : async function detail(id: string): Promise<Route | null> {
+    return RouteModel.findById(id).populate('meta.auths_options').lean().exec();
+  },
   findAll : async function findAll(): Promise<Route[]> {
     return RouteModel
       .find({})

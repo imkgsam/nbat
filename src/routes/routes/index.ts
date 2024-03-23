@@ -6,7 +6,7 @@ import authentication from '../../auth/authentication';
 
 import { RoleCodeEnum } from '../../database/model/Role';
 import RouteRepo from '../../database/repository/RouteRepo';
-import validator from '../../helpers/validator';
+import validator, { ValidationSourceEnum } from '../../helpers/validator';
 import RouteSchema from './schema';
 import Route from '../../database/model/Route';
 import { ProtectedRequest } from 'app-request';
@@ -82,7 +82,32 @@ router.post('/delete',
     }else{
       new FailureMsgResponse('Route deleted failure').send(res)
     }
-    
+  }),
+);
+
+router.get('/detail',
+  validator(RouteSchema.Id, ValidationSourceEnum.QUERY ),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const rt =  await RouteRepo.Route.detail(req.query.id as string);
+    if(rt){
+      new SuccessResponse(`success`, rt).send(res);
+    }else{
+      new FailureMsgResponse('failure').send(res)
+    }
+  }),
+);
+
+router.get('/get-auths_options',
+  validator(RouteSchema.Id, ValidationSourceEnum.QUERY),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const rt =  await RouteRepo.Route.detail(req.query.id as string);
+    if(rt){
+      new SuccessResponse(`success`, rt.meta.auths_options).send(res);
+    }else{
+      new FailureMsgResponse('failure').send(res)
+    }
   }),
 );
 
