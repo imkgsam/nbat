@@ -1,6 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 
-const { Date: SDate, ObjectId} = Schema.Types
+const { Date: SDate, ObjectId, Boolean} = Schema.Types
 
 export const DOCUMENT_NAME = 'RouteAccess';
 export const COLLECTION_NAME = 'RouteAccessControl';
@@ -18,6 +18,9 @@ export default interface RouteAccess {
   role?: Types.ObjectId;
   route: Types.ObjectId;
   auths: Array<Types.ObjectId>;
+  meta:{
+    enabled: boolean
+  }
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -44,6 +47,12 @@ const schema = new Schema<RouteAccess>(
         }
       ],
       required:true
+    },
+    meta:{
+      enabled: {
+        type: Boolean,
+        default: false
+      }
     },
     createdAt: {
       type: Date,

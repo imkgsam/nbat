@@ -87,17 +87,36 @@ export default {
   },
   RouteAccess:{
     create: Joi.object().keys({
-      user: JoiObjectId(),
-      role: JoiObjectId(),
+      user: JoiObjectId().allow(null),
+      role: JoiObjectId().allow(null),
       route: JoiObjectId().required(),
-      auths: Joi.array().items(JoiObjectId())
+      auths: Joi.array().items(JoiObjectId()),
+      meta: Joi.object().keys({
+        enabled: Joi.boolean()
+      })
     }),
     update: Joi.object().keys({
       _id: JoiObjectId().required(),
-      user: JoiObjectId(),
-      role: JoiObjectId(),
+      user: JoiObjectId().allow(null),
+      role: JoiObjectId().allow(null),
       route: JoiObjectId().required(),
-      auths: Joi.array().items(JoiObjectId())
+      auths: Joi.array().items(JoiObjectId()),
+      meta: Joi.object().keys({
+        enabled: Joi.boolean()
+      })
+    }),
+    paged_filters: Joi.object().keys({
+      currentPage: Joi.number(),
+      pageSize: Joi.number(),
+  
+      filters: Joi.object().keys({
+        user: JoiObjectId(),
+        role: JoiObjectId(),
+        route: JoiObjectId(),
+        meta: Joi.object().keys({
+          enabled: Joi.boolean()
+        })
+      })
     }),
   }
 };

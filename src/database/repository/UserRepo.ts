@@ -5,6 +5,20 @@ import { Types } from 'mongoose';
 import KeystoreRepo from './KeystoreRepo';
 import Keystore from '../model/Keystore';
 
+
+
+async function findAll(): Promise<User[]> {
+  return UserModel.find({}).lean().exec();
+}
+
+
+async function filters(filters: object): Promise<User[]> {
+  if(!filters)
+    filters = {}
+  return UserModel.find(filters).lean().exec();
+}
+
+
 async function exists(id: Types.ObjectId): Promise<boolean> {
   const user = await UserModel.exists({ _id: id, 'meta.enabled': true });
   return user !== null && user !== undefined;
@@ -127,5 +141,7 @@ export default {
   create,
   update,
   updateInfo,
-  changePassword
+  changePassword,
+  findAll,
+  filters
 };

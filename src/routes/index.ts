@@ -13,6 +13,7 @@ import tests from './test';
 import roles from './roles';
 import department from './department';
 import entity from './entities/entity';
+import users from './entities/user'
 import employee from './entities/employee';
 import attribute from './item/attribute';
 import item from './item';
@@ -41,6 +42,7 @@ router.use('/roles',roles);
 router.use('/entity',entity);
 router.use('/department',department)
 router.use('/employee',employee)
+router.use('/users',users)
 router.use('/attribute',attribute)
 router.use('/item',item)
 router.use('/route',route)

@@ -15,6 +15,9 @@ import { genEID } from '../../../helpers/utils'
 
 const router = express.Router();
 
+/**
+ * 
+ */
 router.get( '/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {

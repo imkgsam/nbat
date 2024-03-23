@@ -198,7 +198,30 @@ const RouteAccess = {
     return createdOne.toObject();
   },
   update: async function update(updateOne: RouteAccess): Promise<RouteAccess | null> {
-    return RouteAccessModel.findByIdAndUpdate(updateOne._id,{$set: {...updateOne,parent}},{ new: true }).lean().exec();
+    return RouteAccessModel.findByIdAndUpdate(updateOne._id,{$set: {...updateOne}},{ new: true }).lean().exec();
+  },
+  filters: async function filters(filters: object): Promise<RouteAccess[]> {
+    return RouteAccessModel
+    .find(filters)
+    .populate('user')
+    .populate('role')
+    .populate({
+      path:'route',
+      populate:{
+        path:'meta.auths_options'
+      }
+    })
+    .populate('auths')
+    .lean().exec();
+  },
+  removeOneById: async function removeOneById(id: Types.ObjectId): Promise<RouteAccess | null> {
+    return RouteAccessModel.findOneAndDelete({_id: id}).lean().exec()
+  },
+  enable: async function enable(id: Types.ObjectId): Promise<RouteAccess | null> {
+    return RouteAccessModel.findOneAndUpdate({_id:id ,  'meta.enabled':false},{'meta.enabled':true },{ new: true }).lean().exec();
+  },
+  disable: async function disable(id: Types.ObjectId): Promise<RouteAccess | null> {
+    return RouteAccessModel.findOneAndUpdate({ _id: id, 'meta.enabled': true},{'meta.enabled':false},{ new: true }).lean().exec();
   }
 }
 
