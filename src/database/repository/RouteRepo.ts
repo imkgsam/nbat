@@ -2,6 +2,7 @@
 import Route, { RouteModel} from '../model/Route';
 import RouteAccess, { RouteAccessModel} from '../model/RouteAccess';
 import RouteAuth, { RouteAuthModel } from '../model/RouteAuth';
+import Role from '../model/Role'
 import RoleRepo from './RoleRepo';
 import { Types } from 'mongoose'
 
@@ -140,17 +141,16 @@ const Route = {
   },
 
   getAsyncRoutes: async function getAsyncRoutes(user?: Types.ObjectId, roles?: Array<Types.ObjectId>) : Promise<Route[]>{
-    console.log(user,roles)
+    console.log('user ', user, 'roles ', roles)
     const filters = []
-    filters.push({$and:[{user:{$exists:false}},{role:{$exists:false}}]})
+    filters.push({$and:[{user:{$exists:false}},{role:{$exists:false}}]},{$and:[{user:null},{role:null}]})
     if(user){
       filters.push({user:user})
     }
     if(roles && roles.length){
       filters.push({role:{$in:roles}})
     }
-    console.log(filters)
-    const ras = await RouteAccessModel.aggregate([
+    let ras = await RouteAccessModel.aggregate([
       {
         $match:{$or:filters}
       }
@@ -167,24 +167,80 @@ const Route = {
               initialValue: [],
               in: {$concatArrays: ['$$value', '$$this']}
             }
-          }
+          },
+          "role":1
         }
       }
-
+      ,{
+        $lookup:{
+          from : "routes",
+          localField:'_id',
+          foreignField:"_id",
+          as: "route"
+        }
+      }
+      ,{
+        $unwind: "$route"
+      }
+      ,{
+        $lookup:{
+          from : "roles",
+          localField:'role',
+          foreignField:"_id",
+          as: "role"
+        }
+      }
+      ,{
+        $lookup:{
+          from : "RouteAuths",
+          localField:'auths',
+          foreignField:"_id",
+          as: "auths"
+        }
+      }
       // ,{
-      //   $lookup:{
-      //     from : "routes",
-      //     localField:'route',
-      //     foreignField:"_id",
-      //     as: "RouteObj"
+      //   $project: {
+      //     'role.code':1
       //   }
       // }
       // ,{
-      //   $unwind: "$RouteObj"
+      //   $lookup:{
+      //     from : "RouteAuths",
+      //     localField:'auths',
+      //     foreignField:"_id",
+      //     as: "auths2"
+      //   }
       // }
+      // // ,{
+      // //   $project: {
+      // //     "auths2": {
+      // //       $reduce: {
+      // //         input: '$auths2',
+      // //         initialValue: [],
+      // //         in: {$concatArrays: ['$$value', '$$this']}
+      // //       }
+      // //     }
+      // //   }
+      // // }
+      //  ,{
+      //   $project: {
+      //     _id: 0,
+      //     auths:0
+      //   }
+      // }
+      
+      
     ])
-    console.log(ras, ras.length)
-    return []
+    ras = ras.map( each => {
+      delete each._id
+      each.route.meta.auths = each.auths.map((k:RouteAuth) => k.name)
+      each.route.meta.roles = each.role.map((r:Role) => r.code)
+      each.route.meta.auths
+      return each.route
+    })
+    console.log(ras,ras.length)
+    
+    return ras
   }
 }
 
