@@ -60,9 +60,7 @@ router.post( '/filters',
     //   }
     // }
     const { filters } = req.body
-    console.log(filters)
     const datas = await AttributeRepo.filter(filters)
-    console.log(datas)
     let {currentPage, pageSize} = req.body
     if(!currentPage || currentPage<=0){
       currentPage = 1

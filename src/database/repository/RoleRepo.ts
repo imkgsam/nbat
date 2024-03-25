@@ -41,11 +41,16 @@ async function filter(filters: object) : Promise<Role[]>{
   return RoleModel.find(filters).lean().exec()
 }
 
+async function update(updatedOne: Role): Promise<Role | null> {
+  return RoleModel.findByIdAndUpdate(updatedOne._id,{$set: updatedOne},{ new: true }).lean().exec();
+}
+
 
 
 
 export default {
   create,
+  update,
   enable,
   disable,
   findAll,

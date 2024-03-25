@@ -32,10 +32,18 @@ router.post( '/',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const createdRole = await RoleRepo.create({
-      code: req.body.code,
-      meta:{
-        enabled:false
-      }
+      ...req.body
+    } as Role);
+    new SuccessResponse('Role created successfully', createdRole).send(res);
+  }),
+);
+
+router.put( '/',
+  validator(roleSchema.update),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const createdRole = await RoleRepo.update({
+      ...req.body
     } as Role);
     new SuccessResponse('Role created successfully', createdRole).send(res);
   }),
@@ -70,7 +78,6 @@ router.post( '/filters',
       }
     }
     const { filters  } = req.body
-    console.log(filters)
     const datas = await RoleRepo.filter(filters as Filters)
     let {currentPage, pageSize} = req.body
     if(!currentPage || currentPage<=0){

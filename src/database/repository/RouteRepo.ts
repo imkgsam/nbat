@@ -7,7 +7,6 @@ import RoleRepo from './RoleRepo';
 import { Types } from 'mongoose'
 
 // =------------------------- helpers -------------------
-
 function processValues(arr: Array<string>) {
   if (arr && arr.length) {
     const hasIds = arr.filter(each => Types.ObjectId.isValid(each))
@@ -20,8 +19,6 @@ function processValues(arr: Array<string>) {
     return {hasIds:null, hasntIds:null}
   }
 }
-
-
 
 // ----------------------------- route repo ops --------------------------------
 // 获取所有路由
@@ -61,6 +58,8 @@ const Route = {
         parent = parentObj._id
       }
     }
+    if(!newOne.meta.rank)
+      delete newOne.meta.rank
     const { hasntIds, hasIds } = processValues(newOne.meta.auths_options as string[])
     console.log( hasntIds, hasIds )
     let validAuths1: any[] = []
@@ -88,6 +87,9 @@ const Route = {
         parent = parentObj._id
       }
     }
+    if(!updateOne.meta.rank)
+      delete updateOne.meta.rank
+
     const { hasntIds, hasIds } = processValues(updateOne.meta.auths_options as string[])
     console.log( hasntIds, hasIds )
     let validAuths1: any[] = []
@@ -152,7 +154,7 @@ const Route = {
     }
     let ras = await RouteAccessModel.aggregate([
       {
-        $match:{$or:filters}
+        $match:{$and:[{$or:filters},{'meta.enabled':true}]}
       }
       ,{
         $group: {
@@ -198,54 +200,18 @@ const Route = {
           as: "auths"
         }
       }
-      // ,{
-      //   $project: {
-      //     'role.code':1
-      //   }
-      // }
-      // ,{
-      //   $lookup:{
-      //     from : "RouteAuths",
-      //     localField:'auths',
-      //     foreignField:"_id",
-      //     as: "auths2"
-      //   }
-      // }
-      // // ,{
-      // //   $project: {
-      // //     "auths2": {
-      // //       $reduce: {
-      // //         input: '$auths2',
-      // //         initialValue: [],
-      // //         in: {$concatArrays: ['$$value', '$$this']}
-      // //       }
-      // //     }
-      // //   }
-      // // }
-      //  ,{
-      //   $project: {
-      //     _id: 0,
-      //     auths:0
-      //   }
-      // }
-      
-      
     ])
     ras = ras.map( each => {
-      delete each._id
       each.route.meta.auths = each.auths.map((k:RouteAuth) => k.name)
       each.route.meta.roles = each.role.map((r:Role) => r.code)
       each.route.meta.auths
       return each.route
-    })
-    console.log(ras,ras.length)
-    
+    }).filter(each=> each.meta.enabled)
     return ras
   }
 }
 
 // ----------------------------- route access repo ops --------------------------------
-
 const RouteAccess = {
   findAll: async function findAll(): Promise<RouteAccess[]> {
     return RouteAccessModel
@@ -258,6 +224,8 @@ const RouteAccess = {
     return createdOne.toObject();
   },
   update: async function update(updateOne: RouteAccess): Promise<RouteAccess | null> {
+    if(!updateOne.role) updateOne.role = null as any
+    if(!updateOne.user) updateOne.user = null as any
     return RouteAccessModel.findByIdAndUpdate(updateOne._id,{$set: {...updateOne}},{ new: true }).lean().exec();
   },
   filters: async function filters(filters: object): Promise<RouteAccess[]> {
@@ -285,6 +253,7 @@ const RouteAccess = {
   }
 }
 
+// ----------------------------- route auth repo ops --------------------------------
 const RouteAuth = {
   findAll: async function findAll(): Promise<RouteAuth[]> {
     return RouteAuthModel

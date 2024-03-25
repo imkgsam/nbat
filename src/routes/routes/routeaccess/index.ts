@@ -41,9 +41,7 @@ router.post('/paged-filters',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const { filters } = req.body
-    console.log(filters)
     const datas = await RouteRepo.RouteAccess.filters(filters)
-    console.log(datas)
     let {currentPage, pageSize} = req.body
     if(!currentPage || currentPage<=0){
       currentPage = 1
@@ -65,7 +63,6 @@ router.post('/',
   validator(RouteSchema.RouteAccess.create),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    console.log(req.body)
     const data = await RouteRepo.RouteAccess.create({
       ...req.body
     } as RouteAccess)
@@ -76,7 +73,6 @@ router.post('/',
 router.put('/',
   validator(RouteSchema.RouteAccess.update),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    console.log(req.body)
     const updateOne = await RouteRepo.RouteAccess.update({ ...req.body } as RouteAccess);
     return new SuccessResponse('Route updated', updateOne).send(res);
   }),

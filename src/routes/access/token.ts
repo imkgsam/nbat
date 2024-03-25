@@ -36,9 +36,7 @@ router.post(
     if (!user) throw new AuthFailureError('User not registered');
     req.user = user;
 
-    console.log('checking refresh token')
     const refreshTokenPayload = await JWT.validate(req.body.refreshToken);
-    console.log('checking refresh token2')
     validateTokenData(refreshTokenPayload);
 
     if (accessTokenPayload.sub !== refreshTokenPayload.sub)
