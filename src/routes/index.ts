@@ -18,6 +18,7 @@ import employee from './entities/employee';
 import attribute from './item/attribute';
 import item from './item';
 import route from './routes';
+import barcode from './barcode';
 
 const router = express.Router();
 
@@ -46,6 +47,7 @@ router.use('/users',users)
 router.use('/attribute',attribute)
 router.use('/item',item)
 router.use('/route',route)
+router.use('/barcode',barcode)
 
 router.use('/test',tests);
 
