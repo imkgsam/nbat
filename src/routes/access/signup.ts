@@ -4,7 +4,7 @@ import { RoleRequest } from 'app-request';
 import crypto from 'crypto';
 import UserRepo from '../../database/repository/UserRepo';
 import { BadRequestError } from '../../core/ApiError';
-import User from '../../database/model/User';
+import User from '../../database/model/Account';
 import { createTokens } from '../../auth/authUtils';
 import validator from '../../helpers/validator';
 import schema from './schema';

@@ -2,15 +2,15 @@ import { model, Schema, Types } from 'mongoose';
 import Role from './Role';
 import Entity from './Entity';
 
-export const DOCUMENT_NAME = 'User';
-export const COLLECTION_NAME = 'users';
+export const DOCUMENT_NAME = 'Account';
+export const COLLECTION_NAME = 'accounts';
 
 export interface Question {
   question: string;
   answer: string;
 }
 
-export default interface User {
+export default interface Account {
   _id: Types.ObjectId;
   accountName?: string;
   //用于登录，或接收邮件验证码
@@ -36,7 +36,7 @@ export default interface User {
   updatedAt?: Date;
 }
 
-const schema = new Schema<User>(
+const schema = new Schema<Account>(
   {
     accountName: {
       type: Schema.Types.String,
@@ -145,4 +145,4 @@ const schema = new Schema<User>(
 schema.index({ email: 1 });
 
 
-export const UserModel = model<User>(DOCUMENT_NAME, schema, COLLECTION_NAME);
+export const AccountModel = model<Account>(DOCUMENT_NAME, schema, COLLECTION_NAME);

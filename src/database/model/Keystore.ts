@@ -1,5 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
-import User from './User';
+import User from './Account';
 import { tokenInfo } from '../../config'
 
 export const DOCUMENT_NAME = 'Keystore';

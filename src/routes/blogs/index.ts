@@ -6,7 +6,7 @@ import schema from './schema';
 import { BadRequestError } from '../../core/ApiError';
 import BlogRepo from '../../database/repository/BlogRepo';
 import { Types } from 'mongoose';
-import User from '../../database/model/User';
+import User from '../../database/model/Account';
 import BlogsCache from '../../cache/repository/BlogsCache';
 
 const router = express.Router();

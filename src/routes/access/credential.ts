@@ -3,7 +3,7 @@ import { SuccessResponse } from '../../core/ApiResponse';
 import { RoleRequest } from 'app-request';
 import UserRepo from '../../database/repository/UserRepo';
 import { BadRequestError } from '../../core/ApiError';
-import User from '../../database/model/User';
+import Account from '../../database/model/Account';
 import validator from '../../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
@@ -27,19 +27,19 @@ router.post( '/user/assign',
      * #swagger.tags = ['admin']
      */
     const user = await UserRepo.findByEmail(req.body.email);
-    if (!user) throw new BadRequestError('User do not exists');
+    if (!user) throw new BadRequestError('Account do not exists');
 
     const passwordHash = await bcrypt.hash(req.body.password, 10);
 
     await UserRepo.updateInfo({
       _id: user._id,
       password: passwordHash,
-    } as User);
+    } as Account);
 
     await KeystoreRepo.removeAllForClient(user);
 
     new SuccessResponse(
-      'User password updated',
+      'Account password updated',
       _.pick(user, ['_id', 'name', 'email']),
     ).send(res);
   }),

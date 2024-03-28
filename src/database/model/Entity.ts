@@ -66,7 +66,7 @@ export default interface Entity {
   //所有社交方式
   socialMedias?:KVMap[];
   //关联的登录账户 可选
-  user?: Types.ObjectId;
+  account?: Types.ObjectId;
   //关联的员工账户 可选
   employee?: Types.ObjectId;
   meta:{
@@ -74,6 +74,10 @@ export default interface Entity {
     enabled: boolean;
     //是否已通过认证
     verified: boolean;
+    //是否为我司供应商
+    isSupplier: boolean;
+    //是否为我司客户
+    isCustomer: boolean;
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -158,9 +162,9 @@ const schema = new Schema<Entity>(
       mkey: { type: String, trim:true},
       mvalue: { type: String, trim: true}
     }],
-    user: {
+    account: {
       type: ObjectId,
-      ref:'Entity'
+      ref: 'Account'
     },
     employee: {
       type: ObjectId,
@@ -174,19 +178,25 @@ const schema = new Schema<Entity>(
       verified:{
         type: Boolean,
         default: false,
+      },
+      isSupplier:{
+        type: Boolean,
+        default:false
+      },
+      isCustomer:{
+        type: Boolean,
+        default:false
       }
     },
     createdAt: {
       type: Schema.Types.Date,
       required: true,
       default: new Date(),
-      select: false
     },
     updatedAt: {
       type: Schema.Types.Date,
       required: true,
       default: new Date(),
-      select: false
     },
   },
   {

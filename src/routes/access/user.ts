@@ -15,7 +15,7 @@ import Logger from '../../core/Logger';
 import { ProtectedRequest } from 'app-request';
 import { SuccessMsgResponse } from '../../core/ApiResponse';
 import authentication from '../../auth/authentication';
-import User from '../../database/model/User';
+import User from '../../database/model/Account';
 import { RoleRequest } from 'app-request';
 import { RoleCodeEnum } from '../../database/model/Role';
 
@@ -43,7 +43,7 @@ router.post(
     const userData = await getUserData(user);
     Logger.info(`User Login as ${user.accountName}`)
     new SuccessResponse('Login Success', {
-      user:{
+      account:{
         ...userData,
         roles: userData.roles.map(each=> each.code)
       },
@@ -100,7 +100,7 @@ router.post(
     const refreshTokenKey = crypto.randomBytes(64).toString('hex');
     const passwordHash = await bcrypt.hash(req.body.password, 10);
 
-    const { user: createdUser, keystore } = await UserRepo.create(
+    const { account: createdUser, keystore } = await UserRepo.create(
       {
         accountName: req.body.accountName,
         email: req.body.email,

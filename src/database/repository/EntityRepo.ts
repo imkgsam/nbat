@@ -10,13 +10,13 @@ async function findOneByUserId(userId: Types.ObjectId): Promise<Entity | null> {
     .exec();
 }
 
-
 /**
  *  用户获取profile
  */
-async function findEntityDetailedInfoByUserId(userId: Types.ObjectId): Promise<Entity | null> {
+async function findEntityDetailedInfoByUserId(id: Types.ObjectId): Promise<Entity | null> {
+  console.log(id)
   return EntityModel.findOne({
-    user: userId
+    account: id
   })
   .select('+accountName +roles +email')
   .populate('employee')
@@ -63,40 +63,7 @@ async function findAllEE(): Promise<Entity[]> {
   );
 }
 
-async function create(newEntity: Entity): Promise<Entity> {
-  const createdOne = await EntityModel.create(newEntity);
-  return createdOne.toObject();
-}
 
-async function enable(id: Types.ObjectId): Promise<Entity | null> {
-  return EntityModel.findByIdAndUpdate(
-    id,
-    { 'meta.enabled': true },
-    { new: true },
-  )
-    .lean()
-    .exec();
-}
-
-async function disable(id: Types.ObjectId): Promise<Entity | null> {
-  return EntityModel.findByIdAndUpdate(
-    id,
-    { 'meta.enabled': false },
-    { new: true },
-  )
-    .lean()
-    .exec();
-}
-
-async function verify(id: Types.ObjectId): Promise<Entity | null> {
-  return EntityModel.findOneAndUpdate(
-    { _id:id, 'meta.verified':false },
-    { 'meta.verified': true },
-    { new: true },
-  )
-    .lean()
-    .exec();
-}
 
 async function findOneVECompanyByName(name: string): Promise<Entity | null> {
   return EntityModel.findOne({  name: name, etype: EntityTypeEnum.COMPANY, 'meta.enabled':true, 'meta.verified':true })
@@ -122,31 +89,91 @@ async function findOneEEbyId(id: Types.ObjectId): Promise<Entity | null> {
     .exec();
 }
 
-async function createCompany(newEntity: Entity): Promise<Entity> {
-  newEntity.etype = EntityTypeEnum.COMPANY
-  return create(newEntity)
+
+// ------------------------ 
+
+const Company = {
+  create: (newOne: Entity) => create(newOne,EntityTypeEnum.COMPANY),
+  update,
+  filter: (filter:Entity) => filters(filter, EntityTypeEnum.COMPANY),
+  delete: deleteOne
+
 }
 
-async function createPerson(newEntity: Entity): Promise<Entity> {
-  newEntity.etype = EntityTypeEnum.PERSON
-  return create(newEntity)
+
+const Person = {
+  create: (newOne: Entity) => create(newOne,EntityTypeEnum.PERSON),
+  update,
+  filter: (filter:Entity) => filters(filter, EntityTypeEnum.PERSON),
+  delete: deleteOne
 }
+
+//          ------------------------ share functions ---------------------
+async function enable(id: Types.ObjectId): Promise<Entity | null> {
+  return EntityModel.findByIdAndUpdate(
+    id,
+    { 'meta.enabled': true },
+    { new: true },
+  )
+    .lean()
+    .exec();
+}
+async function disable(id: Types.ObjectId): Promise<Entity | null> {
+  return EntityModel.findByIdAndUpdate(
+    id,
+    { 'meta.enabled': false },
+    { new: true },
+  )
+    .lean()
+    .exec();
+}
+async function verify(id: Types.ObjectId): Promise<Entity | null> {
+  return EntityModel.findOneAndUpdate(
+    { _id:id, 'meta.verified':false },
+    { 'meta.verified': true },
+    { new: true },
+  )
+    .lean()
+    .exec();
+}
+async function create(newOne: Entity,type: EntityTypeEnum): Promise<Entity> {
+  newOne.etype = type
+  return EntityModel.create(newOne)
+}
+async function update(updateOne: Entity): Promise<Entity | null> {
+  return EntityModel.findByIdAndUpdate(updateOne._id, { $set: updateOne }, { new: true }).lean().exec();
+}
+async function filters( filters: Entity,type: EntityTypeEnum ): Promise<Entity[]> {
+  filters.etype = type
+  return EntityModel.find(filters).populate('account').lean().exec();
+}
+async function deleteOne(id: Types.ObjectId): Promise<Entity | null> {
+  return EntityModel.findOneAndDelete({_id: id}).lean().exec();
+}
+
+
 
 export default {
-  // create,
   findOneOrCreate,
   findOneByUserId,
-  enable,
-  disable,
-  verify,
+  
   findOneByIdOrName,
   findOneVECompanyByName,
   findOneVEPersonByName,
   findOneByIdAndSetEmployee,
-  createCompany,
-  createPerson,
+  // createCompany,
+  // createPerson,
   findAllwithFilters,
   findOneEEbyId,
   findAllEE,
-  findEntityDetailedInfoByUserId
+  findEntityDetailedInfoByUserId,
+
+  Person,
+  Company,
+
+
+  // shared function 
+  enable,
+  disable,
+  verify,
 };

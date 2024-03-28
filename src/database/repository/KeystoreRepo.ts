@@ -1,8 +1,8 @@
 import Keystore, { KeystoreModel } from '../model/Keystore';
 import { Types } from 'mongoose';
-import User from '../model/User';
+import Account from '../model/Account';
 
-async function findforKey(client: User, key: string): Promise<Keystore | null> {
+async function findforKey(client: Account, key: string): Promise<Keystore | null> {
   return KeystoreModel.findOne({
     client: client,
     primaryKey: key,
@@ -16,12 +16,12 @@ async function remove(id: Types.ObjectId): Promise<Keystore | null> {
   return KeystoreModel.findOneAndDelete({_id: id}).lean().exec();
 }
 
-async function removeAllForClient(client: User) {
+async function removeAllForClient(client: Account) {
   return KeystoreModel.deleteMany({ client: client }).exec();
 }
 
 async function find(
-  client: User,
+  client: Account,
   primaryKey: string,
   secondaryKey: string,
 ): Promise<Keystore | null> {
@@ -35,7 +35,7 @@ async function find(
 }
 
 async function create(
-  client: User,
+  client: Account,
   primaryKey: string,
   secondaryKey: string,
 ): Promise<Keystore> {

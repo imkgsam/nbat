@@ -1,5 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
-import User from './User';
+import User from './Account';
 
 export const DOCUMENT_NAME = 'Blog';
 export const COLLECTION_NAME = 'blogs';

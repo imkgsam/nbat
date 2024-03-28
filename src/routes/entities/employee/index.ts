@@ -10,7 +10,7 @@ import EmployeeRepo from '../../../database/repository/EmployeeRepo';
 import EntityRepo from '../../../database/repository/EntityRepo';
 import Entity, { EntityTypeEnum } from '../../../database/model/Entity';
 import Employee from '../../../database/model/Employee'
-import User from '../../../database/model/User';
+import User from '../../../database/model/Account';
 import { genEID } from '../../../helpers/utils'
 
 const router = express.Router();
