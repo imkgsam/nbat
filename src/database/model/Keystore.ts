@@ -1,5 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
-import User from './Account';
+import Account from './Account';
 import { tokenInfo } from '../../config'
 
 export const DOCUMENT_NAME = 'Keystore';
@@ -7,7 +7,7 @@ export const COLLECTION_NAME = 'keystores';
 
 export default interface Keystore {
   _id: Types.ObjectId;
-  client: User;
+  client: Account;
   primaryKey: string;
   secondaryKey: string;
   status?: boolean;
@@ -20,7 +20,7 @@ const schema = new Schema<Keystore>(
     client: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'User',
+      ref: 'Account',
     },
     primaryKey: {
       type: Schema.Types.String,

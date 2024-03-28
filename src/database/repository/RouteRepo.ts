@@ -225,7 +225,7 @@ const RouteAccess = {
   },
   update: async function update(updateOne: RouteAccess): Promise<RouteAccess | null> {
     if(!updateOne.role) updateOne.role = null as any
-    if(!updateOne.user) updateOne.user = null as any
+    if(!updateOne.account) updateOne.account = null as any
     return RouteAccessModel.findByIdAndUpdate(updateOne._id,{$set: {...updateOne}},{ new: true }).lean().exec();
   },
   filters: async function filters(filters: object): Promise<RouteAccess[]> {

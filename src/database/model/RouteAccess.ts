@@ -14,7 +14,7 @@ export enum RoleCodeEnum {
 
 export default interface RouteAccess {
   _id?: Types.ObjectId;
-  user?: Types.ObjectId;
+  account?: Types.ObjectId;
   role?: Types.ObjectId;
   route: Types.ObjectId;
   auths: Array<Types.ObjectId>;
@@ -27,9 +27,9 @@ export default interface RouteAccess {
 
 const schema = new Schema<RouteAccess>(
   {
-    user: {
+    account: {
       type: ObjectId,
-      ref: 'User'
+      ref: 'Account'
     },
     role:{
       type: ObjectId,
@@ -71,6 +71,6 @@ const schema = new Schema<RouteAccess>(
   },
 );
 
-schema.index({ user:1, role:1, route:1 });
+schema.index({ account:1, role:1, route:1 });
 
 export const RouteAccessModel = model<RouteAccess>(DOCUMENT_NAME, schema, COLLECTION_NAME);

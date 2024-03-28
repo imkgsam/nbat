@@ -143,8 +143,13 @@ async function create(newOne: Entity,type: EntityTypeEnum): Promise<Entity> {
 async function update(updateOne: Entity): Promise<Entity | null> {
   return EntityModel.findByIdAndUpdate(updateOne._id, { $set: updateOne }, { new: true }).lean().exec();
 }
-async function filters( filters: Entity,type: EntityTypeEnum ): Promise<Entity[]> {
-  filters.etype = type
+async function filters( filters: any,type: EntityTypeEnum ): Promise<Entity[]> {
+  filters['etype'] = type
+  for (let key of Object.keys(filters.meta)){
+    filters[`meta.${key}`] = filters.meta[key]
+  }
+  delete filters.meta
+  console.log(filters)
   return EntityModel.find(filters).populate('account').lean().exec();
 }
 async function deleteOne(id: Types.ObjectId): Promise<Entity | null> {
