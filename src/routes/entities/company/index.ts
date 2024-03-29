@@ -5,29 +5,12 @@ import authorization from '../../../auth/authorization';
 import authentication from '../../../auth/authentication'
 import { RoleCodeEnum } from '../../../database/model/Role';
 import validator from '../../../helpers/validator';
-import schema from './schema';
+import schema from '../schema';
 import { ProtectedRequest } from 'app-request';
 import EntityRepo from '../../../database/repository/EntityRepo';
 import Entity, { EntityTypeEnum } from '../../../database/model/Entity';
 
 const router = express.Router();
-
-router.get( '/all',
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req, res) => {
-    const entities = await EntityRepo.findAllwithFilters();
-    return new SuccessResponse('success', entities).send(res);
-  }),
-);
-
-router.get( '/detailedinfo4currentuser',
-  authentication,
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    console.log(req.user._id)
-    const entity = await EntityRepo.findEntityDetailedInfoByUserId(req.user._id);
-    return new SuccessResponse('success', entity).send(res);
-  }),
-);
 
 router.get( '/company/all',
   authorization(RoleCodeEnum.ADMIN),
@@ -59,14 +42,6 @@ router.post( '/company/filters',
       pageSize: pageSize,
       currentPage: currentPage 
     }).send(res);
-  }),
-);
-
-router.get( '/employee/all',
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req, res) => {
-    const entities = await EntityRepo.findAllwithFilters({employee: {$ne:null}});
-    return new SuccessResponse('success', entities).send(res);
   }),
 );
 
@@ -125,47 +100,5 @@ router.post( '/verify',
   }),
 );
 
-router.get( '/person/all',
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req, res) => {
-    const entities = await EntityRepo.findAllwithFilters({etype: EntityTypeEnum.PERSON});
-    return new SuccessResponse('success', entities).send(res);
-  }),
-);
-
-router.post( '/person/filters',
-  validator(schema.Person.filters),
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    
-    const { filters } = req.body
-    const datas = await EntityRepo.Person.filter(filters)
-    let {currentPage, pageSize} = req.body
-    if(!currentPage || currentPage<=0){
-      currentPage = 1
-    }
-    if(!pageSize || pageSize <=0){
-      pageSize = 10
-    }
-    const rt = datas.slice(pageSize*(currentPage-1),currentPage*pageSize)
-    new SuccessResponse('success', {
-      list: rt,
-      total: datas.length,
-      pageSize: pageSize,
-      currentPage: currentPage 
-    }).send(res);
-  }),
-);
-
-router.post( '/person/',
-  validator(schema.Person.create),
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    const createdOne = await EntityRepo.Person.create({
-      ...req.body
-    } as Entity);
-    new SuccessResponse('Person created successfully', createdOne).send(res);
-  }),
-);
 
 export default router;

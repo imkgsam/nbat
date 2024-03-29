@@ -9,8 +9,9 @@ import RoleRepo from './RoleRepo';
 async function findAll(): Promise<Employee[]> {
   return (
     EmployeeModel.find({})
-      .lean()
-      .exec()
+    .populate('entity')
+    .lean()
+    .exec()
   );
 }
 
@@ -80,6 +81,7 @@ async function enableLogin(entityId: Types.ObjectId, employeeId: Types.ObjectId,
     return null;
   }
 }
+
 async function disableLogin(entityId: Types.ObjectId, employeeId: Types.ObjectId, userId: Types.ObjectId): Promise<Account | null> {
   const [entity, employee, user] = await Promise.all([EntityModel.findById(entityId) ,EmployeeModel.findById(employeeId), AccountModel.findById(userId)])
   if(entity && employee && user && entity.account && entity.employee?.toString() === employee._id.toString() && employee.entity.toString() === entity._id.toString() && entity.account.toString() === user._id.toString()){
@@ -87,6 +89,17 @@ async function disableLogin(entityId: Types.ObjectId, employeeId: Types.ObjectId
   }else{
     return null;
   }
+}
+
+async function filters( filters: any ): Promise<Employee[]> {
+  if(Object.keys(filters).includes('meta')){
+    for (let key of Object.keys(filters.meta)){
+      filters[`meta.${key}`] = filters.meta[key]
+    }
+    delete filters.meta
+  }
+  console.log(filters)
+  return EmployeeModel.find(filters).populate('account').lean().exec();
 }
 
 export default {
