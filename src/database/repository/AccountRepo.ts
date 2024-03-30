@@ -117,7 +117,7 @@ async function create(
 
 
 async function update(updatedOne: Account): Promise<Account | null> {
-  return AccountModel.findByIdAndUpdate(updatedOne._id,{$set: updatedOne},{ new: true }).lean().exec();
+  return AccountModel.findByIdAndUpdate(updatedOne._id,{$set: updatedOne},{ new: true }).populate('roles','code').lean().exec()
 }
 
 async function updateInfo(account: Account): Promise<any> {

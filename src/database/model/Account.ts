@@ -66,7 +66,6 @@ const schema = new Schema<Account>(
         },
       ],
       required: true,
-      select: false,
     },
     entity: {
       type: Schema.Types.ObjectId,
@@ -127,13 +126,11 @@ const schema = new Schema<Account>(
       type: Schema.Types.Date,
       default: new Date(),
       required: true,
-      select: false
     },
     updatedAt: {
       type: Schema.Types.Date,
       default: new Date(),
       required: true,
-      select: false
     },
   },
   {

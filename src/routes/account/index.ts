@@ -36,7 +36,7 @@ router.put('/',
   validator(schema.update),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const updatedOne = await AccountRepo.update({...req.body} as Account);
-    return new SuccessResponse('Account updated', updatedOne).send(res);
+    return new SuccessResponse('Account updated', {...updatedOne,roles: updatedOne?.roles.map(each=> each.code)}).send(res);
   }),
 );
 
