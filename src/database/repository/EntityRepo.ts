@@ -108,6 +108,18 @@ const Person = {
   delete: deleteOne
 }
 
+const Employee = {
+  filter: async function filter(filters: any){
+    filters['etype'] = EntityTypeEnum.PERSON
+    for (const key of Object.keys(filters.meta)){
+      filters[`meta.${key}`] = filters.meta[key]
+    }
+    delete filters.meta
+    console.log(filters)
+    return EntityModel.find(filters).populate('account').populate({path:'employee',populate:{path:'departments'}}).lean().exec()
+  }
+}
+
 //          ------------------------ share functions ---------------------
 async function enable(id: Types.ObjectId): Promise<Entity | null> {
   return EntityModel.findByIdAndUpdate(
@@ -145,12 +157,12 @@ async function update(updateOne: Entity): Promise<Entity | null> {
 }
 async function filters( filters: any,type: EntityTypeEnum ): Promise<Entity[]> {
   filters['etype'] = type
-  for (let key of Object.keys(filters.meta)){
+  for (const key of Object.keys(filters.meta)){
     filters[`meta.${key}`] = filters.meta[key]
   }
   delete filters.meta
   console.log(filters)
-  return EntityModel.find(filters).populate('account').lean().exec();
+  return EntityModel.find(filters).populate('account');
 }
 async function deleteOne(id: Types.ObjectId): Promise<Entity | null> {
   return EntityModel.findOneAndDelete({_id: id}).lean().exec();
@@ -175,6 +187,7 @@ export default {
 
   Person,
   Company,
+  Employee,
 
 
   // shared function 

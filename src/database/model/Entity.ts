@@ -71,13 +71,15 @@ export default interface Entity {
   employee?: Types.ObjectId;
   meta:{
     //是否开启
-    enabled: boolean;
+    enabled?: boolean;
     //是否已通过认证
-    verified: boolean;
+    verified?: boolean;
     //是否为我司供应商
-    isSupplier: boolean;
+    isSupplier?: boolean;
     //是否为我司客户
-    isCustomer: boolean;
+    isCustomer?: boolean;
+    //是否为我司员工
+    isEmployee?: boolean;
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -168,7 +170,7 @@ const schema = new Schema<Entity>(
     },
     employee: {
       type: ObjectId,
-      ref:'Employee'
+      ref: 'Employee'
     },
     meta:{
       enabled: {
@@ -186,6 +188,10 @@ const schema = new Schema<Entity>(
       isCustomer:{
         type: Boolean,
         default:false
+      },
+      isEmployee:{
+        type: Boolean,
+        default: false
       }
     },
     createdAt: {

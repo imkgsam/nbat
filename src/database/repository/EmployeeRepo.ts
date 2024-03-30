@@ -10,6 +10,7 @@ async function findAll(): Promise<Employee[]> {
   return (
     EmployeeModel.find({})
     .populate('entity')
+    .populate('departments')
     .lean()
     .exec()
   );
@@ -110,5 +111,6 @@ export default {
   verify,
   createUser,
   enableLogin,
-  disableLogin
+  disableLogin,
+  filters
 };

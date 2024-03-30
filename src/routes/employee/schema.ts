@@ -92,11 +92,10 @@ export default {
       pageSize: Joi.number(),
   
       filters: Joi.object().keys({
-        name: Joi.string(),
+        code: Joi.string(),
         meta: Joi.object().keys({
           enabled: Joi.boolean(),
-          verified: Joi.boolean(),
-          isEmployee: Joi.boolean()
+          verified: Joi.boolean()
         })
       })
     }),

@@ -1,6 +1,6 @@
 import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
-import UserRepo from '../../database/repository/UserRepo';
+import UserRepo from '../../database/repository/AccountRepo';
 import { ProtectedRequest } from 'app-request';
 import { BadRequestError } from '../../core/ApiError';
 import validator from '../../helpers/validator';

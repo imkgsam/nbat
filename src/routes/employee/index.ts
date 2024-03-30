@@ -1,51 +1,50 @@
 import express from 'express';
-import { SuccessResponse, FailureMsgResponse } from '../../../core/ApiResponse';
-import asyncHandler from '../../../helpers/asyncHandler';
-import authorization from '../../../auth/authorization';
-import { RoleCodeEnum } from '../../../database/model/Role';
-import validator from '../../../helpers/validator';
-import schema from '../schema';
+import { SuccessResponse, FailureMsgResponse } from '../../core/ApiResponse';
+import asyncHandler from '../../helpers/asyncHandler';
+import authorization from '../../auth/authorization';
+import { RoleCodeEnum } from '../../database/model/Role';
+import validator from '../../helpers/validator';
+import schema from './schema';
 import { ProtectedRequest } from 'app-request';
-import EmployeeRepo from '../../../database/repository/EmployeeRepo';
-import EntityRepo from '../../../database/repository/EntityRepo';
-import Entity, { EntityTypeEnum } from '../../../database/model/Entity';
-import Employee from '../../../database/model/Employee'
-import User from '../../../database/model/Account';
-import { genEID } from '../../../helpers/utils'
+import EmployeeRepo from '../../database/repository/EmployeeRepo';
+import EntityRepo from '../../database/repository/EntityRepo';
+import Entity, { EntityTypeEnum } from '../../database/model/Entity';
+import Employee from '../../database/model/Employee'
+import User from '../../database/model/Account';
+import { genEID } from '../../helpers/utils'
 
 const router = express.Router();
 
 router.get( '/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const employees = await EntityRepo.Employee.filter({meta:{isEmployee:true}} as Entity);
+    const employees = await EmployeeRepo.findAll();
     return new SuccessResponse('success', employees).send(res);
   }),
 )
 
-router.post( '/pfilters',
-  validator(schema.Employee.filters),
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    const { filters } = req.body
-    filters.meta.isEmployee = true
-    const datas = await EntityRepo.Employee.filter(filters)
-    let {currentPage, pageSize} = req.body
-    if(!currentPage || currentPage<=0){
-      currentPage = 1
-    }
-    if(!pageSize || pageSize <=0){
-      pageSize = 10
-    }
-    const rt = datas.slice(pageSize*(currentPage-1),currentPage*pageSize)
-    new SuccessResponse('success', {
-      list: rt,
-      total: datas.length,
-      pageSize: pageSize,
-      currentPage: currentPage 
-    }).send(res);
-  }),
-);
+// router.post( '/pfilters',
+//   validator(schema.Employee.filters),
+//   authorization(RoleCodeEnum.ADMIN),
+//   asyncHandler(async (req: ProtectedRequest, res) => {
+//     const { filters } = req.body
+//     const datas = await EntityRepo.Employee.filter(filters)
+//     let {currentPage, pageSize} = req.body
+//     if(!currentPage || currentPage<=0){
+//       currentPage = 1
+//     }
+//     if(!pageSize || pageSize <=0){
+//       pageSize = 10
+//     }
+//     const rt = datas.slice(pageSize*(currentPage-1),currentPage*pageSize)
+//     new SuccessResponse('success', {
+//       list: rt,
+//       total: datas.length,
+//       pageSize: pageSize,
+//       currentPage: currentPage 
+//     }).send(res);
+//   }),
+// );
 
 // router.post( '/',
 //   validator(schema.Employee.create),

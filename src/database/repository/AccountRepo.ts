@@ -5,19 +5,15 @@ import { Types } from 'mongoose';
 import KeystoreRepo from './KeystoreRepo';
 import Keystore from '../model/Keystore';
 
-
-
 async function findAll(): Promise<Account[]> {
   return AccountModel.find({}).lean().exec();
 }
-
 
 async function filters(filters: object): Promise<Account[]> {
   if(!filters)
     filters = {}
   return AccountModel.find(filters).lean().exec();
 }
-
 
 async function exists(id: Types.ObjectId): Promise<boolean> {
   const account = await AccountModel.exists({ _id: id, 'meta.enabled': true });
@@ -102,21 +98,26 @@ async function create(
   };
 }
 
-async function update(
-  account: Account,
-  accessTokenKey: string,
-  refreshTokenKey: string,
-): Promise<{ account: Account; keystore: Keystore }> {
-  account.updatedAt = new Date();
-  await AccountModel.updateOne({ _id: account._id }, { $set: { ...account } })
-    .lean()
-    .exec();
-  const keystore = await KeystoreRepo.create(
-    account,
-    accessTokenKey,
-    refreshTokenKey,
-  );
-  return { account, keystore: keystore };
+// async function update(
+//   account: Account,
+//   accessTokenKey: string,
+//   refreshTokenKey: string,
+// ): Promise<{ account: Account; keystore: Keystore }> {
+//   account.updatedAt = new Date();
+//   await AccountModel.updateOne({ _id: account._id }, { $set: { ...account } })
+//     .lean()
+//     .exec();
+//   const keystore = await KeystoreRepo.create(
+//     account,
+//     accessTokenKey,
+//     refreshTokenKey,
+//   );
+//   return { account, keystore: keystore };
+// }
+
+
+async function update(updatedOne: Account): Promise<Account | null> {
+  return AccountModel.findByIdAndUpdate(updatedOne._id,{$set: updatedOne},{ new: true }).lean().exec();
 }
 
 async function updateInfo(account: Account): Promise<any> {

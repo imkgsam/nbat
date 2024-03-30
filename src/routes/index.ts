@@ -18,8 +18,10 @@ import item from './item';
 import route from './routes';
 import barcode from './barcode';
 import publics from './access/publics'
-const router = express.Router();
+import account from './account'
+import employee from './employee'
 
+const router = express.Router();
 
 /*---------------------------------------------------------*/
 // router.use(apikey);
@@ -47,7 +49,8 @@ router.use('/attribute',attribute)
 router.use('/item',item)
 router.use('/route',route)
 router.use('/barcode',barcode)
-
+router.use('/employee',employee)
+router.use('/account',account)
 router.use('/test',tests);
 
 export default router;

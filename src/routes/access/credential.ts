@@ -1,7 +1,7 @@
 import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
 import { RoleRequest } from 'app-request';
-import UserRepo from '../../database/repository/UserRepo';
+import UserRepo from '../../database/repository/AccountRepo';
 import { BadRequestError } from '../../core/ApiError';
 import Account from '../../database/model/Account';
 import validator from '../../helpers/validator';
