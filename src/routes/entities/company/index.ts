@@ -74,7 +74,7 @@ router.post( '/company',
 );
 
 router.post( '/enable',
-  validator(schema.id),
+  validator(schema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const updatedOne = await EntityRepo.enable(req.body.id)
@@ -83,7 +83,7 @@ router.post( '/enable',
 );
 
 router.post( '/disable',
-  validator(schema.id),
+  validator(schema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const updatedOne = await EntityRepo.disable(req.body.id)
@@ -92,7 +92,7 @@ router.post( '/disable',
 );
 
 router.post( '/verify',
-  validator(schema.id),
+  validator(schema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const updatedOne = await EntityRepo.verify(req.body.id)

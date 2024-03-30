@@ -90,7 +90,7 @@ export default interface Employee {
   //试用期
   probation?:{
     //试用期开始时间
-    startDate?: boolean;
+    startDate?: Date;
     //计划试用时间 按天算
     period?: number;
     //试用期实际结束日期：提前转正，延期试用
