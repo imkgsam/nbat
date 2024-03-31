@@ -12,10 +12,17 @@ export enum EmployeeTypeEnum {
   INTERN = 'Intern',
   // 零时工，或是 parttime
   TEMPORARY = 'Temporary',
-  //合同工
+  //合同工 - 参考飞书 劳务
   CONTRACT = 'Contract',
   //试用工
-  PROBATIONARY = "Probationary" 
+  PROBATIONARY = "Probationary" ,
+  //外包
+  OUTSOURCE = "Outsource",
+  //参考飞书 顾问
+  CONSULTANT ="Consultant",
+  //工人
+  LABOR = 'Labor'
+
 }
 // 试用结果类型
 export enum probationResultTypeEnum {
@@ -86,7 +93,7 @@ export default interface Employee {
   //ETL 员工职称等级(K为管理体系，P为普通员工体系 K1-9 P1-9 如有细分则为 K1.1 K3.2 P7.4 ...)
   ETL?: string;
   //入职日期 = 试用期起始日期 = 进入公司的日期
-  inauguratiionDate?: Date;
+  inaugurationDate?: Date;
   //试用期
   probation?:{
     //试用期开始时间
@@ -158,7 +165,7 @@ const schema = new Schema<Employee>(
     entity: {
       type: ObjectId,
       required: true,
-      unique:true
+      unique:true,
     },
     etype: {
       type: String,
@@ -192,7 +199,7 @@ const schema = new Schema<Employee>(
       type: String,
       trim:true
     },
-    inauguratiionDate: {
+    inaugurationDate: {
       type: Schema.Types.Date,
     },
     probation:{
@@ -241,12 +248,26 @@ const schema = new Schema<Employee>(
           type: String,
           unique: true,
           trim: true,
+          sparse:true
         },
         passport: {
           type: String,
           unique: true,
           trim: true,
-        }
+          sparse:true
+        },
+        taxNo: {
+          type: String,
+          unique: true,
+          trim: true,
+          sparse:true
+        },
+        driverLicense : {
+          type: String,
+          unique: true,
+          trim: true,
+          sparse:true
+        },
       },
       emergency:{
         contact: {

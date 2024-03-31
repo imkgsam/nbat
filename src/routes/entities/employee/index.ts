@@ -15,6 +15,11 @@ import { genEID } from '../../../helpers/utils'
 
 const router = express.Router();
 
+
+/**
+ * 获取所有员工
+ * 完整列表
+ */
 router.get( '/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
@@ -23,6 +28,22 @@ router.get( '/all',
   }),
 )
 
+/**
+ * 获取所有公开的员工
+ * 完整列表
+ */
+router.get( '/allpublic',
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const employees = await EntityRepo.Employee.filter({meta:{isEmployee:true,enabled: true, verified: true}} as Entity);
+    return new SuccessResponse('success', employees).send(res);
+  }),
+)
+
+/**
+ * 筛选员工
+ * 按页返回
+ */
 router.post( '/pfilters',
   validator(schema.Employee.filters),
   authorization(RoleCodeEnum.ADMIN),
@@ -47,30 +68,17 @@ router.post( '/pfilters',
   }),
 );
 
-// router.post( '/',
-//   validator(schema.Employee.create),
-//   authorization(RoleCodeEnum.ADMIN),
-//   asyncHandler(async (req: ProtectedRequest, res) => {
-//     const myCompany = await EntityRepo.findOneVECompanyByName('潮州市美隆陶瓷实业有限公司')
-//     if(!myCompany){
-//       return new FailureMsgResponse('ml is missing').send(res)
-//     }
-//     const createdEntity = await EntityRepo.findOneOrCreate({
-//       ...req.body,
-//       etype: EntityTypeEnum.PERSON,
-//       scompany: myCompany._id,
-//     } as Entity)
-//     const createdEmployee = await EmployeeRepo.create({
-//       entity: createdEntity._id,
-//       ...req.body.employee,
-//       EID: genEID(req.body.entity.name, req.body.employee.inauguratiionDate,req.body.entity.personal?.sex),
-//     } as Employee)
-//     createdEntity.employee = createdEmployee._id
-//     await EntityRepo.findOneByIdAndSetEmployee(createdEntity._id,createdEmployee._id)
-//     const employeeEntity = await EntityRepo.findOneEEbyId(createdEmployee._id)
-//     new SuccessResponse('Employee created successfully', employeeEntity).send(res);
-//   }),
-// )
+router.post( '/',
+  validator(schema.Employee.create),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const createdEntity = await EntityRepo.Employee.create({
+      ...req.body,
+      etype: EntityTypeEnum.PERSON,
+    } as Entity)
+    new SuccessResponse('Employee created successfully', createdEntity).send(res);
+  }),
+)
 
 // router.post( '/enable',
 //   validator(schema.Employee.idee),

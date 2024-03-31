@@ -80,6 +80,8 @@ export default interface Entity {
     isCustomer?: boolean;
     //是否为我司员工
     isEmployee?: boolean;
+    //是否可以登录系统
+    isUser?: boolean;
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -190,6 +192,10 @@ const schema = new Schema<Entity>(
         default:false
       },
       isEmployee:{
+        type: Boolean,
+        default: false
+      },
+      isUser:{
         type: Boolean,
         default: false
       }

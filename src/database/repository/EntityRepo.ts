@@ -1,3 +1,5 @@
+import { AccountModel } from '../model/Account';
+import { EmployeeModel } from '../model/Employee';
 import Entity, { EntityModel, EntityTypeEnum } from '../model/Entity';
 import { Types } from 'mongoose';
 
@@ -115,8 +117,39 @@ const Employee = {
       filters[`meta.${key}`] = filters.meta[key]
     }
     delete filters.meta
-    console.log(filters)
-    return EntityModel.find(filters).populate('account').populate({path:'employee',populate:{path:'departments'}}).lean().exec()
+    return EntityModel.find(filters).populate('account').populate({path:'employee',populate:{ path:'departments'}}).lean().exec()
+  },
+  create: async function create(newOne: Entity) : Promise<Entity | null>{
+    console.log(' in create ', newOne)
+    const employee = newOne.employee
+    const account = newOne.account
+    delete newOne.employee
+    delete newOne.account
+    const newEntity = await EntityModel.create({...newOne, etype: EntityTypeEnum.PERSON})
+    if(newEntity){
+      console.log(1)
+      if(newOne.meta.isEmployee){
+        console.log(2)
+        const newEmployee = await EmployeeModel.create({...employee,entity:newEntity._id })
+        if(newEmployee){
+          console.log(3)
+          newEntity.employee = newEmployee._id
+        }
+      }
+      if(newOne.meta.isUser){
+        console.log(4)
+        const newAccount = await AccountModel.create({...account,entity:newEntity._id })
+        if(newAccount){
+          console.log(5)
+          newEntity.account = newAccount._id
+        }
+      }
+      console.log(6)
+      await newEntity.save()
+      const rt = await (await (newEntity.populate('account'))).populate('employee')
+      return rt
+    }
+    return null
   }
 }
 

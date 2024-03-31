@@ -12,7 +12,7 @@ import Entity, { EntityTypeEnum } from '../../../database/model/Entity';
 
 const router = express.Router();
 
-router.get( '/company/all',
+router.get( '/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
     const entities = await EntityRepo.findAllwithFilters({etype: EntityTypeEnum.COMPANY});
@@ -20,8 +20,17 @@ router.get( '/company/all',
   }),
 );
 
+router.get( '/allpublic',
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const rts = await EntityRepo.findAllwithFilters({etype: EntityTypeEnum.COMPANY,'meta.enabled':true,'meta.verified':true});
+    return new SuccessResponse('success', rts).send(res);
+  }),
+);
 
-router.post( '/company/filters',
+
+
+router.post( '/filters',
   validator(schema.Company.filters),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
@@ -45,7 +54,7 @@ router.post( '/company/filters',
   }),
 );
 
-router.post( '/company',
+router.post( '/',
   validator(schema.Company.create),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
@@ -72,33 +81,5 @@ router.post( '/company',
     return new SuccessResponse('success', createdOne).send(res);
   }),
 );
-
-router.post( '/enable',
-  validator(schema.Id),
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await EntityRepo.enable(req.body.id)
-    new SuccessResponse('Entity enabled successfully', updatedOne).send(res);
-  }),
-);
-
-router.post( '/disable',
-  validator(schema.Id),
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await EntityRepo.disable(req.body.id)
-    new SuccessResponse('Entity disabled successfully', updatedOne).send(res);
-  }),
-);
-
-router.post( '/verify',
-  validator(schema.Id),
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await EntityRepo.verify(req.body.id)
-    new SuccessResponse('Entity enabled successfully', updatedOne).send(res);
-  }),
-);
-
 
 export default router;

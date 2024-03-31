@@ -19,11 +19,11 @@ router.get( '/all',
   }),
 );
 
-router.get( '/all-public',
+router.get( '/allpublic',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const roles = await RoleRepo.filter({'meta.enabled':true});
-    return new SuccessResponse('success', roles).send(res);
+    const rts = await RoleRepo.filter({'meta.enabled':true});
+    return new SuccessResponse('success', rts).send(res);
   }),
 );
 

@@ -19,6 +19,14 @@ router.get( '/all',
   }),
 );
 
+router.get( '/allpublic',
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const rts = await DepartmentRepo.filters({'meta.enabled':true});
+    return new SuccessResponse('success', rts).send(res);
+  }),
+);
+
 router.get( '/detail',
   validator(DepartmentSchema.Id, ValidationSourceEnum.QUERY),
   authorization(RoleCodeEnum.ADMIN),
