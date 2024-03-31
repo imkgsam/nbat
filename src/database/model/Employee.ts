@@ -291,6 +291,10 @@ const schema = new Schema<Employee>(
       },
       graduatedAt: {
         type: Schema.Types.Date
+      },
+      major: {
+        type: String,
+        trim: true
       }
     },
     meta:{

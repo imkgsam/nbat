@@ -119,6 +119,7 @@ const schema = new Schema<Account>(
       bindedPhone: {
           type: Schema.Types.String,
           trim: true,
+          sparse:true,
           unique: true
       }
     },

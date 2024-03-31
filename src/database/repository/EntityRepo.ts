@@ -2,6 +2,7 @@ import { AccountModel } from '../model/Account';
 import { EmployeeModel } from '../model/Employee';
 import Entity, { EntityModel, EntityTypeEnum } from '../model/Entity';
 import { Types } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 async function findOneByUserId(userId: Types.ObjectId): Promise<Entity | null> {
   return EntityModel.findOne({
@@ -120,36 +121,72 @@ const Employee = {
     return EntityModel.find(filters).populate('account').populate({path:'employee',populate:{ path:'departments'}}).lean().exec()
   },
   create: async function create(newOne: Entity) : Promise<Entity | null>{
-    console.log(' in create ', newOne)
     const employee = newOne.employee
     const account = newOne.account
     delete newOne.employee
     delete newOne.account
     const newEntity = await EntityModel.create({...newOne, etype: EntityTypeEnum.PERSON})
     if(newEntity){
-      console.log(1)
       if(newOne.meta.isEmployee){
-        console.log(2)
         const newEmployee = await EmployeeModel.create({...employee,entity:newEntity._id })
         if(newEmployee){
-          console.log(3)
           newEntity.employee = newEmployee._id
         }
       }
-      if(newOne.meta.isUser){
-        console.log(4)
-        const newAccount = await AccountModel.create({...account,entity:newEntity._id })
-        if(newAccount){
-          console.log(5)
-          newEntity.account = newAccount._id
+      if(newOne.meta.isUser && account){
+        const { password } = account as any
+        if(password){
+          const passwordHash = await bcrypt.hash(password, 10);
+          const newAccount = await AccountModel.create({...account,entity:newEntity._id, password: passwordHash})
+          if(newAccount){
+            console.log(5)
+            newEntity.account = newAccount._id
+          }
         }
       }
-      console.log(6)
       await newEntity.save()
       const rt = await (await (newEntity.populate('account'))).populate('employee')
       return rt
     }
     return null
+  },
+  update: async function update(updateOne: Entity) : Promise<Entity | null>{
+    const updateAccount = updateOne.account
+    const updateEmployee = updateOne.employee
+    delete updateOne.account
+    delete updateOne.employee
+    const updatedEntity = await EntityModel.findOneAndUpdate({_id: updateOne._id}, { $set: updateOne }, { new: true })
+    if(updatedEntity){
+      if(updatedEntity.meta.isUser){
+        if(updateAccount){
+          const { password } = updateAccount as any
+          const passwordHash = await bcrypt.hash(password, 10);
+          await AccountModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateAccount,password: passwordHash} }, { new: true, upsert:true })
+        }else{
+          await AccountModel.findOneAndDelete({ entity: updatedEntity._id})
+        }
+      }
+      if(updatedEntity.meta.isEmployee){
+        if(updateEmployee){
+          await EmployeeModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: updateEmployee }, { new: true, upsert:true })
+        }else{
+          await EmployeeModel.findOneAndDelete({ entity: updatedEntity._id})
+        }
+      }
+      return EntityModel.findById(updateOne._id).populate('account').populate('employee').lean().exec()
+    }else{
+      return null
+    }
+  },
+  deleteOne: async function deleteOne(id: Types.ObjectId) : Promise<Entity | null>{
+    const deletedEntity = await EntityModel.findOneAndDelete({_id:id})
+    if(deletedEntity){
+      if(deletedEntity.account)
+        AccountModel.findOneAndDelete({entity: deletedEntity._id})
+      if(deletedEntity.employee)
+        EmployeeModel.findOneAndDelete({entity:deletedEntity._id})
+    }
+    return deletedEntity
   }
 }
 

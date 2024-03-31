@@ -19,6 +19,7 @@ export default {
       name: Joi.string().required().min(2),
       etype: Joi.string(),
       alias: Joi.string().min(2),
+      scompany: JoiObjectId(),
       personal: {
         jobTitle: Joi.string(),
         sex: Joi.string(),
@@ -42,7 +43,7 @@ export default {
       ),
       meta: Joi.object().keys({
         enabled: Joi.boolean(),
-        verifie: Joi.boolean(),
+        verified: Joi.boolean(),
         isSupplier: Joi.boolean(),
         isCustomer: Joi.boolean(),
         isEmployee: Joi.boolean(),
@@ -55,6 +56,7 @@ export default {
         workPhone: Joi.string(),
         workMobile: Joi.string(),
         workEmail: Joi.string(),
+        inaugurationDate: Joi.date(),
         probation: Joi.object().keys({
           isNeeded: Joi.boolean(),
           period: Joi.number(),
@@ -80,7 +82,8 @@ export default {
         education: Joi.object().keys({
           qulification: Joi.string(),
           school: Joi.string(),
-          graduatedAt: Joi.date()
+          graduatedAt: Joi.date(),
+          major: Joi.string()
         }),
         meta: Joi.object().keys({
           enabled: Joi.boolean()
@@ -89,6 +92,97 @@ export default {
       account: Joi.object().keys({
         accountName: Joi.string(),
         email: Joi.string(),
+        phone: Joi.string(),
+        password: Joi.string(),
+        roles: Joi.array().items(JoiObjectId()),
+        meta:{
+          verified: Joi.boolean(),
+          enabled: Joi.boolean()
+        }
+      }),
+    }),
+    update: Joi.object().keys({
+      _id: JoiObjectId().required(),
+      name: Joi.string().required().min(2),
+      etype: Joi.string().required(),
+      alias: Joi.string().min(2),
+      scompany: JoiObjectId(),
+      personal: {
+        jobTitle: Joi.string(),
+        sex: Joi.string(),
+        birth: Joi.date()
+      },
+      common: {
+        website: Joi.string(),
+        email: Joi.string(),
+        landline: Joi.string(),
+        mobilePhone: Joi.string(),
+        country: Joi.string(),
+        city: Joi.string(),
+        industry: Joi.string(),
+        internalNote: Joi.string()
+      },
+      socialMedias: Joi.array().items(
+        Joi.object().keys({
+          key: Joi.string().required(),
+          value: Joi.string().required()
+        })
+      ),
+      meta: Joi.object().keys({
+        enabled: Joi.boolean(),
+        verified: Joi.boolean(),
+        isSupplier: Joi.boolean(),
+        isCustomer: Joi.boolean(),
+        isEmployee: Joi.boolean(),
+        isUser: Joi.boolean(),
+      }),
+      employee: Joi.object().keys({
+        _id: JoiObjectId(),
+        etype: Joi.string(),
+        entity: JoiObjectId(),
+        departments: Joi.array().items(JoiObjectId()),
+        manager: JoiObjectId(),
+        workPhone: Joi.string(),
+        workMobile: Joi.string(),
+        workEmail: Joi.string(),
+        inaugurationDate: Joi.date(),
+        probation: Joi.object().keys({
+          isNeeded: Joi.boolean(),
+          period: Joi.number(),
+          startAt: Joi.date()
+        }),
+        privacy: Joi.object().keys({
+          family: Joi.object().keys({
+            status: Joi.string(),
+            dependentChildrenCount: Joi.number().min(0)
+          }),
+          nationality: Joi.object().keys({
+            country: Joi.string(),
+            city: Joi.string(),
+            birth: Joi.string(),
+            ID: Joi.string(),
+            passport: Joi.string(),
+          }),
+          emergency: Joi.object().keys({
+            contact: Joi.string(),
+            phone: Joi.string()
+          })
+        }),
+        education: Joi.object().keys({
+          qulification: Joi.string(),
+          school: Joi.string(),
+          graduatedAt: Joi.date(),
+          major: Joi.string()
+        }),
+        meta: Joi.object().keys({
+          enabled: Joi.boolean()
+        })
+      }),
+      account: Joi.object().keys({
+        _id: JoiObjectId(),
+        accountName: Joi.string(),
+        email: Joi.string(),
+        entity: JoiObjectId(),
         phone: Joi.string(),
         password: Joi.string(),
         roles: Joi.array().items(JoiObjectId()),

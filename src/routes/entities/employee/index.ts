@@ -68,6 +68,15 @@ router.post( '/pfilters',
   }),
 );
 
+router.post( '/delete',
+  validator(schema.Id),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const deletedOne = await EntityRepo.Employee.deleteOne(req.body.id);
+    new SuccessResponse('Department deleted successfully', deletedOne).send(res);
+  }),
+);
+
 router.post( '/',
   validator(schema.Employee.create),
   authorization(RoleCodeEnum.ADMIN),
@@ -77,6 +86,18 @@ router.post( '/',
       etype: EntityTypeEnum.PERSON,
     } as Entity)
     new SuccessResponse('Employee created successfully', createdEntity).send(res);
+  }),
+)
+
+router.put( '/',
+  validator(schema.Employee.update),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const createdEntity = await EntityRepo.Employee.update({
+      ...req.body,
+      etype: EntityTypeEnum.PERSON,
+    } as Entity)
+    new SuccessResponse('Employee updated successfully', createdEntity).send(res);
   }),
 )
 
