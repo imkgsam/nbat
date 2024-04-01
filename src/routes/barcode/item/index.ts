@@ -4,53 +4,45 @@ import asyncHandler from '../../../helpers/asyncHandler';
 import authorization from '../../../auth/authorization';
 import { RoleCodeEnum } from '../../../database/model/Role';
 import validator from '../../../helpers/validator';
-import roleSchema from '../schema';
+import schema from '../schema';
 import { ProtectedRequest } from 'app-request';
-import RoleRepo from '../../../database/repository/RoleRepo';
-import Role from '../../../database/model/Role';
+import BarcodeRepo from '../../../database/repository/BarcodeRepo';
+import BarcodeItem from '../../../database/model/barcode/BarcodeItem';
 
 const router = express.Router();
 
-// router.get( '/all',
-//   authorization(RoleCodeEnum.ADMIN),
-//   asyncHandler(async (req, res) => {
-//     const roles = await RoleRepo.findAll();
-//     return new SuccessResponse('success', roles).send(res);
-//   }),
-// );
+router.get( '/all',
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const all = await BarcodeRepo.BarcodeItem.findAll();
+    return new SuccessResponse('success', all).send(res);
+  }),
+);
 
-// router.get( '/all-public',
-//   authorization(RoleCodeEnum.ADMIN),
-//   asyncHandler(async (req, res) => {
-//     const roles = await RoleRepo.filter({'meta.enabled':true});
-//     return new SuccessResponse('success', roles).send(res);
-//   }),
-// );
+router.post( '/',
+  validator(schema.BarcodeItem.create),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const createdOne = await BarcodeRepo.BarcodeItem.create({
+      ...req.body
+    } as BarcodeItem);
+    new SuccessResponse('BarcodeItem created successfully', createdOne).send(res);
+  }),
+);
 
-// router.post( '/',
-//   validator(roleSchema.create),
-//   authorization(RoleCodeEnum.ADMIN),
-//   asyncHandler(async (req: ProtectedRequest, res) => {
-//     const createdRole = await RoleRepo.create({
-//       ...req.body
-//     } as Role);
-//     new SuccessResponse('Role created successfully', createdRole).send(res);
-//   }),
-// );
-
-// router.put( '/',
-//   validator(roleSchema.update),
-//   authorization(RoleCodeEnum.ADMIN),
-//   asyncHandler(async (req: ProtectedRequest, res) => {
-//     const createdRole = await RoleRepo.update({
-//       ...req.body
-//     } as Role);
-//     new SuccessResponse('Role created successfully', createdRole).send(res);
-//   }),
-// );
+router.put( '/',
+  validator(schema.BarcodeItem.update),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const updatedOne = await BarcodeRepo.BarcodeItem.update({
+      ...req.body
+    } as BarcodeItem);
+    new SuccessResponse('BarcodeItem updated successfully', updatedOne).send(res);
+  }),
+);
 
 // router.post( '/enable',
-//   validator(roleSchema.Id),
+//   validator(schema.Id),
 //   authorization(RoleCodeEnum.ADMIN),
 //   asyncHandler(async (req: ProtectedRequest, res) => {
 //     const updatedOne = await RoleRepo.enable(req.body.id)
@@ -59,7 +51,7 @@ const router = express.Router();
 // );
 
 // router.post( '/disable',
-//   validator(roleSchema.Id),
+//   validator(schema.Id),
 //   authorization(RoleCodeEnum.ADMIN),
 //   asyncHandler(async (req: ProtectedRequest, res) => {
 //     const updatedOne = await RoleRepo.disable(req.body.id)
@@ -68,7 +60,7 @@ const router = express.Router();
 // );
 
 // router.post( '/filters',
-//   validator(roleSchema.filters),
+//   validator(schema.filters),
 //   authorization(RoleCodeEnum.ADMIN),
 //   asyncHandler(async (req: ProtectedRequest, res) => {
 //     interface Filters {

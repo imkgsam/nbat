@@ -151,6 +151,8 @@ export default {
           period: Joi.number(),
           startAt: Joi.date()
         }),
+        EID: JoiObjectId(),
+        ETL: Joi.string(),
         privacy: Joi.object().keys({
           family: Joi.object().keys({
             status: Joi.string(),

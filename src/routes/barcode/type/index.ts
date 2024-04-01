@@ -7,7 +7,7 @@ import validator from '../../../helpers/validator';
 import barcodeSchema from '../schema';
 import { ProtectedRequest } from 'app-request';
 import BarcodeRepo from '../../../database/repository/BarcodeRepo';
-import BarcodeType from '../../../database/model/BarcodeType';
+import BarcodeType from '../../../database/model/barcode/BarcodeType';
 
 const router = express.Router();
 
@@ -23,10 +23,19 @@ router.post( '/',
   validator(barcodeSchema.BarcodeType.create),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const createdRole = await BarcodeRepo.BarcodeType.create({
+    const createdOne = await BarcodeRepo.BarcodeType.create({
       ...req.body
     } as BarcodeType);
-    new SuccessResponse('Barcode Type created successfully', createdRole).send(res);
+    new SuccessResponse('Barcode Type created successfully', createdOne).send(res);
+  }),
+);
+
+router.post( '/delete',
+  validator(barcodeSchema.Id),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const deletedOne = await BarcodeRepo.BarcodeType.delete(req.body.id);
+    new SuccessResponse('Barcode Type created successfully', deletedOne).send(res);
   }),
 );
 
@@ -34,10 +43,10 @@ router.put( '/',
   validator(barcodeSchema.BarcodeType.update),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const createdRole = await BarcodeRepo.BarcodeType.update({
+    const updatedOne = await BarcodeRepo.BarcodeType.update({
       ...req.body
     } as BarcodeType);
-    new SuccessResponse('Barcode Type created successfully', createdRole).send(res);
+    new SuccessResponse('Barcode Type updated successfully', updatedOne).send(res);
   }),
 );
 
@@ -58,35 +67,5 @@ router.post( '/disable',
     new SuccessResponse('Barcode Type disabled successfully', updatedOne).send(res);
   }),
 );
-
-// router.post( '/filters',
-//   validator(barcodeSchema.BarcodeType.pfilters),
-//   authorization(RoleCodeEnum.ADMIN),
-//   asyncHandler(async (req: ProtectedRequest, res) => {
-//     interface Filters {
-//       code?: string,
-//       meta?:{
-//         enabled: boolean
-//       }
-//     }
-//     const { filters  } = req.body
-//     const datas = await BarcodeRepo.filter(filters as Filters)
-//     let {currentPage, pageSize} = req.body
-//     if(!currentPage || currentPage<=0){
-//       currentPage = 1
-//     }
-//     if(!pageSize || pageSize <=0){
-//       pageSize = 10
-//     }
-//     const rt = datas.slice(pageSize*(currentPage-1),currentPage*pageSize)
-//     new SuccessResponse('success', {
-//       list: rt,
-//       total: datas.length,
-//       pageSize: pageSize,
-//       currentPage: currentPage 
-//     }).send(res);
-//   }),
-// );
-
 
 export default router;

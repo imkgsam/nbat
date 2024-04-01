@@ -23,7 +23,7 @@ const router = express.Router();
 router.get( '/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const employees = await EntityRepo.Employee.filter({meta:{isEmployee:true}} as Entity);
+    let employees = await EntityRepo.Employee.filter({meta:{isEmployee:true}} as Entity);
     return new SuccessResponse('success', employees).send(res);
   }),
 )
@@ -35,7 +35,7 @@ router.get( '/all',
 router.get( '/allpublic',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const employees = await EntityRepo.Employee.filter({meta:{isEmployee:true,enabled: true, verified: true}} as Entity);
+    let employees = await EntityRepo.Employee.filter({meta:{isEmployee:true,enabled: true, verified: true}} as Entity);
     return new SuccessResponse('success', employees).send(res);
   }),
 )
@@ -50,7 +50,7 @@ router.post( '/pfilters',
   asyncHandler(async (req: ProtectedRequest, res) => {
     const { filters } = req.body
     filters.meta.isEmployee = true
-    const datas = await EntityRepo.Employee.filter(filters)
+    let datas = await EntityRepo.Employee.filter(filters)
     let {currentPage, pageSize} = req.body
     if(!currentPage || currentPage<=0){
       currentPage = 1
@@ -77,6 +77,9 @@ router.post( '/delete',
   }),
 );
 
+/**
+ * 新增成员信息
+ */
 router.post( '/',
   validator(schema.Employee.create),
   authorization(RoleCodeEnum.ADMIN),
@@ -89,6 +92,9 @@ router.post( '/',
   }),
 )
 
+/**
+ * 修改成员信息
+ */
 router.put( '/',
   validator(schema.Employee.update),
   authorization(RoleCodeEnum.ADMIN),
@@ -101,18 +107,17 @@ router.put( '/',
   }),
 )
 
-// router.post( '/enable',
-//   validator(schema.Employee.idee),
-//   authorization(RoleCodeEnum.ADMIN),
-//   asyncHandler(async (req: ProtectedRequest, res) => {
-//     const updatedOne = await EmployeeRepo.enable(req.body.entityId, req.body.employeeId)
-//     if(updatedOne){
-//       new SuccessResponse('Employee enabled successfully', updatedOne).send(res);
-//     }else{
-//       new FailureMsgResponse('Employee enable failure').send(res)
+// function formatEntityEID(data: any[]){
+//   return data.map(each=>{
+//     if(each?.employee){
+//       const employee = each?.employee as any
+//       if(employee.EID){
+//         each.employee.EID = each?.employee?.EID?.btype?.startsWith + '-' + employee.EID.num
+//       }
 //     }
-//   }),
-// )
+//     return each
+//   })
+// }
 
 // router.post( '/disable',
 //   validator(schema.Employee.idee),

@@ -1,8 +1,10 @@
-import { AccountModel } from '../model/Account';
-import { EmployeeModel } from '../model/Employee';
+import Account, { AccountModel } from '../model/Account';
+import Employee, { EmployeeModel } from '../model/Employee';
 import Entity, { EntityModel, EntityTypeEnum } from '../model/Entity';
 import { Types } from 'mongoose';
 import bcrypt from 'bcrypt';
+import BarcodeRepo from './BarcodeRepo';
+import { genEID } from '../../helpers/utils';
 
 async function findOneByUserId(userId: Types.ObjectId): Promise<Entity | null> {
   return EntityModel.findOne({
@@ -22,7 +24,9 @@ async function findEntityDetailedInfoByUserId(id: Types.ObjectId): Promise<Entit
     account: id
   })
   .select('+accountName +roles +email')
-  .populate('employee')
+  .populate({path:'employee',populate:{
+    path:'departments'
+  }})
   .populate('scompany',"name")
     .lean()
     .exec();
@@ -118,7 +122,7 @@ const Employee = {
       filters[`meta.${key}`] = filters.meta[key]
     }
     delete filters.meta
-    return EntityModel.find(filters).populate('account').populate({path:'employee',populate:{ path:'departments'}}).lean().exec()
+    return EntityModel.find(filters).populate('account').populate({path:'employee',populate:[{ path:'departments'},{ path:'EID',populate:{"path":'btype'}}]}).lean().exec()
   },
   create: async function create(newOne: Entity) : Promise<Entity | null>{
     const employee = newOne.employee
@@ -127,10 +131,17 @@ const Employee = {
     delete newOne.account
     const newEntity = await EntityModel.create({...newOne, etype: EntityTypeEnum.PERSON})
     if(newEntity){
-      if(newOne.meta.isEmployee){
-        const newEmployee = await EmployeeModel.create({...employee,entity:newEntity._id })
+      if(newOne.meta.isEmployee && employee){
+        const newEmployee = await EmployeeModel.create({ ...employee,entity:newEntity._id})
         if(newEmployee){
           newEntity.employee = newEmployee._id
+          if(newEmployee.inaugurationDate && newOne?.personal?.sex && newOne?.name){
+            const newBarcode = await BarcodeRepo.BarcodeItem.findOneOrCreateForEmployee(newOne?.name,newEmployee.inaugurationDate,newOne?.personal?.sex,newEmployee._id)
+            if(newBarcode){
+              newEmployee.EID = newBarcode._id
+              await newEmployee.save()
+            }
+          }
         }
       }
       if(newOne.meta.isUser && account){
@@ -151,26 +162,45 @@ const Employee = {
     return null
   },
   update: async function update(updateOne: Entity) : Promise<Entity | null>{
-    const updateAccount = updateOne.account
-    const updateEmployee = updateOne.employee
+    const updateAccount = updateOne.account as Account
+    const updateEmployee = updateOne.employee as Employee
     delete updateOne.account
     delete updateOne.employee
+    console.log()
     const updatedEntity = await EntityModel.findOneAndUpdate({_id: updateOne._id}, { $set: updateOne }, { new: true })
     if(updatedEntity){
+      console.log(1)
       if(updatedEntity.meta.isUser){
+        console.log(2)
         if(updateAccount){
+          console.log(3)
           const { password } = updateAccount as any
-          const passwordHash = await bcrypt.hash(password, 10);
-          await AccountModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateAccount,password: passwordHash} }, { new: true, upsert:true })
+          if(password){
+            console.log(4)
+            await AccountModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateAccount, password: await bcrypt.hash(password, 10)} }, { new: true, upsert:true })
+          }else{
+            console.log(5)
+            await AccountModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateAccount} }, { new: true, upsert:true })
+          }
         }else{
+          console.log(6)
           await AccountModel.findOneAndDelete({ entity: updatedEntity._id})
         }
       }
+      console.log(7)
       if(updatedEntity.meta.isEmployee){
+        console.log(8)
         if(updateEmployee){
-          await EmployeeModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: updateEmployee }, { new: true, upsert:true })
-        }else{
-          await EmployeeModel.findOneAndDelete({ entity: updatedEntity._id})
+          console.log(9)
+          let newBarcode = null
+          if(!updateEmployee.EID && updateEmployee.inaugurationDate && updatedEntity?.personal?.sex && updatedEntity?.name){
+            console.log(10)
+            newBarcode = await BarcodeRepo.BarcodeItem.findOneOrCreateForEmployee(updatedEntity?.name,updateEmployee.inaugurationDate,updatedEntity?.personal?.sex,updateEmployee._id)
+            console.log(11)
+          }
+          console.log(12)
+          await EmployeeModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateEmployee,EID: updateEmployee?.EID || newBarcode} }, { new: true, upsert:true })
+          console.log(15)
         }
       }
       return EntityModel.findById(updateOne._id).populate('account').populate('employee').lean().exec()

@@ -7,10 +7,13 @@ export const COLLECTION_NAME = 'barcodeTypes';
 
 export default interface BarcodeType {
   _id: Types.ObjectId;
-  startsWith: string;
+  //条码名称
   code: string;
+  // 条码 起始符
+  startsWith: string;
   // 中文 remark
   remark: string;
+  // barcode 总长度
   length: number;
   meta:{
     enabled: boolean;
@@ -27,15 +30,15 @@ const schema = new Schema<BarcodeType>(
       trim: true,
       unique: true
     },
-    remark:{
-      type: String,
-      trim: true
-    },
     startsWith: {
       type: String,
       trim: true,
       unique: true,
       sparse: true
+    },
+    remark:{
+      type: String,
+      trim: true
     },
     length:{
       type: Number,
@@ -46,17 +49,7 @@ const schema = new Schema<BarcodeType>(
         type: Boolean,
         default: false
       },
-    },
-    createdAt: {
-      type: Date,
-      required: true,
-      default: new Date()
-    },
-    updatedAt: {
-      type: SDate,
-      required: true,
-      default: new Date()
-    },
+    }
   },
   {
     versionKey: false,

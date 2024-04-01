@@ -1,4 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
+import Account from './Account';
+import Employee from './Employee';
 const { String, Boolean, ObjectId } = Schema.Types
 
 export const DOCUMENT_NAME = 'Entity';
@@ -29,7 +31,7 @@ export default interface Entity {
   //种类，个人还是公司
   etype: EntityTypeEnum;
   //对于个人是所属的公司，对于公司就是所属的母公司，可选
-  scompany?: Types.ObjectId; 
+  scompany?: Types.ObjectId | Entity; 
   personal?:{
     //职位
     jobTitle?: string;
@@ -66,9 +68,9 @@ export default interface Entity {
   //所有社交方式
   socialMedias?:KVMap[];
   //关联的登录账户 可选
-  account?: Types.ObjectId;
+  account?: Types.ObjectId | Account;
   //关联的员工账户 可选
-  employee?: Types.ObjectId;
+  employee?: Types.ObjectId | Employee;
   meta:{
     //是否开启
     enabled?: boolean;

@@ -62,7 +62,7 @@ router.get( '/all',
 //     const createdEmployee = await EmployeeRepo.create({
 //       entity: createdEntity._id,
 //       ...req.body.employee,
-//       EID: genEID(req.body.entity.name, req.body.employee.inauguratiionDate,req.body.entity.personal?.sex),
+//       EID: genEID(req.body.entity.name, req.body.employee.inaugurationDate,req.body.entity.personal?.sex),
 //     } as Employee)
 //     createdEntity.employee = createdEmployee._id
 //     await EntityRepo.findOneByIdAndSetEmployee(createdEntity._id,createdEmployee._id)

@@ -44,7 +44,7 @@ export default {
     update: Joi.object().keys({
       _id: JoiObjectId().required(),
       code: Joi.string().required(),
-      length: Joi.number().min(6),
+      length: Joi.number().required().min(6),
       startsWith: Joi.string(),
       remark: Joi.string(),
       meta: Joi.object().keys({

@@ -20,6 +20,14 @@ router.get( '/all',
   })
 );
 
+router.get( '/allpublic',
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const users = await AccountRepo.filters({'meta.enabled':true, 'meta.verified':true});
+    return new SuccessResponse('success', users).send(res);
+  })
+);
+
 
 router.get( '/get-user-list',
   authorization(RoleCodeEnum.ADMIN),

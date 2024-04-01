@@ -10,8 +10,6 @@ async function findAll(): Promise<Account[]> {
 }
 
 async function filters(filters: object): Promise<Account[]> {
-  if(!filters)
-    filters = {}
   return AccountModel.find(filters).lean().exec();
 }
 
