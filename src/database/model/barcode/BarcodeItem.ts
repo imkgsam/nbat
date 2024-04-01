@@ -39,7 +39,7 @@ const schema = new Schema<BarcodeItem>(
       type: ObjectId,
       required: true,
       ref: function(){
-        return this.ttyps
+        return this.ttype
       }
     },
     meta:{

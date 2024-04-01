@@ -30,6 +30,29 @@ router.post( '/',
   }),
 );
 
+router.post( '/pfilters',
+  validator(barcodeSchema.BarcodeType.pfilters),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const { filters  } = req.body
+    const datas = await BarcodeRepo.BarcodeType.filters(filters)
+    let {currentPage, pageSize} = req.body
+    if(!currentPage || currentPage<=0){
+      currentPage = 1
+    }
+    if(!pageSize || pageSize <=0){
+      pageSize = 10
+    }
+    const rt = datas.slice(pageSize*(currentPage-1),currentPage*pageSize)
+    new SuccessResponse('success', {
+      list: rt,
+      total: datas.length,
+      pageSize: pageSize,
+      currentPage: currentPage 
+    }).send(res);
+  }),
+);
+
 router.post( '/delete',
   validator(barcodeSchema.Id),
   authorization(RoleCodeEnum.ADMIN),

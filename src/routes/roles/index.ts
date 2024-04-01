@@ -22,7 +22,7 @@ router.get( '/all',
 router.get( '/allpublic',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const rts = await RoleRepo.filter({'meta.enabled':true});
+    const rts = await RoleRepo.filters({'meta.enabled':true});
     return new SuccessResponse('success', rts).send(res);
   }),
 );
@@ -67,18 +67,12 @@ router.post( '/disable',
   }),
 );
 
-router.post( '/filters',
+router.post( '/pfilters',
   validator(roleSchema.filters),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    interface Filters {
-      code?: string,
-      meta?:{
-        enabled: boolean
-      }
-    }
     const { filters  } = req.body
-    const datas = await RoleRepo.filter(filters as Filters)
+    const datas = await RoleRepo.filters(filters)
     let {currentPage, pageSize} = req.body
     if(!currentPage || currentPage<=0){
       currentPage = 1

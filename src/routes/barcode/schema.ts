@@ -7,7 +7,10 @@ export default {
   }),
   BarcodeItem: {
     create: Joi.object().keys({
-      code: Joi.string().required(),
+      ttype: Joi.string().required(),
+      num: Joi.number().required(),
+      btype: Joi.string().required(),
+      item: Joi.string().required(),
       meta: Joi.object().keys({
         enabled: Joi.boolean()
       })
@@ -34,7 +37,7 @@ export default {
   BarcodeType: {
     create: Joi.object().keys({
       code: Joi.string().required(),
-      length: Joi.number().min(6),
+      length: Joi.number().min(1),
       startsWith: Joi.string(),
       remark: Joi.string(),
       meta: Joi.object().keys({
@@ -44,7 +47,7 @@ export default {
     update: Joi.object().keys({
       _id: JoiObjectId().required(),
       code: Joi.string().required(),
-      length: Joi.number().required().min(6),
+      length: Joi.number().required().min(1),
       startsWith: Joi.string(),
       remark: Joi.string(),
       meta: Joi.object().keys({
@@ -62,10 +65,5 @@ export default {
         })
       })
     }),
-  },
-
-
-
-
-
+  }
 };

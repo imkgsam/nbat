@@ -34,7 +34,6 @@ router.post( '/filters',
   validator(schema.Company.filters),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    
     const { filters  } = req.body
     const datas = await EntityRepo.Company.filter(filters)
     let {currentPage, pageSize} = req.body

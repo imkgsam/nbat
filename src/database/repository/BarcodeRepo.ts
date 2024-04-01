@@ -39,7 +39,7 @@ const BarcodeItem = {
     return BarcodeItemModel.findByIdAndUpdate(id, { 'meta.enabled': false }, { new: true }).lean().exec();
   },
   findAll: async function findAll(): Promise<BarcodeItem[]> {
-    return BarcodeItemModel.find({})
+    return BarcodeItemModel.find({}).populate('item').lean().exec()
   },
   filters: async function filters(filters: any): Promise<BarcodeItem[]> {
     return []
