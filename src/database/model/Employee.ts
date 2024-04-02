@@ -143,7 +143,7 @@ export default interface Employee {
   //教育
   education?:{
     //最高学历
-    qulification?: EducationTypeEnum,
+    qualification?: EducationTypeEnum,
     //毕业院校
     school?: string,
     //毕业日期
@@ -280,7 +280,7 @@ const schema = new Schema<Employee>(
       }
     },
     education:{
-      qulification: {
+      qualification: {
         type: String,
         enum: Object.values(EducationTypeEnum)
       },

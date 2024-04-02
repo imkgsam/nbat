@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import BarcodeRepo from './BarcodeRepo';
 import { genEID } from '../../helpers/utils';
 
+
 async function findOneByUserId(userId: Types.ObjectId): Promise<Entity | null> {
   return EntityModel.findOne({
     user: userId
@@ -24,9 +25,9 @@ async function findEntityDetailedInfoByUserId(id: Types.ObjectId): Promise<Entit
     account: id
   })
   .select('+accountName +roles +email')
-  .populate({path:'employee',populate:{
-    path:'departments'
-  }})
+  .populate({path:'employee',populate:[
+    {path:'departments'},{path:'EID',populate:{path:'btype'}}
+  ]})
   .populate('scompany',"name")
     .lean()
     .exec();
