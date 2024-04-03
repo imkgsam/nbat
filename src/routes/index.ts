@@ -20,6 +20,7 @@ import barcode from './barcode';
 import publics from './access/publics'
 import account from './account'
 import employee from './employee'
+import mold from './mold'
 
 const router = express.Router();
 
@@ -52,5 +53,6 @@ router.use('/barcode',barcode)
 router.use('/employee',employee)
 router.use('/account',account)
 router.use('/test',tests);
+router.use('/mold',mold)
 
 export default router;
