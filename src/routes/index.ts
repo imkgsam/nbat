@@ -21,6 +21,7 @@ import publics from './access/publics'
 import account from './account'
 import employee from './employee'
 import mold from './mold'
+import location from './location'
 
 const router = express.Router();
 
@@ -54,5 +55,6 @@ router.use('/employee',employee)
 router.use('/account',account)
 router.use('/test',tests);
 router.use('/mold',mold)
+router.use('/location',location)
 
 export default router;

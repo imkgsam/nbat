@@ -1,5 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
-const { String,  ObjectId } = Schema.Types
+const { String, ObjectId, Boolean } = Schema.Types
 
 export const DOCUMENT_NAME = 'Location';
 export const COLLECTION_NAME = 'Locations';
@@ -17,7 +17,11 @@ export enum LocationTypeEnum {
   INVENTORY_LOST = 'Inventory Lost',
   // 内部 - 物理区域，能存货
   INTERNAL = "Internal",
-  //生产区域 - 区域
+  //生产区域 - 区域, 不能存货
+  PRODUCTION = "Production",
+  //退回 区域
+  RETURN = 'Return',
+
 }
 
 
@@ -26,15 +30,15 @@ export default interface Location {
   name: string;
   ltype: LocationTypeEnum;
   // 所属公司
-  company?: Types.ObjectId | string;
+  company?: Types.ObjectId;
   parent?: Types.ObjectId;
-  meta?:{
+  meta?: {
+    // 地区是否开启
     enabled: boolean;
-    isProduction: boolean;
-    isReturn: boolean;
-    isScrap: boolean;
+    // 地区是否可存货
     isStorable: boolean;
-    isRentable: boolean;
+    // 地区是否可出租
+    // isRentable: boolean;
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -43,47 +47,37 @@ export default interface Location {
 const schema = new Schema<Location>(
   {
     name: {
-      type: Schema.Types.String,
+      type: String,
       required: true,
       unique: true,
-      trim:true,
-      index:true
+      trim: true,
+      index: true
     },
-    manager:{
-      type: ObjectId,
-      ref: 'Entity'
-    },
-    parent:{
-      type: ObjectId,
-      ref: 'Location'
-    },
-    meta:{
-      enabled: {
-        type: Schema.Types.Boolean,
-        default: false,
-      }
-    },
-    color: {
+    ltype: {
       type: String,
-      trim: true
+      enum: Object.values(LocationTypeEnum),
+      required: true
+    },
+    parent: {
+      type: ObjectId,
+      ref: 'Location',
+      sparse: true
     },
     company: {
       type: ObjectId,
       ref: 'Entity',
-      required:true
+      required: true
     },
-    createdAt: {
-      type: Schema.Types.Date,
-      required: true,
-      default: new Date(),
-      select: false
-    },
-    updatedAt: {
-      type: Schema.Types.Date,
-      required: true,
-      default: new Date(),
-      select: false
-    },
+    meta: {
+      enabled: {
+        type: Boolean,
+        default: false,
+      },
+      isStorable: {
+        type: Boolean,
+        default: false,
+      }
+    }
   },
   {
     versionKey: false,
@@ -91,6 +85,6 @@ const schema = new Schema<Location>(
   },
 );
 
-schema.index({ name: 1 });
+schema.index({ name: 1, parent: 1 });
 
 export const LocationModel = model<Location>(DOCUMENT_NAME, schema, COLLECTION_NAME);
