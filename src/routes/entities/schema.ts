@@ -48,6 +48,7 @@ export default {
         isCustomer: Joi.boolean(),
         isEmployee: Joi.boolean(),
         isUser: Joi.boolean(),
+        isWorker: Joi.boolean()
       }),
       employee: Joi.object().keys({
         etype: Joi.string(),
@@ -135,6 +136,7 @@ export default {
         isCustomer: Joi.boolean(),
         isEmployee: Joi.boolean(),
         isUser: Joi.boolean(),
+        isWorker: Joi.boolean()
       }),
       employee: Joi.object().keys({
         _id: JoiObjectId(),
@@ -151,7 +153,7 @@ export default {
           period: Joi.number(),
           startAt: Joi.date()
         }),
-        EID: JoiObjectId(),
+        EID: JoiObjectId().allow(null),
         ETL: Joi.string(),
         privacy: Joi.object().keys({
           family: Joi.object().keys({

@@ -2,7 +2,7 @@ import Location, { LocationModel } from '../model/Location';
 import { Types } from "mongoose"
 
 async function findAll(): Promise<Location[]> {
-  return LocationModel.find({})
+  return LocationModel.find({}).populate('company')
     .lean()
     .exec();
 }

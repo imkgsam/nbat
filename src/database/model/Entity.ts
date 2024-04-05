@@ -84,6 +84,8 @@ export default interface Entity {
     isEmployee?: boolean;
     //是否可以登录系统
     isUser?: boolean;
+    //是否为工人
+    isWorker?: boolean
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -182,24 +184,22 @@ const schema = new Schema<Entity>(
         default: false,
       },
       verified:{
-        type: Boolean,
-        default: false,
+        type: Boolean
       },
       isSupplier:{
-        type: Boolean,
-        default:false
+        type: Boolean
       },
       isCustomer:{
-        type: Boolean,
-        default:false
+        type: Boolean
       },
       isEmployee:{
-        type: Boolean,
-        default: false
+        type: Boolean
       },
       isUser:{
-        type: Boolean,
-        default: false
+        type: Boolean
+      },
+      isWorker:{
+        type: Boolean
       }
     },
     createdAt: {

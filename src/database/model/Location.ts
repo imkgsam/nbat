@@ -14,14 +14,13 @@ export enum LocationTypeEnum {
   // 中转 - 用于不同区域间的调拨
   TRANSIT = 'Transit',
   // 折损 - 虚拟地址，用于产品破损销毁
-  INVENTORY_LOST = 'Inventory Lost',
+  SCRAP = 'Scrap',
   // 内部 - 物理区域，能存货
   INTERNAL = "Internal",
   //生产区域 - 区域, 不能存货
   PRODUCTION = "Production",
   //退回 区域
   RETURN = 'Return',
-
 }
 
 
@@ -49,7 +48,6 @@ const schema = new Schema<Location>(
     name: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
       index: true
     },

@@ -17,7 +17,7 @@ export default {
   }),
   update: Joi.object().keys({
     _id: JoiObjectId().required(),
-    name: Joi.string().min(3).max(60),
+    name: Joi.string().required(),
     manager: JoiObjectId().allow(null).allow(''),
     parent: JoiObjectId().allow(null).allow(''),
     color: Joi.string().allow(""),

@@ -12,6 +12,8 @@ export default interface MoldGroup {
   workers: Types.ObjectId[],
   //所属车间部门
   department: Types.ObjectId,
+  //所在地点
+  location: Types.ObjectId,
   // 管理人员
   manager: Types.ObjectId,
   meta:{
@@ -38,6 +40,11 @@ const schema = new Schema<MoldGroup>(
       type: ObjectId,
       required: true,
       ref: 'Department'
+    },
+    location: {
+      type: ObjectId,
+      required: true,
+      ref: 'Location'
     },
     manager:{
       type: ObjectId,
