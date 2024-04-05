@@ -36,20 +36,24 @@ export default {
   },
   MoldGroup: {
     create: Joi.object().keys({
-      code: Joi.string().required(),
-      length: Joi.number().min(1),
-      startsWith: Joi.string(),
-      remark: Joi.string(),
+      name: Joi.string().required(),
+      manager: JoiObjectId().required(),
+      mtype: Joi.string().required(),
+      workers: Joi.array().items(JoiObjectId()),
+      department: JoiObjectId().required(),
+      location: JoiObjectId().required(),
       meta: Joi.object().keys({
         enabled: Joi.boolean()
       })
     }),
     update: Joi.object().keys({
       _id: JoiObjectId().required(),
-      code: Joi.string().required(),
-      length: Joi.number().required().min(1),
-      startsWith: Joi.string(),
-      remark: Joi.string(),
+      name: Joi.string().required(),
+      mtype: Joi.string().required(),
+      manager: JoiObjectId().required(),
+      workers: Joi.array().items(JoiObjectId()),
+      department: JoiObjectId().required(),
+      location: JoiObjectId().required(),
       meta: Joi.object().keys({
         enabled: Joi.boolean()
       })
@@ -59,7 +63,12 @@ export default {
       pageSize: Joi.number(),
 
       filters: Joi.object().keys({
-        code: Joi.string(),
+        name: Joi.string(),
+        mtype: Joi.string(),
+        manager: JoiObjectId(),
+        workers: Joi.array().items(JoiObjectId()),
+        location: JoiObjectId(),
+        department: JoiObjectId(),
         meta: Joi.object().keys({
           enabled: Joi.boolean()
         })

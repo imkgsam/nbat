@@ -5,8 +5,8 @@ import Item from './item';
 
 const router = express.Router();
 
-router.use('/item',Group)
-router.use('/group',Item)
+router.use('/item',Item)
+router.use('/group',Group)
 
 
 export default router;

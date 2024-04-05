@@ -51,7 +51,7 @@ const MoldGroup = {
       }
       delete filters.meta
     }
-    return MoldGroupModel.find(filters).lean().exec()
+    return MoldGroupModel.find(filters).populate('workers').populate('department').populate('manager').populate('location').lean().exec()
   },
   delete: async function deleteOne(id: string): Promise<MoldGroup | null> {
     return MoldGroupModel.findOneAndDelete({_id:id}).lean().exec()

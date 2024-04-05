@@ -4,10 +4,19 @@ const { Boolean, String, Date: SDate, Number, ObjectId} = Schema.Types
 export const DOCUMENT_NAME = 'MoldGroup';
 export const COLLECTION_NAME = 'MoldGroups';
 
+export enum MoldTypeEnum {
+  ONFLOOR = 'OnFloor',
+  HIGHPRESSURE = 'HighPressure',
+  ONLINE = 'On-line'
+}
+
+
 export default interface MoldGroup {
   _id: Types.ObjectId;
   //模具组名称
   name: string,
+  //类型
+  mtype: MoldTypeEnum,
   // 操作工人s
   workers: Types.ObjectId[],
   //所属车间部门
@@ -29,6 +38,11 @@ const schema = new Schema<MoldGroup>(
       type: String,
       required: true,
       unique: true,
+      trim: true
+    },
+    mtype: {
+      type: String,
+      required: true,
       trim: true
     },
     workers:[{
