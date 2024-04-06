@@ -7,11 +7,17 @@ export default {
   }),
   create: Joi.object().keys({
     name: Joi.string().required(),
-    parent: JoiObjectId()
+    parent: JoiObjectId(),
+    meta: Joi.object().keys({
+      enabled: Joi.boolean()
+    })
   }),
   update: Joi.object().keys({
     _id: JoiObjectId().required(),
     name: Joi.string().required(),
-    parent: JoiObjectId()
+    parent: JoiObjectId(),
+    meta: Joi.object().keys({
+      enabled: Joi.boolean()
+    })
   })
 };

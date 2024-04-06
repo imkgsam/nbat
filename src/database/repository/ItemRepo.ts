@@ -1,21 +1,33 @@
-import Item, { ItemModel } from '../model/Item';
+import Item, { ItemModel } from '../model/item/Item';
 
-
-async function create(category: Item): Promise<Item> {
-  const createdOne = await ItemModel.create(category);
-  return createdOne.toObject();
+async function create(newOne: Item): Promise<Item> {
+  return await ItemModel.create(newOne);
 }
-
-async function findAll(options: object): Promise<Item[]> {
-  return ItemModel.find(options)
+async function findAll(): Promise<Item[]> {
+  return ItemModel.find({}).lean().exec()
 }
-
-async function detail(id: string): Promise<Item | null> {
-  return ItemModel.findById(id)
+async function enable(id: string): Promise<Item | null> {
+  return ItemModel.findByIdAndUpdate(id, { 'meta.enabled': true }, { new: true }).lean().exec();
+}
+async function disable(id: string): Promise<Item | null> {
+  return ItemModel.findByIdAndUpdate(id, { 'meta.enabled': false }, { new: true }).lean().exec();
+}
+async function filters(filters: any): Promise<Item[]> {
+  return []
+}
+async function deleteOne(id: string): Promise<Item | null> {
+  return null
+}
+async function update(updateOne: Item): Promise<Item | null> {
+  return ItemModel.findByIdAndUpdate(updateOne._id, { $set: updateOne }, { new: true }).lean().exec();
 }
 
 export default {
   create,
   findAll,
-  detail
+  enable,
+  disable,
+  filters,
+  deleteOne,
+  update
 };

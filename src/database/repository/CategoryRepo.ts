@@ -7,7 +7,7 @@ async function create(category: Category): Promise<Category> {
   return createdOne.toObject();
 }
 
-async function findAll(options: object): Promise<Category[]> {
+async function filters(options: object): Promise<Category[]> {
   return CategoryModel.find(options)
 }
 
@@ -35,7 +35,7 @@ async function removeOneById(id: Types.ObjectId): Promise<Category | null> {
 
 export default {
   create,
-  findAll,
+  filters,
   detail,
   update,
   removeOneById

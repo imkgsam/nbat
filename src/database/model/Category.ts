@@ -9,6 +9,9 @@ export default interface Category {
   //类别名称，英文
   name: string;
   parent?: Types.ObjectId;
+  meta?:{
+    enabled?: boolean;
+  }
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -24,6 +27,12 @@ const schema = new Schema<Category>(
     parent: {
       type: ObjectId,
       ref: 'Category'
+    },
+    meta:{
+      enabled: {
+        type: Boolean,
+        default: false
+      }
     },
     createdAt: {
       type: Schema.Types.Date,

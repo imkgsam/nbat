@@ -13,7 +13,10 @@ interface attributeOptions {
 export enum itemTypeEnum {
   PRODUCT = 'Product',
   SERVICE = 'Service',
-  EXPENSE = 'Expense'
+  //关联到场地，就能出租了
+  // LOCATION = 'Location'，
+  // 模具
+  // MOLD = 'Mold'
 }
 
 /**
@@ -26,22 +29,26 @@ export default interface Item {
   //所属的产品类别
   category: Types.ObjectId;
   etype: itemTypeEnum;
-  attributes: Array<attributeOptions>;
   meta?: {
     //是否启用
     enabled: boolean;
     //是否跟踪库存
-    isStockable: boolean;
+    canBeStocked: boolean;
     //是否能销售
     canBeSold: boolean;
     //是否能采购
     canBePurchased: boolean;
     //是否能生产
     canBenProduced: boolean;
+    //是否能出租
+    canBenRented: boolean;
+    // 是否有变体
     hasVariants: boolean;
-    //是哪个款式的变体
-    isVariantOf: Types.ObjectId;
+    //是哪个款式的变体 parent
+    isVariantOf?: Types.ObjectId;
+    attributeTags?: Array<Types.ObjectId>;
   };
+  attributes?: Array<attributeOptions>;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -82,7 +89,7 @@ const schema = new Schema<Item>(
         type: Boolean,
         default: false,
       },
-      isStockable: {
+      canBeStocked: {
         type: Boolean,
         default: false
       },
@@ -126,6 +133,6 @@ const schema = new Schema<Item>(
   },
 );
 
-schema.index({ code: 1 });
+schema.index({ code: 1 ,category: 1});
 
 export const ItemModel = model<Item>(DOCUMENT_NAME, schema, COLLECTION_NAME);

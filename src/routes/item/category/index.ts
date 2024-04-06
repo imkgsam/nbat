@@ -16,7 +16,16 @@ router.get(
   '/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const data = await CategoryRepo.findAll({})
+    const data = await CategoryRepo.filters({})
+    return new SuccessResponse('success', data).send(res);
+  }),
+)
+
+router.get(
+  '/allpublic',
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const data = await CategoryRepo.filters({'meta.enabled':true})
     return new SuccessResponse('success', data).send(res);
   }),
 )
