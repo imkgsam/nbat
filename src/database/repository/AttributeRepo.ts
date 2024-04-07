@@ -48,10 +48,6 @@ async function update(updateOne: Attribute): Promise<Attribute | null> {
 }
 
 
-async function findAll(options: object): Promise<Attribute[]> {
-  return AttributeModel.find(options)
-}
-
 async function findOneById(id: Types.ObjectId | string): Promise<Attribute | null> {
   let attri = await AttributeModel.findById(id)
   if (attri) {
@@ -71,7 +67,20 @@ async function removeOneById(id: Types.ObjectId): Promise<Attribute | null> {
 }
 
 async function filter(filters: object): Promise<Attribute[]> {
-  return AttributeModel.find(filters).lean().exec()
+  console.log('fitler with aggregate')
+  return AttributeModel.aggregate([
+    {
+      $match:filters
+    },
+    {
+      $lookup:{
+        from : "attributeValues",
+        localField:'_id',
+        foreignField:"attribute",
+        as: "values"
+      }
+    }
+  ])
 }
 
 async function enable(id: Types.ObjectId): Promise<Attribute | null> {
@@ -129,7 +138,6 @@ export default {
   create,
   detail,
   update,
-  findAll,
   filter,
   enable,
   disable,

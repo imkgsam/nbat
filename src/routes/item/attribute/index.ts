@@ -17,7 +17,16 @@ router.get(
   '/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const data = await AttributeRepo.findAll({})
+    const data = await AttributeRepo.filter({})
+    return new SuccessResponse('success', data).send(res);
+  }),
+);
+
+router.get(
+  '/allpublic',
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const data = await AttributeRepo.filter({'meta.enabled':true})
     return new SuccessResponse('success', data).send(res);
   }),
 );
