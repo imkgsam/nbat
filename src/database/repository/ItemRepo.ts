@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import Item, { ItemModel } from '../model/item/Item';
 
 async function create(newOne: Item): Promise<Item> {
@@ -22,6 +23,10 @@ async function update(updateOne: Item): Promise<Item | null> {
   return ItemModel.findByIdAndUpdate(updateOne._id, { $set: updateOne }, { new: true }).lean().exec();
 }
 
+async function detail(id: Types.ObjectId | string): Promise<Item | null> {
+ return ItemModel.findById(id).populate('category').populate('attributes').populate('meta.isVariantOf').populate('meta.attributeTags').lean().exec()
+}
+
 export default {
   create,
   findAll,
@@ -29,5 +34,6 @@ export default {
   disable,
   filters,
   deleteOne,
-  update
+  update,
+  detail
 };

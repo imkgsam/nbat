@@ -30,6 +30,17 @@ router.post( '/',
   }),
 );
 
+router.get(
+  '/detail',
+  validator(schema.Id, ValidationSourceEnum.QUERY),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const { id }  = req.query
+    const data = await ItemRepo.detail(id as string)
+    return new SuccessResponse('success', data).send(res);
+  }),
+);
+
 router.put( '/',
   validator(schema.item.update),
   authorization(RoleCodeEnum.ADMIN),
