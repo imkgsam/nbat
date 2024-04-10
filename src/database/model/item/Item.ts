@@ -13,10 +13,16 @@ interface attributeOptions {
 export enum itemTypeEnum {
   PRODUCT = 'Product',
   SERVICE = 'Service',
+  
   //关联到场地，就能出租了
   // LOCATION = 'Location'，
   // 模具
   // MOLD = 'Mold'
+  // 纸箱
+  // CARTON = 'Carton'
+  // 集合
+  // COMB = 'Combination' 
+
 }
 
 /**
@@ -38,7 +44,7 @@ export default interface Item {
     canBeSold: boolean;
     //是否能采购
     canBePurchased: boolean;
-    //是否能生产
+    //是否能生产, 说明是 - 空瓷 或 自产品
     canBenProduced: boolean;
     //是否能出租
     canBenRented: boolean;
