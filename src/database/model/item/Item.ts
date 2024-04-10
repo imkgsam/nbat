@@ -22,7 +22,6 @@ export enum itemTypeEnum {
   // CARTON = 'Carton'
   // 集合
   // COMB = 'Combination' 
-
 }
 
 /**
@@ -119,6 +118,10 @@ const schema = new Schema<Item>(
         type: ObjectId,
         ref: 'Item'
       },
+      attributeTags:{
+        type: ObjectId,
+        ref: 'AttributeValue'
+      }
     },
     createdAt: {
       type: Schema.Types.Date,

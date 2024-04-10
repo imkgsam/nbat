@@ -24,6 +24,14 @@ async function update(updatedOne: Category): Promise<Category | null> {
   return CategoryModel.findByIdAndUpdate(updatedOne._id,{$set: updatedOne},{ new: true }).lean().exec();
 }
 
+async function enable(id: Types.ObjectId): Promise<Category | null> {
+  return CategoryModel.findOneAndUpdate({ _id: id }, { 'meta.enabled': true }, { new: true }).lean().exec();
+}
+
+async function disable(id: Types.ObjectId): Promise<Category | null> {
+  return CategoryModel.findOneAndUpdate({ _id: id }, { 'meta.enabled': false }, { new: true }).lean().exec();
+}
+
 async function removeOneById(id: Types.ObjectId): Promise<Category | null> {
   const deletedOne = await CategoryModel.findOneAndDelete({_id: id}).lean().exec()
   const children = await CategoryModel.find({parent: id}).lean().exec()
@@ -38,5 +46,7 @@ export default {
   filters,
   detail,
   update,
+  enable,
+  disable,
   removeOneById
 };

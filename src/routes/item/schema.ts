@@ -25,8 +25,7 @@ export default {
         canBenProduced: Joi.boolean(),
         canBenRented: Joi.boolean(),
         hasVariants: Joi.boolean(),
-        isVariantOf: JoiObjectId(),
-        attributeTags: Joi.array().items(JoiObjectId())
+        isVariantOf: JoiObjectId()
       },
       attributes: Joi.array().items(attributeItem),
     }),
@@ -43,8 +42,7 @@ export default {
         canBenProduced: Joi.boolean(),
         canBenRented: Joi.boolean(),
         hasVariants: Joi.boolean(),
-        isVariantOf: JoiObjectId(),
-        attributeTags: Joi.array().items(JoiObjectId())
+        isVariantOf: JoiObjectId()
       },
       attributes: Joi.array().items(attributeItem),
     }),

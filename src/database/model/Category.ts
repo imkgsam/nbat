@@ -21,12 +21,12 @@ const schema = new Schema<Category>(
     name: {
       type: String,
       required: true,
-      unique:true,
       trim: true
     },
     parent: {
       type: ObjectId,
-      ref: 'Category'
+      ref: 'Category',
+      sparse: true
     },
     meta:{
       enabled: {
@@ -51,7 +51,7 @@ const schema = new Schema<Category>(
   },
 );
 
-schema.index({ name: 1});
+schema.index({ name: 1, parent: 1});
 
 
 export const CategoryModel = model<Category>(DOCUMENT_NAME, schema, COLLECTION_NAME);

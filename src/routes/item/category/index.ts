@@ -1,5 +1,5 @@
 import express from 'express';
-import { SuccessResponse } from '../../../core/ApiResponse';
+import { FailureMsgResponse, SuccessResponse } from '../../../core/ApiResponse';
 import asyncHandler from '../../../helpers/asyncHandler';
 import CategorySchema from './schema';
 import authorization from '../../../auth/authorization';
@@ -30,6 +30,33 @@ router.get(
   }),
 )
 
+router.post( '/enable',
+  validator(CategorySchema.Id),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const updatedOne = await CategoryRepo.enable(req.body.id)
+    if(updatedOne){
+      new SuccessResponse('Attribute enabled successfully', updatedOne).send(res);
+    }else{
+      new FailureMsgResponse('Attribute enable failure').send(res)
+    }
+  }),
+);
+
+
+router.post( '/disable',
+  validator(CategorySchema.Id),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const updatedOne = await CategoryRepo.disable(req.body.id)
+    if(updatedOne){
+      new SuccessResponse('Attribute disabled successfully', updatedOne).send(res)
+    }else{
+      new FailureMsgResponse('Attribute disabled failure').send(res)
+    }
+  }),
+);
+
 router.get(
   '/detail',
   validator(CategorySchema.Id,ValidationSourceEnum.QUERY),
@@ -45,10 +72,7 @@ router.post( '/',
   validator(CategorySchema.create),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const createdOne = await CategoryRepo.create({
-      name: req.body.name,
-      parent: req.body?.parent
-    } as Category);
+    const createdOne = await CategoryRepo.create({...req.body} as Category);
     new SuccessResponse('category created successfully', createdOne).send(res);
   }),
 )
