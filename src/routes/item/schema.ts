@@ -4,6 +4,7 @@ import { itemTypeEnum } from '../../database/model/item/Item'
 
 
 const attributeItem = Joi.object().keys({
+  _id: JoiObjectId(),
   attribute: JoiObjectId().required(),
   options: Joi.array().items(JoiObjectId())
 })

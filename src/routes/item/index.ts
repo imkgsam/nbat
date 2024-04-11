@@ -21,6 +21,16 @@ router.get( '/all',
   }),
 );
 
+router.get( '/variant/all',
+validator(schema.Id, ValidationSourceEnum.QUERY),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    console.log(req?.query?.id)
+    const all = await ItemRepo.filters({'meta.isVariantOf': req?.query?.id});
+    return new SuccessResponse('success', all).send(res);
+  }),
+);
+
 router.post( '/',
   validator(schema.item.create),
   authorization(RoleCodeEnum.ADMIN),
