@@ -10,6 +10,19 @@ export enum MoldTypeEnum {
   ONLINE = 'On-line'
 }
 
+export enum MOLDGROUPSTATUSENUM  {
+  // 闲置, 没有安装模具的时候
+  IDLE = 'Idle',
+  //待命中， 已经安装上了
+  STANDBY = 'Standby',
+  // 维护中， 已经安装上，但是在维护中，不可生产
+  MAINTENANCE = 'Maintenance',
+  // 运行中， 正常生产中
+  RUNNING = 'Running',
+  // 报废停用中， 已经不再生产的
+  SCRAPPED = 'Scrapped'
+}
+
 
 export default interface MoldGroup {
   _id: Types.ObjectId;
@@ -27,6 +40,8 @@ export default interface MoldGroup {
   manager: Types.ObjectId,
   meta:{
     enabled: boolean;
+    //状态
+    status: MOLDGROUPSTATUSENUM
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -70,6 +85,11 @@ const schema = new Schema<MoldGroup>(
         type: Boolean,
         default: false
       },
+      status: {
+        type: String,
+        required: true,
+        enum: Object.values(MOLDGROUPSTATUSENUM)
+      }
     },
   },
   {
