@@ -9,18 +9,23 @@ export enum MOLDSTATUSENUM {
 
 }
 
+interface moldItemAttributeOptions {
+  attribute: Types.ObjectId,
+  options: Array<Types.ObjectId>
+}
+
 
 
 export default interface MoldItem {
   _id: Types.ObjectId;
   //模具厂家, Entity
   supplier: Types.ObjectId,
-  // 对应的产品模具 sku
+  // 对应的产品模具 sku，
   mold: Types.ObjectId,
-  // 对应的产品spu
+  // 对应的产品spu 涉及属性
   product: Types.ObjectId,
-
-
+  //模具所能添加的属性以及可选值， 创建模具的时候，可以从对应的mold上选取attribute和attribute option，并附加到模具上。
+  attributes: Array<moldItemAttributeOptions>,
   group:{
     // 所属模组(线), 1.安装上了，2.还没安装
     moldGroup: Types.ObjectId,
@@ -29,10 +34,6 @@ export default interface MoldItem {
   },
   //条码
   barcode: Types.ObjectId,
-
-  
-  //上线装载 时间戳
-  loadTime: Date,
   //报废日期
   scrapDate: Date,
   //理论最大注浆次数
@@ -52,17 +53,14 @@ export default interface MoldItem {
    *  2.1 制作完成 具体地点（模具车间）
    *  2.2 入库到其他车间 （其他生产车间）
    */
-  currentLocation: Types.ObjectId,
   meta:{
     //是否启用
     enabled: boolean;
     //是否在使用中
     inUse: boolean;
   };
-  /**
-   * 具体模具的创建时间，相当于他的制作时间。
-   * 1. 当模具是外购的时候（大多是情况），采购到货入库的时候，才会相应的创建每个独立的模具，这种情况下，创建时间为入库时间。 
-   */
+  // 内部备注，
+  remark: string,
   createdAt?: Date;
   updatedAt?: Date;
 }
