@@ -1,19 +1,32 @@
 import Joi from 'joi';
 import { JoiObjectId } from '../../helpers/validator';
-
+import { MoldGroupStatusEnum } from '../../database/model/mold/MoldGroup'
 export default {
   Id: Joi.object().keys({
     id: JoiObjectId().required(),
   }),
   MoldItem: {
     create: Joi.object().keys({
-      ttype: Joi.string().required(),
-      num: Joi.number().required(),
-      btype: Joi.string().required(),
-      item: Joi.string().required(),
+      supplier: JoiObjectId().required(),
+      attributes: Joi.array().items(Joi.object().keys({
+        attribute: JoiObjectId().required(),
+        options: Joi.array().required().items(JoiObjectId())
+      })),
+      mtype: Joi.string().required(),
+      group: Joi.object().keys({
+        moldGroup: JoiObjectId(),
+        index: Joi.number()
+      }),
+      maxGroutingTimes: Joi.number(),
+      initialGroutingTimes: Joi.number(),
+      warningThreadhold: Joi.number(),
+      location: JoiObjectId(),
+
       meta: Joi.object().keys({
-        enabled: Joi.boolean()
-      })
+        enabled: Joi.boolean(),
+        batch: Joi.string()
+      }),
+      remark: Joi.string()
     }),
     update: Joi.object().keys({
       _id: JoiObjectId().required(),
@@ -37,11 +50,11 @@ export default {
   MoldGroup: {
     create: Joi.object().keys({
       name: Joi.string().required(),
-      manager: JoiObjectId().required(),
       mtype: Joi.string().required(),
       workers: Joi.array().items(JoiObjectId()),
       department: JoiObjectId().required(),
       location: JoiObjectId().required(),
+      manager: JoiObjectId().required(),
       meta: Joi.object().keys({
         enabled: Joi.boolean()
       })
@@ -55,13 +68,13 @@ export default {
       department: JoiObjectId().required(),
       location: JoiObjectId().required(),
       meta: Joi.object().keys({
-        enabled: Joi.boolean()
+        enabled: Joi.boolean(),
+        status: Joi.string().valid(...Object.values(MoldGroupStatusEnum))
       })
     }),
     pfilters: Joi.object().keys({
       currentPage: Joi.number(),
       pageSize: Joi.number(),
-
       filters: Joi.object().keys({
         name: Joi.string(),
         mtype: Joi.string(),

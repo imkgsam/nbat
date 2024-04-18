@@ -167,41 +167,27 @@ const Employee = {
     const updateEmployee = updateOne.employee as Employee
     delete updateOne.account
     delete updateOne.employee
-    console.log()
     const updatedEntity = await EntityModel.findOneAndUpdate({_id: updateOne._id}, { $set: updateOne }, { new: true })
     if(updatedEntity){
-      console.log(1)
       if(updatedEntity.meta.isUser){
-        console.log(2)
         if(updateAccount){
-          console.log(3)
           const { password } = updateAccount as any
           if(password){
-            console.log(4)
             await AccountModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateAccount, password: await bcrypt.hash(password, 10)} }, { new: true, upsert:true })
           }else{
-            console.log(5)
             await AccountModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateAccount} }, { new: true, upsert:true })
           }
         }else{
-          console.log(6)
           await AccountModel.findOneAndDelete({ entity: updatedEntity._id})
         }
       }
-      console.log(7)
       if(updatedEntity.meta.isEmployee){
-        console.log(8)
         if(updateEmployee){
-          console.log(9)
           let newBarcode = null
           if(!updateEmployee.EID && updateEmployee.inaugurationDate && updatedEntity?.personal?.sex && updatedEntity?.name){
-            console.log(10)
             newBarcode = await BarcodeRepo.BarcodeItem.findOneOrCreateForEmployee(updatedEntity?.name,updateEmployee.inaugurationDate,updatedEntity?.personal?.sex,updateEmployee._id)
-            console.log(11)
           }
-          console.log(12)
           await EmployeeModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateEmployee,EID: updateEmployee?.EID || newBarcode} }, { new: true, upsert:true })
-          console.log(15)
         }
       }
       return EntityModel.findById(updateOne._id).populate('account').populate('employee').lean().exec()

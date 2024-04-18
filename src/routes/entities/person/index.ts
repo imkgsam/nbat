@@ -68,7 +68,6 @@ router.post( '/filters',
   validator(schema.Person.filters),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    
     const { filters } = req.body
     const datas = await EntityRepo.Person.filter(filters)
     let {currentPage, pageSize} = req.body
@@ -96,6 +95,17 @@ router.post( '/',
       ...req.body
     } as Entity);
     new SuccessResponse('Person created successfully', createdOne).send(res);
+  }),
+);
+
+router.put( '/',
+  validator(schema.Person.update),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const createdOne = await EntityRepo.Person.create({
+      ...req.body
+    } as Entity);
+    new SuccessResponse('Person updated successfully', createdOne).send(res);
   }),
 );
 

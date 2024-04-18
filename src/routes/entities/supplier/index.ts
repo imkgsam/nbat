@@ -15,7 +15,7 @@ const router = express.Router();
 router.get( '/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const entities = await EntityRepo.findAllwithFilters({etype: EntityTypeEnum.COMPANY});
+    const entities = await EntityRepo.findAllwithFilters({'meta.isSupplier': true});
     return new SuccessResponse('success', entities).send(res);
   }),
 );
@@ -23,7 +23,7 @@ router.get( '/all',
 router.get( '/allpublic',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const rts = await EntityRepo.findAllwithFilters({etype: EntityTypeEnum.COMPANY,'meta.enabled':true,'meta.verified':true});
+    const rts = await EntityRepo.findAllwithFilters({'meta.isSupplier': true,'meta.enabled':true,'meta.verified':true});
     return new SuccessResponse('success', rts).send(res);
   }),
 );
@@ -56,20 +56,26 @@ router.post( '/',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
     const createdOne = await EntityRepo.Company.create({
-      ...req.body
+      name: req.body.name,
+      alias: req.body.alias,
+      enterprise:{
+        manager: req.body.enterprise?.manager,
+        foundedAt: req.body.enterprise?.foundedAt,
+        taxNum: req.body.enterprise?.taxNum
+      },
+      common:{
+        website: req.body.common?.website,
+        email:  req.body.common?.email,
+        landline:  req.body.common?.landline,
+        mobilePhone:  req.body.common?.mobilePhone,
+        country:  req.body.common?.country,
+        city:  req.body.common?.city,
+        industry:  req.body.common?.industry,
+        internalNote:  req.body.common?.internalNote
+      },
+      socialMedias: req.body.socialMedias
     } as Entity)
     return new SuccessResponse('success', createdOne).send(res);
-  }),
-);
-
-router.put( '/',
-  validator(schema.Company.update),
-  authorization(RoleCodeEnum.ADMIN),
-  asyncHandler(async (req, res) => {
-    const updatedOne = await EntityRepo.Company.update({
-      ...req.body
-    } as Entity)
-    return new SuccessResponse('success', updatedOne).send(res);
   }),
 );
 

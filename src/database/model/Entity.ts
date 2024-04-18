@@ -41,9 +41,9 @@ export default interface Entity {
     birth?: Date;
   };
   enterprise?:{
-    //公司
+    //公司 管理员，用于管理系统内 公司信息及人员 的 ‘管理员’
     manager?: Types.ObjectId;
-    //成立行业
+    //成立时间
     foundedAt?: Date;
     // 公司税务代码 用于识别公司机构 唯一
     taxNum?: string;

@@ -51,7 +51,67 @@ const MoldGroup = {
       }
       delete filters.meta
     }
-    return MoldGroupModel.find(filters).populate('workers').populate('department').populate('manager').populate('location').lean().exec()
+    let rt =  await MoldGroupModel.aggregate([
+      {
+        $match:filters
+      },
+      {
+        $lookup:{
+          from : "MoldItems",
+          localField:'_id',
+          foreignField:"group.moldGroup",
+          as: "items"
+        }
+      },
+      {
+        $lookup:{
+          from : "entites",
+          localField:'workers',
+          foreignField:"_id",
+          as: "workers"
+        }
+      },
+      {
+        $lookup:{
+          from : "departments",
+          localField:'department',
+          foreignField:"_id",
+          as: "department"
+        }
+      },
+      {
+        $unwind: "$department"
+      },
+      {
+        $lookup:{
+          from : "entites",
+          localField:'manager',
+          foreignField:"_id",
+          as: "manager"
+        }
+      },
+      {
+        $unwind: "$manager"
+      },
+      {
+        $lookup:{
+          from : "Locations",
+          localField:'location',
+          foreignField:"_id",
+          as: "location"
+        }
+      },
+      {
+        $unwind: "$location"
+      },
+    ])
+    rt = rt.map(each=> {
+      each['moldCount'] = each.items.length
+      delete each.items
+      return each
+    })
+    return rt
+    // return MoldGroupModel.find(filters).populate('workers').populate('department').populate('manager').populate('location').lean().exec()
   },
   delete: async function deleteOne(id: string): Promise<MoldGroup | null> {
     return MoldGroupModel.findOneAndDelete({_id:id}).lean().exec()

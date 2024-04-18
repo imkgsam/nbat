@@ -52,7 +52,7 @@ export default interface MoldItem {
    *  2.1 制作完成 具体地点（模具车间）
    *  2.2 入库到其他车间 （其他生产车间）
    */
-  location: Types.ObjectId,
+  // location: Types.ObjectId,
   meta:{
     //是否启用
     enabled: boolean;

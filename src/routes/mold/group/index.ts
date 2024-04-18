@@ -7,7 +7,7 @@ import validator from '../../../helpers/validator';
 import schema from '../schema';
 import { ProtectedRequest } from 'app-request';
 import MoldRepo from '../../../database/repository/MoldRepo';
-import MoldGroup from '../../../database/model/mold/MoldGroup';
+import MoldGroup, { MoldGroupStatusEnum } from '../../../database/model/mold/MoldGroup';
 
 const router = express.Router();
 
@@ -24,7 +24,8 @@ router.post( '/',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const createdOne = await MoldRepo.MoldGroup.create({
-      ...req.body
+      ...req.body,
+      'meta.status':MoldGroupStatusEnum.IDLE
     } as MoldGroup);
     new SuccessResponse('MoldGroup created successfully', createdOne).send(res);
   }),

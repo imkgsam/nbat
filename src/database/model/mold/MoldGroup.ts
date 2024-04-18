@@ -10,7 +10,7 @@ export enum MoldTypeEnum {
   ONLINE = 'On-line'
 }
 
-export enum MOLDGROUPSTATUSENUM  {
+export enum MoldGroupStatusEnum  {
   // 闲置, 没有安装模具的时候
   IDLE = 'Idle',
   //待命中， 已经安装上了
@@ -41,7 +41,7 @@ export default interface MoldGroup {
   meta:{
     enabled: boolean;
     //状态
-    status: MOLDGROUPSTATUSENUM
+    status: MoldGroupStatusEnum
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -89,7 +89,7 @@ const schema = new Schema<MoldGroup>(
       status: {
         type: String,
         required: true,
-        enum: Object.values(MOLDGROUPSTATUSENUM)
+        enum: Object.values(MoldGroupStatusEnum)
       }
     },
   },
