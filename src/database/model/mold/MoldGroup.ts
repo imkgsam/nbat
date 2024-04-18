@@ -58,6 +58,7 @@ const schema = new Schema<MoldGroup>(
     mtype: {
       type: String,
       required: true,
+      enum: Object.values(MoldTypeEnum),
       trim: true
     },
     workers:[{
