@@ -83,5 +83,14 @@ router.post( '/pfilters',
   }),
 );
 
+router.post( '/delete',
+  validator(schema.Id),
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const deletedOne = await MoldRepo.MoldGroup.delete(req.body.id);
+    new SuccessResponse('Mold Group created successfully', deletedOne).send(res);
+  }),
+);
+
 
 export default router;

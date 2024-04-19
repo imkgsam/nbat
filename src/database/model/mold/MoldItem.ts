@@ -75,7 +75,6 @@ const schema = new Schema<MoldItem>(
   {
     supplier:{
       type: ObjectId,
-      required: true,
       ref: 'Entity'
     },
     mold:{
@@ -143,8 +142,7 @@ const schema = new Schema<MoldItem>(
     },
     cumulativeGroutingTimes: {
       type: Number,
-      required: true,
-      ref: 'MoldGroup'
+      default: 0
     },
     meta:{
       enabled: {

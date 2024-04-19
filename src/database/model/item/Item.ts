@@ -13,11 +13,11 @@ interface attributeOptions {
 export enum itemTypeEnum {
   PRODUCT = 'Product',
   SERVICE = 'Service',
+  // 模具
+  MOLD = 'Mold'
   
   //关联到场地，就能出租了
   // LOCATION = 'Location'，
-  // 模具
-  // MOLD = 'Mold'
   // 纸箱
   // CARTON = 'Carton'
   // 集合
@@ -56,6 +56,17 @@ export default interface Item {
     attributeTags?: Array<Types.ObjectId>;
   };
   attributes?: Array<attributeOptions>;
+  //模具相关
+  mold?:{
+    //理论最高注浆次数
+    maxGroutingTimes: number,
+    //初始注浆次数
+    initialGroutingTimes: number,
+    // 预警 阈值
+    warningThreadhold: number,
+    // 累计注浆次数，不含初始次数
+    cumulativeGroutingTimes: number,
+  }
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -79,18 +90,6 @@ const schema = new Schema<Item>(
       ref: 'Category',
       required: true
     },
-    attributes: [{
-      attribute: {
-        type: ObjectId,
-        ref: 'Attribute',
-        required: true
-      },
-      options: [{
-        type: ObjectId,
-        ref: 'AttributeOption',
-        required: true
-      }]
-    }],
     etype: {
       type: String,
       required:true,
@@ -129,6 +128,32 @@ const schema = new Schema<Item>(
         type: ObjectId,
         ref: 'AttributeValue'
       }
+    },
+    attributes: [{
+      attribute: {
+        type: ObjectId,
+        ref: 'Attribute',
+        required: true
+      },
+      options: [{
+        type: ObjectId,
+        ref: 'AttributeOption',
+        required: true
+      }]
+    }],
+    mold:{
+      maxGroutingTimes: {
+        type: Number
+      },
+      initialGroutingTimes: {
+        type: Number
+      },
+      warningThreadhold: {
+        type: Number
+      },
+      cumulativeGroutingTimes: {
+        type: Number
+      },
     },
     createdAt: {
       type: Schema.Types.Date,
