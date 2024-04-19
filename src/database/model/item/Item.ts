@@ -29,8 +29,10 @@ export enum itemTypeEnum {
  */
 export default interface Item {
   _id: Types.ObjectId;
-  // 产品型号 如： MB-2062
+  // 对外产品型号 如： MB-2062
   code: string;
+  //内部的别称
+  alias: string;
   //所属的产品类别
   category: Types.ObjectId;
   etype: itemTypeEnum;
@@ -63,7 +65,12 @@ const schema = new Schema<Item>(
     code: {
       type: String,
       required: true,
-      unique: true,
+      trim: true,
+      index: true
+    },
+    alias: {
+      type: String,
+      required: true,
       trim: true,
       index: true
     },
@@ -143,5 +150,6 @@ const schema = new Schema<Item>(
 );
 
 schema.index({ code: 1 ,category: 1});
+schema.index({ alias: 1 ,category: 1});
 
 export const ItemModel = model<Item>(DOCUMENT_NAME, schema, COLLECTION_NAME);

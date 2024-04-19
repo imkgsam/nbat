@@ -107,7 +107,6 @@ const MoldGroup = {
     ])
     rt = rt.map(each=> {
       each['moldCount'] = each.items.length
-      delete each.items
       return each
     })
     return rt
