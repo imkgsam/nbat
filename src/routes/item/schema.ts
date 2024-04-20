@@ -16,6 +16,7 @@ export default {
   item:{
     create: Joi.object().keys({
       code: Joi.string().required(),
+      alias: Joi.string(),
       category: JoiObjectId().required(),
       etype: Joi.string().required().valid(...Object.values(itemTypeEnum)),
       meta: {
@@ -23,16 +24,22 @@ export default {
         canBeStocked: Joi.boolean(),
         canBeSold: Joi.boolean(),
         canBePurchased: Joi.boolean(),
-        canBenProduced: Joi.boolean(),
-        canBenRented: Joi.boolean(),
+        canBeProduced: Joi.boolean(),
+        canBeRented: Joi.boolean(),
         hasVariants: Joi.boolean(),
         isVariantOf: JoiObjectId()
+      },
+      mold:{
+        maxGroutingTimes: Joi.number(),
+        warningThreadhold: Joi.number(),
+        product: JoiObjectId()
       },
       attributes: Joi.array().items(attributeItem),
     }),
     update: Joi.object().keys({
       _id: JoiObjectId().required(),
       code: Joi.string().required(),
+      alias: Joi.string(),
       category: JoiObjectId().required(),
       etype: Joi.string().required().valid(...Object.values(itemTypeEnum)),
       meta: {
@@ -40,10 +47,15 @@ export default {
         canBeStocked: Joi.boolean(),
         canBeSold: Joi.boolean(),
         canBePurchased: Joi.boolean(),
-        canBenProduced: Joi.boolean(),
-        canBenRented: Joi.boolean(),
+        canBeProduced: Joi.boolean(),
+        canBeRented: Joi.boolean(),
         hasVariants: Joi.boolean(),
         isVariantOf: JoiObjectId()
+      },
+      mold:{
+        maxGroutingTimes: Joi.number(),
+        warningThreadhold: Joi.number(),
+        product: JoiObjectId()
       },
       attributes: Joi.array().items(attributeItem),
     }),

@@ -46,9 +46,9 @@ export default interface Item {
     //是否能采购
     canBePurchased: boolean;
     //是否能生产, 说明是 - 空瓷 或 自产品
-    canBenProduced: boolean;
+    canBeProduced: boolean;
     //是否能出租
-    canBenRented: boolean;
+    canBeRented: boolean;
     // 是否有变体
     hasVariants: boolean;
     //是哪个款式的变体 parent
@@ -60,12 +60,10 @@ export default interface Item {
   mold?:{
     //理论最高注浆次数
     maxGroutingTimes: number,
-    //初始注浆次数
-    initialGroutingTimes: number,
     // 预警 阈值
     warningThreadhold: number,
-    // 累计注浆次数，不含初始次数
-    cumulativeGroutingTimes: number,
+    // 对应的产品spu
+    product: Types.ObjectId
   }
   createdAt?: Date;
   updatedAt?: Date;
@@ -112,7 +110,7 @@ const schema = new Schema<Item>(
         type: Boolean,
         default: false
       },
-      canBenProduced: {
+      canBeProduced: {
         type: Boolean,
         default: false
       },
@@ -145,15 +143,13 @@ const schema = new Schema<Item>(
       maxGroutingTimes: {
         type: Number
       },
-      initialGroutingTimes: {
-        type: Number
-      },
       warningThreadhold: {
         type: Number
       },
-      cumulativeGroutingTimes: {
-        type: Number
-      },
+      product: {
+        type: ObjectId,
+        ref:'Item'
+      }
     },
     createdAt: {
       type: Schema.Types.Date,

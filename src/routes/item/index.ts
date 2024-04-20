@@ -21,6 +21,14 @@ router.get( '/all',
   }),
 );
 
+router.get( '/allpublic',
+  authorization(RoleCodeEnum.ADMIN),
+  asyncHandler(async (req, res) => {
+    const all = await ItemRepo.filters({'meta.enabled':true});
+    return new SuccessResponse('success', all).send(res);
+  }),
+);
+
 router.get( '/variant/all',
 validator(schema.Id, ValidationSourceEnum.QUERY),
   authorization(RoleCodeEnum.ADMIN),
