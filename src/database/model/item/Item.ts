@@ -1,4 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
+import { MoldTypeEnum } from '../mold/MoldGroup';
 const { String, ObjectId, Boolean } = Schema.Types
 
 export const DOCUMENT_NAME = 'Item';
@@ -63,7 +64,9 @@ export default interface Item {
     // 预警 阈值
     warningThreadhold: number,
     // 对应的产品spu
-    product: Types.ObjectId
+    product: Types.ObjectId,
+    // 对饮模具的类型
+    mtype: MoldTypeEnum
   }
   createdAt?: Date;
   updatedAt?: Date;
@@ -149,6 +152,10 @@ const schema = new Schema<Item>(
       product: {
         type: ObjectId,
         ref:'Item'
+      },
+      mtype: {
+        type:String,
+        enum: Object.values(MoldTypeEnum)
       }
     },
     createdAt: {

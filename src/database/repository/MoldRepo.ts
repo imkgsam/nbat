@@ -4,8 +4,13 @@ import { Types } from "mongoose"
 
 
 const MoldItem = {
-  create: async function create(newOne: MoldItem): Promise<MoldItem> {
-    return await MoldItemModel.create(newOne);
+  create: async function create(newOne: MoldItem, inBatch: boolean, count: number): Promise<MoldItem | MoldItem[]> {
+    if(inBatch && count > 1){
+      //todo
+      return []
+    }else{
+      return await MoldItemModel.create(newOne);
+    }
   },
   findAll: async function findAll(): Promise<MoldItem[]> {
     return MoldItemModel.find({}).lean().exec()

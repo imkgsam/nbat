@@ -32,7 +32,8 @@ export default {
       mold:{
         maxGroutingTimes: Joi.number(),
         warningThreadhold: Joi.number(),
-        product: JoiObjectId()
+        product: JoiObjectId(),
+        mtype: Joi.string()
       },
       attributes: Joi.array().items(attributeItem),
     }),
@@ -55,7 +56,8 @@ export default {
       mold:{
         maxGroutingTimes: Joi.number(),
         warningThreadhold: Joi.number(),
-        product: JoiObjectId()
+        product: JoiObjectId(),
+        mtype: Joi.string()
       },
       attributes: Joi.array().items(attributeItem),
     }),

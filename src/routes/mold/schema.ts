@@ -7,7 +7,12 @@ export default {
   }),
   MoldItem: {
     create: Joi.object().keys({
-      supplier: JoiObjectId().required(),
+      inBatch: Joi.boolean(),
+      count: Joi.number(),
+
+      supplier: JoiObjectId().required,
+      mold: JoiObjectId().required(),
+      product: JoiObjectId().required(),
       attributes: Joi.array().items(Joi.object().keys({
         attribute: JoiObjectId().required(),
         options: Joi.array().required().items(JoiObjectId())
@@ -20,8 +25,6 @@ export default {
       maxGroutingTimes: Joi.number(),
       initialGroutingTimes: Joi.number(),
       warningThreadhold: Joi.number(),
-      location: JoiObjectId(),
-
       meta: Joi.object().keys({
         enabled: Joi.boolean(),
         batch: Joi.string()

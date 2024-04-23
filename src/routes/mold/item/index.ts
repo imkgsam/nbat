@@ -11,7 +11,7 @@ import MoldItem from '../../../database/model/mold/MoldItem';
 
 const router = express.Router();
 
-router.get( '/all',
+router.get('/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
     const alls = await MoldRepo.MoldItem.findAll();
@@ -19,41 +19,42 @@ router.get( '/all',
   }),
 );
 
-router.post( '/',
+router.post('/',
   validator(schema.MoldItem.create),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
+    const { inBatch, count} = req.body
     const createdOne = await MoldRepo.MoldItem.create({
       ...req.body
-    } as MoldItem);
+    } as MoldItem, inBatch, count);
     new SuccessResponse('Mold Item created successfully', createdOne).send(res);
   }),
 );
 
-router.post( '/pfilters',
+router.post('/pfilters',
   validator(schema.MoldItem.pfilters),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const { filters  } = req.body
+    const { filters } = req.body
     const datas = await MoldRepo.MoldItem.filters(filters)
-    let {currentPage, pageSize} = req.body
-    if(!currentPage || currentPage<=0){
+    let { currentPage, pageSize } = req.body
+    if (!currentPage || currentPage <= 0) {
       currentPage = 1
     }
-    if(!pageSize || pageSize <=0){
+    if (!pageSize || pageSize <= 0) {
       pageSize = 10
     }
-    const rt = datas.slice(pageSize*(currentPage-1),currentPage*pageSize)
+    const rt = datas.slice(pageSize * (currentPage - 1), currentPage * pageSize)
     new SuccessResponse('success', {
       list: rt,
       total: datas.length,
       pageSize: pageSize,
-      currentPage: currentPage 
+      currentPage: currentPage
     }).send(res);
   }),
 );
 
-router.post( '/delete',
+router.post('/delete',
   validator(schema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
@@ -62,7 +63,7 @@ router.post( '/delete',
   }),
 );
 
-router.put( '/',
+router.put('/',
   validator(schema.MoldItem.update),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
@@ -73,7 +74,7 @@ router.put( '/',
   }),
 );
 
-router.post( '/enable',
+router.post('/enable',
   validator(schema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
@@ -82,7 +83,7 @@ router.post( '/enable',
   }),
 );
 
-router.post( '/disable',
+router.post('/disable',
   validator(schema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
