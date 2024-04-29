@@ -8,6 +8,9 @@ const BarcodeItem = {
   create: async function create(newOne: BarcodeItem): Promise<BarcodeItem> {
     return await BarcodeItemModel.create(newOne);
   },
+  createNWithType : async function createNWithType(type: string, n: number): Promise<BarcodeItem[]> {
+    return []
+  },
   findOneOrCreateForEmployee: async function findOneOrCreateForEmployee(name: string,inaugurationDate: Date,sex: string,employee: Types.ObjectId): Promise<BarcodeItem | null> {
     const found = await BarcodeItemModel.findOne({ ttype: 'Employee', item: employee })
     if(found)

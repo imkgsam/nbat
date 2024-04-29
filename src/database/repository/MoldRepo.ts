@@ -5,12 +5,17 @@ import { Types } from "mongoose"
 
 const MoldItem = {
   create: async function create(newOne: MoldItem, inBatch: boolean, count: number): Promise<MoldItem | MoldItem[]> {
+    let rt = null
     if(inBatch && count > 1){
-      //todo
-      return []
+      let lst = Array(count).fill(newOne)
+       let imrt =  await MoldItemModel.insertMany(lst)  
+       console.log(imrt)
+       rt = []
     }else{
-      return await MoldItemModel.create(newOne);
+      rt =  await MoldItemModel.create(newOne);
     }
+    console.log(rt)
+    return rt
   },
   findAll: async function findAll(): Promise<MoldItem[]> {
     return MoldItemModel.find({}).lean().exec()
@@ -22,7 +27,7 @@ const MoldItem = {
     return MoldItemModel.findByIdAndUpdate(id, { 'meta.enabled': false }, { new: true }).lean().exec();
   },
   filters: async function filters(filters: any): Promise<MoldItem[]> {
-    return []
+    return MoldItemModel.find(filters).populate('supplier').populate('mold').populate('barcode').populate('product').populate('group.moldGroup').lean().exec()
   },
   delete: async function deleteOne(id: string): Promise<MoldItem | null> {
     return null

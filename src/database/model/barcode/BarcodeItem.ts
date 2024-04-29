@@ -28,7 +28,8 @@ const schema = new Schema<BarcodeItem>(
     },
     num:{
       type: Number,
-      required: true
+      required: true,
+      min: 1
     },
     ttype: {
       type: String,

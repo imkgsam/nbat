@@ -108,19 +108,17 @@ const schema = new Schema<MoldItem>(
     group:{
       moldGroup: {
         type: ObjectId,
-        required: true,
         ref: 'MoldGroup',
         sparse: true
       },
       index: {
         type: Number,
-        required: true,
         default: 0
       }
     },
     barcode: {
       type: ObjectId,
-      required: true,
+      sparse: true,      
       unique: true,
       ref: 'Barcode'
     },
@@ -173,7 +171,6 @@ const schema = new Schema<MoldItem>(
   },
 );
 
-schema.index({ barcode: 1 });
 schema.index({ 'group.moldGroup': 1 ,'group.index':1 });
 
 export const MoldItemModel = model<MoldItem>(DOCUMENT_NAME, schema, COLLECTION_NAME);

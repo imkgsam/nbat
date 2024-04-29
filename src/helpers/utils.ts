@@ -59,3 +59,45 @@ const isDigit = (character: string): boolean => {
     return false
   return DIGIT_EXPRESSION.test(character);
 };
+
+export function findOneSpotInSequence (arr: any[],min: number): number {
+  console.log(arr,min)
+  let rt = min
+  if(arr && arr.length>0 ){
+    for(var i=1; i< arr.length;i++){
+      if(arr[i]-arr[i-1] !=1){
+        rt = arr[i-1] + 1
+        break
+      }
+    }
+  }
+  return rt
+}
+
+export function findNSpotInSequence( arr: any[],min:number,max: number, n:number): number[] {
+  let rt = [] as number[]
+  if(n && n>0 && arr && arr.length > 0){
+    for(var i=1; i< arr.length;i++){
+      if(arr[i]-arr[i-1] !=1){
+        let diff = arr[i] - arr[i-1]
+        let start = 1
+        while(diff >1){
+          rt.push(arr[i-1]+start)
+          diff = diff -1
+          n = n -1
+          start = start + 1
+          if(n===0){
+            return rt
+          }
+        }
+      }
+    }
+    let start = 1
+    while(n>0){
+      rt.push(max+start)
+      start = start + 1
+      n=n-1
+    }
+  }
+  return rt
+}
