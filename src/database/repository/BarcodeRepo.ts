@@ -8,8 +8,24 @@ const BarcodeItem = {
   create: async function create(newOne: BarcodeItem): Promise<BarcodeItem> {
     return await BarcodeItemModel.create(newOne);
   },
-  createNWithType : async function createNWithType(type: string, n: number): Promise<BarcodeItem[]> {
-    return []
+  createNWithType : async function createNWithType(type: string, n: number): Promise<BarcodeItem[] | null> {
+    if(type && n > 0){
+      let rt = []
+      switch(type){
+        case 'Employee':
+          break;
+        case 'MoldItem':
+          break
+        default: 
+          console.log('not implemented')
+          rt = null as any
+        }
+      return rt
+    }else{
+      return null
+    }
+    
+    
   },
   findOneOrCreateForEmployee: async function findOneOrCreateForEmployee(name: string,inaugurationDate: Date,sex: string,employee: Types.ObjectId): Promise<BarcodeItem | null> {
     const found = await BarcodeItemModel.findOne({ ttype: 'Employee', item: employee })

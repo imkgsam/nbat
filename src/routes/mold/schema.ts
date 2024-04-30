@@ -10,7 +10,7 @@ export default {
       inBatch: Joi.boolean(),
       count: Joi.number(),
 
-      supplier: JoiObjectId().required,
+      supplier: JoiObjectId(),
       mold: JoiObjectId().required(),
       product: JoiObjectId().required(),
       attributes: Joi.array().items(Joi.object().keys({
@@ -32,11 +32,27 @@ export default {
       remark: Joi.string()
     }),
     update: Joi.object().keys({
-      _id: JoiObjectId().required(),
-      code: Joi.string().required(),
+      _id: JoiObjectId(),
+      supplier: JoiObjectId(),
+      mold: JoiObjectId(),
+      product: JoiObjectId(),
+      attributes: Joi.array().items(Joi.object().keys({
+        attribute: JoiObjectId(),
+        options: Joi.array().items(JoiObjectId())
+      })),
+      mtype: Joi.string(),
+      group: Joi.object().keys({
+        moldGroup: JoiObjectId(),
+        index: Joi.number()
+      }),
+      maxGroutingTimes: Joi.number(),
+      initialGroutingTimes: Joi.number(),
+      warningThreadhold: Joi.number(),
       meta: Joi.object().keys({
-        enabled: Joi.boolean()
-      })
+        enabled: Joi.boolean(),
+        batch: Joi.string()
+      }),
+      remark: Joi.string()
     }),
     pfilters: Joi.object().keys({
       currentPage: Joi.number(),

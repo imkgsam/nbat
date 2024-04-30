@@ -4,17 +4,18 @@ import { Types } from "mongoose"
 
 
 const MoldItem = {
-  create: async function create(newOne: MoldItem, inBatch: boolean, count: number): Promise<MoldItem | MoldItem[]> {
+  create: async function create(newOne: MoldItem, inBatch: boolean, count: number): Promise<MoldItem[]> {
     let rt = null
-    if(inBatch && count > 1){
+    if (inBatch && count > 1) {
       let lst = Array(count).fill(newOne)
-       let imrt =  await MoldItemModel.insertMany(lst)  
-       console.log(imrt)
-       rt = []
-    }else{
-      rt =  await MoldItemModel.create(newOne);
+      let imrt = await MoldItemModel.insertMany(lst)
+      rt = imrt as MoldItem[]
+    } else {
+      rt = [await MoldItemModel.create(newOne)]
     }
     console.log(rt)
+    const ids = rt.map(each=> each._id)
+    
     return rt
   },
   findAll: async function findAll(): Promise<MoldItem[]> {
@@ -30,12 +31,12 @@ const MoldItem = {
     return MoldItemModel.find(filters).populate('supplier').populate('mold').populate('barcode').populate('product').populate('group.moldGroup').lean().exec()
   },
   delete: async function deleteOne(id: string): Promise<MoldItem | null> {
-    return null
+    return MoldItemModel.findOneAndDelete({ _id: id }).lean().exec()
   },
   update: async function update(updateOne: MoldItem): Promise<MoldItem | null> {
     return MoldItemModel.findByIdAndUpdate(updateOne._id, { $set: updateOne }, { new: true }).lean().exec();
   },
-  
+
 }
 
 const MoldGroup = {
@@ -55,37 +56,37 @@ const MoldGroup = {
     return MoldGroupModel.findByIdAndUpdate(id, { 'meta.enabled': false }, { new: true }).lean().exec();
   },
   filters: async function filters(filters: any): Promise<MoldGroup[]> {
-    if(Object.keys(filters).includes('meta')){
-      for (const key of Object.keys(filters.meta)){
+    if (Object.keys(filters).includes('meta')) {
+      for (const key of Object.keys(filters.meta)) {
         filters[`meta.${key}`] = filters.meta[key]
       }
       delete filters.meta
     }
-    let rt =  await MoldGroupModel.aggregate([
+    let rt = await MoldGroupModel.aggregate([
       {
-        $match:filters
+        $match: filters
       },
       {
-        $lookup:{
-          from : "MoldItems",
-          localField:'_id',
-          foreignField:"group.moldGroup",
+        $lookup: {
+          from: "MoldItems",
+          localField: '_id',
+          foreignField: "group.moldGroup",
           as: "items"
         }
       },
       {
-        $lookup:{
-          from : "entites",
-          localField:'workers',
-          foreignField:"_id",
+        $lookup: {
+          from: "entites",
+          localField: 'workers',
+          foreignField: "_id",
           as: "workers"
         }
       },
       {
-        $lookup:{
-          from : "departments",
-          localField:'department',
-          foreignField:"_id",
+        $lookup: {
+          from: "departments",
+          localField: 'department',
+          foreignField: "_id",
           as: "department"
         }
       },
@@ -93,10 +94,10 @@ const MoldGroup = {
         $unwind: "$department"
       },
       {
-        $lookup:{
-          from : "entites",
-          localField:'manager',
-          foreignField:"_id",
+        $lookup: {
+          from: "entites",
+          localField: 'manager',
+          foreignField: "_id",
           as: "manager"
         }
       },
@@ -104,10 +105,10 @@ const MoldGroup = {
         $unwind: "$manager"
       },
       {
-        $lookup:{
-          from : "Locations",
-          localField:'location',
-          foreignField:"_id",
+        $lookup: {
+          from: "Locations",
+          localField: 'location',
+          foreignField: "_id",
           as: "location"
         }
       },
@@ -115,7 +116,7 @@ const MoldGroup = {
         $unwind: "$location"
       },
     ])
-    rt = rt.map(each=> {
+    rt = rt.map(each => {
       each['moldCount'] = each.items.length
       return each
     })
@@ -123,7 +124,7 @@ const MoldGroup = {
     // return MoldGroupModel.find(filters).populate('workers').populate('department').populate('manager').populate('location').lean().exec()
   },
   delete: async function deleteOne(id: string): Promise<MoldGroup | null> {
-    return MoldGroupModel.findOneAndDelete({_id:id}).lean().exec()
+    return MoldGroupModel.findOneAndDelete({ _id: id }).lean().exec()
   }
 }
 

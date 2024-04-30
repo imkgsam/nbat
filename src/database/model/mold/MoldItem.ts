@@ -164,6 +164,10 @@ const schema = new Schema<MoldItem>(
         trim: true
       }
     },
+    remark: {
+      type: String,
+      trim: true
+    }
   },
   {
     versionKey: false,

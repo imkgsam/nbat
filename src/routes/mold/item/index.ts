@@ -37,7 +37,6 @@ router.post('/pfilters',
   asyncHandler(async (req: ProtectedRequest, res) => {
     const { filters } = req.body
     const datas = await MoldRepo.MoldItem.filters(filters)
-    console.log(datas)
     let { currentPage, pageSize } = req.body
     if (!currentPage || currentPage <= 0) {
       currentPage = 1
@@ -60,7 +59,7 @@ router.post('/delete',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const deletedOne = await MoldRepo.MoldItem.delete(req.body.id);
-    new SuccessResponse('Mold Item created successfully', deletedOne).send(res);
+    new SuccessResponse('Mold Item deleted successfully', deletedOne).send(res);
   }),
 );
 
