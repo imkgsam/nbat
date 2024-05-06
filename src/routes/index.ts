@@ -16,7 +16,7 @@ import entity from './entities';
 import attribute from './item/attribute';
 import item from './item';
 import route from './routes';
-import barcode from './barcode';
+import inccode from './inccode';
 import publics from './access/publics'
 import account from './account'
 import employee from './employee'
@@ -50,7 +50,7 @@ router.use('/department',department)
 router.use('/attribute',attribute)
 router.use('/item',item)
 router.use('/route',route)
-router.use('/barcode',barcode)
+router.use('/inccode',inccode)
 router.use('/employee',employee)
 router.use('/account',account)
 router.use('/test',tests);

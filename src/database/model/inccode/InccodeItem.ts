@@ -1,12 +1,12 @@
 import { Schema, model, Types } from 'mongoose';
 const { Boolean, String, Date: SDate, Number, ObjectId} = Schema.Types
 
-export const DOCUMENT_NAME = 'BarcodeItem';
-export const COLLECTION_NAME = 'barcodeItems';
+export const DOCUMENT_NAME = 'InccodeItem';
+export const COLLECTION_NAME = 'inccodeItems';
 
-export default interface BarcodeItem {
+export default interface InccodeItem {
   _id: Types.ObjectId;
-  // barcode 类型
+  // Inccode 类型
   btype: Types.ObjectId;
   // schema 类型
   ttype: string;
@@ -19,12 +19,12 @@ export default interface BarcodeItem {
   updatedAt?: Date;
 }
 
-const schema = new Schema<BarcodeItem>(
+const schema = new Schema<InccodeItem>(
   {
     btype:{
       type: ObjectId,
       required: true,
-      ref: 'BarcodeType'
+      ref: 'InccodeType'
     },
     num:{
       type: Number,
@@ -69,4 +69,4 @@ const schema = new Schema<BarcodeItem>(
 schema.index({ num: 1, btype: 1 });
 schema.index({ num: 1, item: 1 });
 
-export const BarcodeItemModel = model<BarcodeItem>(DOCUMENT_NAME, schema, COLLECTION_NAME);
+export const InccodeItemModel = model<InccodeItem>(DOCUMENT_NAME, schema, COLLECTION_NAME);

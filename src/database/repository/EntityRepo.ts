@@ -3,7 +3,7 @@ import Employee, { EmployeeModel } from '../model/Employee';
 import Entity, { EntityModel, EntityTypeEnum } from '../model/Entity';
 import { Types } from 'mongoose';
 import bcrypt from 'bcrypt';
-import BarcodeRepo from './BarcodeRepo';
+import InccodeRepo from './InccodeRepo';
 import { genEID } from '../../helpers/utils';
 
 
@@ -137,9 +137,9 @@ const Employee = {
         if(newEmployee){
           newEntity.employee = newEmployee._id
           if(newEmployee.inaugurationDate && newOne?.personal?.sex && newOne?.name){
-            const newBarcode = await BarcodeRepo.BarcodeItem.findOneOrCreateForEmployee(newOne?.name,newEmployee.inaugurationDate,newOne?.personal?.sex,newEmployee._id)
-            if(newBarcode){
-              newEmployee.EID = newBarcode._id
+            const newCode = await InccodeRepo.InccodeItem.findOneOrCreateForEmployee(newOne?.name,newEmployee.inaugurationDate,newOne?.personal?.sex,newEmployee._id)
+            if(newCode){
+              newEmployee.EID = newCode._id
               await newEmployee.save()
             }
           }
@@ -183,11 +183,11 @@ const Employee = {
       }
       if(updatedEntity.meta.isEmployee){
         if(updateEmployee){
-          let newBarcode = null
+          let newCode = null
           if(!updateEmployee.EID && updateEmployee.inaugurationDate && updatedEntity?.personal?.sex && updatedEntity?.name){
-            newBarcode = await BarcodeRepo.BarcodeItem.findOneOrCreateForEmployee(updatedEntity?.name,updateEmployee.inaugurationDate,updatedEntity?.personal?.sex,updateEmployee._id)
+            newCode = await InccodeRepo.InccodeItem.findOneOrCreateForEmployee(updatedEntity?.name,updateEmployee.inaugurationDate,updatedEntity?.personal?.sex,updateEmployee._id)
           }
-          await EmployeeModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateEmployee,EID: updateEmployee?.EID || newBarcode} }, { new: true, upsert:true })
+          await EmployeeModel.findOneAndUpdate({ entity: updatedEntity._id }, { $set: {...updateEmployee,EID: updateEmployee?.EID || newCode} }, { new: true, upsert:true })
         }
       }
       return EntityModel.findById(updateOne._id).populate('account').populate('employee').lean().exec()

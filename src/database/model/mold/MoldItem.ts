@@ -33,8 +33,6 @@ export default interface MoldItem {
     // 模组的哪个位置
     index: number
   },
-  //条码
-  barcode: Types.ObjectId,
   //理论最大注浆次数
   maxGroutingTimes: number,
   //初始注浆次数
@@ -115,12 +113,6 @@ const schema = new Schema<MoldItem>(
         type: Number,
         default: 0
       }
-    },
-    barcode: {
-      type: ObjectId,
-      sparse: true,      
-      unique: true,
-      ref: 'Barcode'
     },
     maxGroutingTimes: {
       type: Number,

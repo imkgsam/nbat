@@ -192,7 +192,7 @@ const schema = new Schema<Employee>(
     },
     EID: {
       type: ObjectId,
-      ref: 'BarcodeItem'
+      ref: 'InccodeItem'
     },
     ETL: {
       type: String,

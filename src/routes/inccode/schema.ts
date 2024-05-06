@@ -5,7 +5,7 @@ export default {
   Id: Joi.object().keys({
     id: JoiObjectId().required(),
   }),
-  BarcodeItem: {
+  InccodeItem: {
     create: Joi.object().keys({
       ttype: Joi.string().required(),
       num: Joi.number().required(),
@@ -34,7 +34,7 @@ export default {
       })
     }),
   },
-  BarcodeType: {
+  InccodeType: {
     create: Joi.object().keys({
       code: Joi.string().required(),
       length: Joi.number().min(1),

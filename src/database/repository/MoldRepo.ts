@@ -28,7 +28,7 @@ const MoldItem = {
     return MoldItemModel.findByIdAndUpdate(id, { 'meta.enabled': false }, { new: true }).lean().exec();
   },
   filters: async function filters(filters: any): Promise<MoldItem[]> {
-    return MoldItemModel.find(filters).populate('supplier').populate('mold').populate('barcode').populate('product').populate('group.moldGroup').lean().exec()
+    return MoldItemModel.find(filters).populate('supplier').populate('mold').populate('product').populate('group.moldGroup').lean().exec()
   },
   delete: async function deleteOne(id: string): Promise<MoldItem | null> {
     return MoldItemModel.findOneAndDelete({ _id: id }).lean().exec()

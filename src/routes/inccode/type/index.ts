@@ -4,38 +4,38 @@ import asyncHandler from '../../../helpers/asyncHandler';
 import authorization from '../../../auth/authorization';
 import { RoleCodeEnum } from '../../../database/model/Role';
 import validator from '../../../helpers/validator';
-import barcodeSchema from '../schema';
+import schema from '../schema';
 import { ProtectedRequest } from 'app-request';
-import BarcodeRepo from '../../../database/repository/BarcodeRepo';
-import BarcodeType from '../../../database/model/barcode/BarcodeType';
+import InccodeRepo from '../../../database/repository/InccodeRepo';
+import InccodeType from '../../../database/model/inccode/InccodeType';
 
 const router = express.Router();
 
 router.get( '/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
-    const roles = await BarcodeRepo.BarcodeType.findAll();
-    return new SuccessResponse('success', roles).send(res);
+    const rts = await InccodeRepo.InccodeType.findAll();
+    return new SuccessResponse('success', rts).send(res);
   }),
 );
 
 router.post( '/',
-  validator(barcodeSchema.BarcodeType.create),
+  validator(schema.InccodeType.create),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const createdOne = await BarcodeRepo.BarcodeType.create({
+    const createdOne = await InccodeRepo.InccodeType.create({
       ...req.body
-    } as BarcodeType);
-    new SuccessResponse('Barcode Type created successfully', createdOne).send(res);
+    } as InccodeType);
+    new SuccessResponse('Inccode Type created successfully', createdOne).send(res);
   }),
 );
 
 router.post( '/pfilters',
-  validator(barcodeSchema.BarcodeType.pfilters),
+  validator(schema.InccodeType.pfilters),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const { filters  } = req.body
-    const datas = await BarcodeRepo.BarcodeType.filters(filters)
+    const datas = await InccodeRepo.InccodeType.filters(filters)
     let {currentPage, pageSize} = req.body
     if(!currentPage || currentPage<=0){
       currentPage = 1
@@ -54,40 +54,40 @@ router.post( '/pfilters',
 );
 
 router.post( '/delete',
-  validator(barcodeSchema.Id),
+  validator(schema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const deletedOne = await BarcodeRepo.BarcodeType.delete(req.body.id);
-    new SuccessResponse('Barcode Type created successfully', deletedOne).send(res);
+    const deletedOne = await InccodeRepo.InccodeType.delete(req.body.id);
+    new SuccessResponse('Inccode Type created successfully', deletedOne).send(res);
   }),
 );
 
 router.put( '/',
-  validator(barcodeSchema.BarcodeType.update),
+  validator(schema.InccodeType.update),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await BarcodeRepo.BarcodeType.update({
+    const updatedOne = await InccodeRepo.InccodeType.update({
       ...req.body
-    } as BarcodeType);
-    new SuccessResponse('Barcode Type updated successfully', updatedOne).send(res);
+    } as InccodeType);
+    new SuccessResponse('Inccode Type updated successfully', updatedOne).send(res);
   }),
 );
 
 router.post( '/enable',
-  validator(barcodeSchema.Id),
+  validator(schema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await BarcodeRepo.BarcodeType.enable(req.body.id)
-    new SuccessResponse('Barcode Type enabled successfully', updatedOne).send(res);
+    const updatedOne = await InccodeRepo.InccodeType.enable(req.body.id)
+    new SuccessResponse('Inccode Type enabled successfully', updatedOne).send(res);
   }),
 );
 
 router.post( '/disable',
-  validator(barcodeSchema.Id),
+  validator(schema.Id),
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedOne = await BarcodeRepo.BarcodeType.disable(req.body.id)
-    new SuccessResponse('Barcode Type disabled successfully', updatedOne).send(res);
+    const updatedOne = await InccodeRepo.InccodeType.disable(req.body.id)
+    new SuccessResponse('Inccode Type disabled successfully', updatedOne).send(res);
   }),
 );
 

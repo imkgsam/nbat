@@ -2,10 +2,10 @@ import { Schema, model, Types } from 'mongoose';
 
 const { Boolean, String, Date: SDate, Number} = Schema.Types
 
-export const DOCUMENT_NAME = 'BarcodeType';
-export const COLLECTION_NAME = 'barcodeTypes';
+export const DOCUMENT_NAME = 'InccodeType';
+export const COLLECTION_NAME = 'inccodeTypes';
 
-export default interface BarcodeType {
+export default interface InccodeType {
   _id: Types.ObjectId;
   //条码名称
   code: string;
@@ -13,7 +13,7 @@ export default interface BarcodeType {
   startsWith: string;
   // 中文 remark
   remark: string;
-  // barcode 总长度
+  // Inccode 总长度
   length: number;
   meta:{
     enabled: boolean;
@@ -22,10 +22,10 @@ export default interface BarcodeType {
   updatedAt?: Date;
 }
 
-const schema = new Schema<BarcodeType>(
+const schema = new Schema<InccodeType>(
   {
     code:{
-      type:String,
+      type: String,
       required: true,
       trim: true,
       unique: true
@@ -59,4 +59,4 @@ const schema = new Schema<BarcodeType>(
 
 schema.index({ code: 1 });
 
-export const BarcodeTypeModel = model<BarcodeType>(DOCUMENT_NAME, schema, COLLECTION_NAME);
+export const InccodeTypeModel = model<InccodeType>(DOCUMENT_NAME, schema, COLLECTION_NAME);
