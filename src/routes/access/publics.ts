@@ -22,37 +22,10 @@ import { RoleCodeEnum } from '../../database/model/Role';
 
 const router = express.Router();
 
+import loginRoute from './login'
 
-/**
- * 用户通过邮箱登录
- */
-router.post(
-  '/login/email',
-  validator(schema.credential),
-  asyncHandler(async (req: PublicRequest, res) => {
-    const user = await UserRepo.findByEmail(req.body.email);
-    if (!user) throw new BadRequestError('User not registered/ not verified');
-    if (!user.meta.enabled) throw new BadRequestError('User not allowed to login');
-    if (!user.meta.verified) throw new BadRequestError('User not verified, please contact admin');
-    if (!user.password) throw new BadRequestError('Credential not set');
-    const match = await bcrypt.compare(req.body.password, user.password);
-    if (!match) throw new AuthFailureError('Authentication failure');
-    const accessTokenKey = crypto.randomBytes(64).toString('hex');
-    const refreshTokenKey = crypto.randomBytes(64).toString('hex');
-    await KeystoreRepo.create(user, accessTokenKey, refreshTokenKey);
-    const tokens = await createTokens(user, accessTokenKey, refreshTokenKey);
-    const userData = await getUserData(user);
-    Logger.info(`User Login as ${user.accountName}`)
-    new SuccessResponse('Login Success', {
-      account:{
-        ...userData,
-        roles: userData.roles.map(each=> each.code)
-      },
-      ...tokens,
-    }).send(res);
-  }),
-);
 
+router.use('/login',loginRoute)
 
 /**
  * 注册用户？

@@ -65,7 +65,7 @@ export default interface Item {
     warningThreadhold: number,
     // 对应的产品spu
     product: Types.ObjectId,
-    // 对饮模具的类型
+    // 对应模具的类型
     mtype: MoldTypeEnum
   }
   createdAt?: Date;
