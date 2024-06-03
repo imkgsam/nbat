@@ -1,6 +1,6 @@
 import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
-import UserRepo from '../../database/repository/AccountRepo';
+import AccountRepo from '../../database/repository/AccountRepo';
 import { ProtectedRequest } from 'app-request';
 import { BadRequestError } from '../../core/ApiError';
 import validator from '../../helpers/validator';
@@ -18,7 +18,7 @@ router.use(authentication);
 router.get(
   '/my',
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const user = await UserRepo.findPrivateProfileById(req.user._id);
+    const user = await AccountRepo.findPrivateProfileById(req.user._id);
     if (!user) throw new BadRequestError('User not registered');
     return new SuccessResponse(
       'success',
@@ -32,10 +32,10 @@ router.put(
   '/',
   validator(schema.profile),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const user = await UserRepo.findPrivateProfileById(req.user._id);
+    const user = await AccountRepo.findPrivateProfileById(req.user._id);
     if (!user) throw new BadRequestError('User not registered');
     if (req.body.name) user.accountName = req.body.name;
-    await UserRepo.updateInfo(user);
+    await AccountRepo.updateInfo(user);
     const data = _.pick(user, ['name']);
     return new SuccessResponse('Profile updated', data).send(res);
   }),

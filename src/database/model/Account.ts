@@ -1,6 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
 import Role from './Role';
 import Entity from './Entity';
+const { Boolean, String, Date: SDate } = Schema.Types;
 
 export const DOCUMENT_NAME = 'Account';
 export const COLLECTION_NAME = 'accounts';
@@ -9,28 +10,42 @@ export interface Question {
   question: string;
   answer: string;
 }
-
 export default interface Account {
   _id: Types.ObjectId;
-  accountName?: string;
-  //用于登录，或接收邮件验证码
-  email: string;
-  //可用于接收短信验证码
-  phone?: string;
-  password: string;
+  accountName: string;
+  avatar?: string;
+  binding:{
+    email:{
+      account: string;
+      verified: boolean
+    },
+    phone?:{
+      account: string;
+      verified: boolean
+    }
+  },
+  security:{
+    password: string;
+    // questions?
+  },
+  termianl: {
+    web: {
+      enabled: boolean,
+    },
+    // pc?:{
+    //   enabled: boolean
+    // },
+    // pda?:{
+    //   enabled: boolean
+    // }
+  },
   roles: Role[];
-  entity: Entity;
+  linkedTo:{
+    entity: Entity;
+  },
   meta:{
     verified?: boolean;
     enabled?: boolean;
-  },
-  security:{
-    questions?:{
-      one: Question,
-      two: Question,
-      three: Question
-    },
-    bindedPhone?: string
   },
   createdAt?: Date;
   updatedAt?: Date;
@@ -39,24 +54,49 @@ export default interface Account {
 const schema = new Schema<Account>(
   {
     accountName: {
-      type: Schema.Types.String,
+      type: String,
       trim: true,
       maxlength: 200,
     },
-    email: {
-      type: Schema.Types.String,
-      unique: true,
-      trim: true
-    },
-    phone: {
-      type: Schema.Types.String,
-      unique: true,
+    avatar: {
+      type: String,
       trim: true,
-      sparse:true
     },
-    password: {
-      type: Schema.Types.String,
-      select: false,
+    binding:{
+      email: {
+        account: {
+          type: String,
+          unique: true,
+          trim: true
+        },
+        verified:{
+          type: Boolean,
+          default: false
+        }
+      },
+      // phone: {
+      //   account: {
+      //     type: String,
+      //     unique: true,
+      //     trim: true,
+      //     sparse:true
+      //   },
+      //   verified: {
+      //     type: Boolean,
+      //     default: false
+      //   }
+      // }
+    },
+    security:{
+      password: {
+        type: String,
+        select: false,
+      },
+    },
+    termianl:{
+      web: {
+        enabled: { type: Boolean, default: true},
+      },
     },
     roles: {
       type: [
@@ -67,69 +107,31 @@ const schema = new Schema<Account>(
       ],
       required: true,
     },
-    entity: {
-      type: Schema.Types.ObjectId,
-      ref: 'Role',
-      required: true,
-      unique:true
+    linkedTo:{
+      entity: {
+        type: Schema.Types.ObjectId,
+        ref: 'Role',
+        required: true,
+        unique:true
+      },
     },
     meta:{
       verified: {
-        type: Schema.Types.Boolean,
+        type: Boolean,
         default: false,
       },
       enabled: {
-        type: Schema.Types.Boolean,
+        type: Boolean,
         default: false,
       },
     },
-    security:{
-      questions:{
-        one: {
-          question: {
-            type: Schema.Types.String,
-            trim:true
-          },
-          answer:{
-            type: Schema.Types.String,
-            trim:true
-          }
-        },
-        two: {
-          question: {
-            type: Schema.Types.String,
-            trim:true
-          },
-          answer:{
-            type: Schema.Types.String,
-            trim:true
-          }
-        },
-        three: {
-          question: {
-            type: Schema.Types.String,
-            trim:true
-          },
-          answer:{
-            type: Schema.Types.String,
-            trim:true
-          }
-        }
-      },
-      bindedPhone: {
-          type: Schema.Types.String,
-          trim: true,
-          sparse:true,
-          unique: true
-      }
-    },
     createdAt: {
-      type: Schema.Types.Date,
+      type: SDate,
       default: new Date(),
       required: true,
     },
     updatedAt: {
-      type: Schema.Types.Date,
+      type: SDate,
       default: new Date(),
       required: true,
     },
@@ -140,7 +142,7 @@ const schema = new Schema<Account>(
   },
 );
 
-schema.index({ email: 1 });
+schema.index({ 'binding.email': 1 });
 
 
 export const AccountModel = model<Account>(DOCUMENT_NAME, schema, COLLECTION_NAME);

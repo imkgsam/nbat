@@ -1,7 +1,7 @@
 import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
 import crypto from 'crypto';
-import UserRepo from '../../database/repository/AccountRepo';
+import AccountRepo from '../../database/repository/AccountRepo';
 import { BadRequestError, AuthFailureError } from '../../core/ApiError';
 import KeystoreRepo from '../../database/repository/KeystoreRepo';
 import EntityRepo from '../../database/repository/EntityRepo';
@@ -54,12 +54,12 @@ router.post(
   authentication,
   validator(schema.changePassword),
   asyncHandler(async (req: PublicRequest, res) => {
-    const user = await UserRepo.findByEmail(req.body.email);
+    const user = await AccountRepo.findByEmail(req.body.email);
     if (!user) throw new BadRequestError('User not Found');
-    const match = await bcrypt.compare(req.body.oldPassword, user.password);
+    const match = await bcrypt.compare(req.body.oldPassword, user.security.password);
     if (!match) throw new AuthFailureError('Authentication failure');
     const newPasswordHash = await bcrypt.hash(req.body.newPassword, 10);
-    const newUser = await UserRepo.changePassword(req.body.email,newPasswordHash)
+    const newUser = await AccountRepo.changePassword(req.body.email,newPasswordHash)
     const userData = await getUserData(newUser as User);
     new SuccessResponse('operation Success', {
       user:{

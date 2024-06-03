@@ -45,9 +45,10 @@ async function findById(id: Types.ObjectId): Promise<Account | null> {
 }
 
 async function findByEmail(email: string): Promise<Account | null> {
-  return AccountModel.findOne({ email: email})
+  console.log(email)
+  return AccountModel.findOne({ 'binding.email.account': email })
     .select(
-      '+email +password +roles +_id +entity',
+      '+binding.email.account +security.password +roles +_id +linkedTo.entity',
     )
     .populate({
       path: 'roles',
@@ -128,6 +129,7 @@ async function updateInfo(account: Account): Promise<any> {
 async function changePassword(email: string,newPassword: string,): Promise< Account | null> {
   return AccountModel.findOneAndUpdate({ email: email }, { $set: { password: newPassword } }, {new: true}).lean().exec();
 }
+
 export default {
   exists,
   findPrivateProfileById,

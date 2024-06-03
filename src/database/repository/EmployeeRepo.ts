@@ -57,10 +57,10 @@ async function verify(entityId: Types.ObjectId, employeeId: Types.ObjectId): Pro
 }
 
 async function createUser(entityId: Types.ObjectId, employeeId: Types.ObjectId, newUser: Account): Promise<Account | null> {
-  const [entity, employee, user] = await Promise.all([EntityModel.findById(entityId) ,EmployeeModel.findById(employeeId), AccountModel.findOne({email: newUser.email})])
+  const [entity, employee, user] = await Promise.all([EntityModel.findById(entityId) ,EmployeeModel.findById(employeeId), AccountModel.findOne({email: newUser.binding.email})])
   if(entity && employee && !entity.account && !user && entity.employee?.toString() === employee._id.toString() && employee.entity.toString() === entity._id.toString()){
-    const passwordHash = await bcrypt.hash(newUser.password as string, 10)
-    newUser.password = passwordHash
+    const passwordHash = await bcrypt.hash(newUser.security.password as string, 10)
+    newUser.security.password = passwordHash
     const roles = await RoleRepo.findByCodes(newUser.roles as any)
     newUser.roles = roles.map(each=>each._id) as any
     const createdUser = await AccountModel.create(newUser)
@@ -68,7 +68,7 @@ async function createUser(entityId: Types.ObjectId, employeeId: Types.ObjectId, 
       entity.account = createdUser._id
       await entity.save()
     }
-    return AccountModel.findOne({email: newUser.email}).lean().exec()
+    return AccountModel.findOne({email: newUser.binding.email}).lean().exec()
   }else{
     return null;
   }

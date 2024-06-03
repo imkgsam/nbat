@@ -1,6 +1,6 @@
 import express from 'express';
 import { ProtectedRequest } from 'app-request';
-import UserRepo from '../database/repository/AccountRepo';
+import AccountRepo from '../database/repository/AccountRepo';
 import {
   AuthFailureError,
   AccessTokenError,
@@ -25,7 +25,7 @@ export default router.use(
       const payload = await JWT.validate(req.accessToken);
       validateTokenData(payload);
 
-      const user = await UserRepo.findById(new Types.ObjectId(payload.sub));
+      const user = await AccountRepo.findById(new Types.ObjectId(payload.sub));
       if (!user) throw new AuthFailureError('User not registered 1');
       req.user = user;
 

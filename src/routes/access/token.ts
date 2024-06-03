@@ -2,7 +2,7 @@ import express from 'express';
 import { TokenRefreshResponse } from '../../core/ApiResponse';
 import { ProtectedRequest } from 'app-request';
 import { Types } from 'mongoose';
-import UserRepo from '../../database/repository/AccountRepo';
+import AccountRepo from '../../database/repository/AccountRepo';
 import { AuthFailureError } from '../../core/ApiError';
 import JWT from '../../core/JWT';
 import KeystoreRepo from '../../database/repository/KeystoreRepo';
@@ -29,7 +29,7 @@ router.post(
     const accessTokenPayload = await JWT.decode(req.accessToken);
     validateTokenData(accessTokenPayload);
 
-    const user = await UserRepo.findById(
+    const user = await AccountRepo.findById(
       new Types.ObjectId(accessTokenPayload.sub),
     );
 

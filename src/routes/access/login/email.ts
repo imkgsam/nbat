@@ -1,7 +1,7 @@
 import express from 'express';
 import { SuccessResponse } from '../../../core/ApiResponse';
 import crypto from 'crypto';
-import UserRepo from '../../../database/repository/AccountRepo';
+import AccountRepo from '../../../database/repository/AccountRepo';
 import { BadRequestError, AuthFailureError } from '../../../core/ApiError';
 import KeystoreRepo from '../../../database/repository/KeystoreRepo';
 import EntityRepo from '../../../database/repository/EntityRepo';
@@ -24,18 +24,19 @@ const router = express.Router();
 
 
 /**
- * 用户通过邮箱登录
+ * login with email and password
  */
 router.post(
-  '/login/email',
+  '/pword',
   validator(schema.credential),
   asyncHandler(async (req: PublicRequest, res) => {
-    const user = await UserRepo.findByEmail(req.body.email);
-    if (!user) throw new BadRequestError('User not registered/ not verified');
-    if (!user.meta.enabled) throw new BadRequestError('User not allowed to login');
-    if (!user.meta.verified) throw new BadRequestError('User not verified, please contact admin');
-    if (!user.password) throw new BadRequestError('Credential not set');
-    const match = await bcrypt.compare(req.body.password, user.password);
+    const user = await AccountRepo.findByEmail(req.body.email);
+    if (!user) throw new BadRequestError('Account not available');
+    if (!user.meta.enabled) throw new BadRequestError('Account not enabled');
+    if (!user.meta.verified) throw new BadRequestError('Account not verified');
+    if (!user.binding.email.verified) throw new BadRequestError('Account email not verified');
+    if (!user.security.password) throw new BadRequestError('Credential not set');
+    const match = await bcrypt.compare(req.body.password, user.security.password);
     if (!match) throw new AuthFailureError('Authentication failure');
     const accessTokenKey = crypto.randomBytes(64).toString('hex');
     const refreshTokenKey = crypto.randomBytes(64).toString('hex');
@@ -44,44 +45,20 @@ router.post(
     const userData = await getUserData(user);
     Logger.info(`User Login as ${user.accountName}`)
     new SuccessResponse('Login Success', {
-      account:{
-        ...userData,
-        roles: userData.roles.map(each=> each.code)
-      },
+      // account:{
+      //   ...userData,
+      //   roles: userData?.roles?.map(each=> each.code)
+      // },
+      accountName: userData.accountName,
+      roles: userData?.roles?.map(each=> each.code),
+      avatar: userData?.avatar,
       ...tokens,
     }).send(res);
   }),
 );
 
-
 /**
- * 注册用户？
+ * login with email and email verification code
  */
-router.post(
-  '/signup/basic',
-  validator(schema.signup),
-  asyncHandler(async (req: RoleRequest, res) => {
-    const user = await UserRepo.findByEmail(req.body.email);
-    if (user) throw new BadRequestError('User already registered');
-    const accessTokenKey = crypto.randomBytes(64).toString('hex');
-    const refreshTokenKey = crypto.randomBytes(64).toString('hex');
-    const passwordHash = await bcrypt.hash(req.body.password, 10);
-    const { account: createdUser, keystore } = await UserRepo.create(
-      {
-        accountName: req.body.accountName,
-        email: req.body.email,
-        password: passwordHash,
-      } as User,
-      accessTokenKey,
-      refreshTokenKey,
-      RoleCodeEnum.LEARNER,
-    );
-    const userData = await getUserData(createdUser);
-    new SuccessResponse('Signup Successful', {
-      user: userData,
-      // tokens: tokens,
-    }).send(res);
-  }),
-);
 
 export default router;

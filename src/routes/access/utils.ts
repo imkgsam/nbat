@@ -7,6 +7,6 @@ export const enum AccessMode {
 }
 
 export async function getUserData(user: User) {
-  const data = _.pick(user, ['accountName', 'roles','email','_id','entity']);
+  const data = _.pick(user, ['accountName','avatar','roles','binding.email.account','_id','linkedTo.entity']);
   return data;
 }
