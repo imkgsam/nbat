@@ -11,13 +11,13 @@ import { Response, NextFunction } from 'express';
 
 const authorization = (...roleCodes: RoleCodeEnum[]) =>
   [authentication,asyncHandler(async (req: ProtectedRequest, res: Response, next: NextFunction) => {
-    if (!req.user || !req.user.roles || !roleCodes)
+    if (!req.account || !req.account.roles || !roleCodes)
       throw new AuthFailureError('Permission denied');
 
     const roles = await RoleRepo.findByCodes(roleCodes);
     if (roles.length === 0) throw new AuthFailureError('Permission denied');
     let authorized = false;
-    for (const userRole of req.user.roles) {
+    for (const userRole of req.account.roles) {
       if (authorized) break;
       for (const role of roles) {
         if (userRole._id.equals(role._id)) {

@@ -3,12 +3,9 @@ import express from 'express';
 // import apikey from '../auth/apikey';
 // import permission from '../helpers/permission';
 // import { Permission } from '../database/model/ApiKey';
-import requestInsepctor from '../helpers/request';
-import publics from './public/publics'
-import prot from './prot'
-import test from './test'
-
-
+import account from './account';
+import authorization from '../../../auth/authorization';
+import { RoleCodeEnum } from '../../../database/model/Role';
 const router = express.Router();
 
 /*---------------------------------------------------------*/
@@ -17,12 +14,9 @@ const router = express.Router();
 /*---------------------------------------------------------*/
 // router.use(permission(Permission.GENERAL));
 /*---------------------------------------------------------*/
-router.use(requestInsepctor)
-/*---------------------------------------------------------*/
 
+router.use(authorization(RoleCodeEnum.ADMIN))
 
-router.use('/public',publics)
-router.use('/prot',prot)
-router.use('/test',test)
+router.use('/account',account)
 
 export default router;

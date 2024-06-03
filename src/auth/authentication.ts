@@ -25,11 +25,11 @@ export default router.use(
       const payload = await JWT.validate(req.accessToken);
       validateTokenData(payload);
 
-      const user = await AccountRepo.findById(new Types.ObjectId(payload.sub));
-      if (!user) throw new AuthFailureError('User not registered 1');
-      req.user = user;
+      const account = await AccountRepo.findById(new Types.ObjectId(payload.sub));
+      if (!account) throw new AuthFailureError('Account not registered 1');
+      req.account = account;
 
-      const keystore = await KeystoreRepo.findforKey(req.user, payload.prm);
+      const keystore = await KeystoreRepo.findforKey(req.account, payload.prm);
       if (!keystore) throw new AuthFailureError('Invalid access token');
       req.keystore = keystore;
 

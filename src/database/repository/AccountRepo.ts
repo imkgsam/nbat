@@ -130,6 +130,15 @@ async function changePassword(email: string,newPassword: string,): Promise< Acco
   return AccountModel.findOneAndUpdate({ email: email }, { $set: { password: newPassword } }, {new: true}).lean().exec();
 }
 
+
+async function disable(id: Types.ObjectId): Promise<Account | null> {
+  return AccountModel.findByIdAndUpdate(id,{$set: {'meta.enabled':false}},{ new: true }).lean().exec()
+}
+
+async function enable(id: Types.ObjectId): Promise<Account | null> {
+  return AccountModel.findByIdAndUpdate(id,{$set: {'meta.enabled':true}},{ new: true }).lean().exec()
+}
+
 export default {
   exists,
   findPrivateProfileById,
@@ -142,5 +151,7 @@ export default {
   updateInfo,
   changePassword,
   findAll,
-  filters
+  filters,
+  disable,
+  enable
 };

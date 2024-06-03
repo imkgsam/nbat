@@ -83,9 +83,10 @@ async function decode(token: string): Promise<JwtPayload> {
   const cert = await readPublicKey();
   try {
     // @ts-ignore
-    return (await promisify(verify)(token, cert, {
+    const payload = (await promisify(verify)(token, cert, {
       ignoreExpiration: true,
     })) as JwtPayload;
+    return payload
   } catch (e) {
     Logger.debug(e);
     throw new BadTokenError();

@@ -2,7 +2,7 @@ import { Tokens } from 'app-request';
 import { AuthFailureError, InternalError } from '../core/ApiError';
 import JWT, { JwtPayload } from '../core/JWT';
 import { Types } from 'mongoose';
-import User from '../database/model/Account';
+import Account from '../database/model/Account';
 import { tokenInfo } from '../config';
 import { addMillisToCurrentDate } from '../helpers/utils'
 
@@ -29,7 +29,7 @@ export const validateTokenData = (payload: JwtPayload): boolean => {
 };
 
 export const createTokens = async (
-  user: User,
+  account: Account,
   accessTokenKey: string,
   refreshTokenKey: string,
 ): Promise<Tokens> => {
@@ -37,7 +37,7 @@ export const createTokens = async (
     new JwtPayload(
       tokenInfo.issuer,
       tokenInfo.audience,
-      user._id.toString(),
+      account._id.toString(),
       accessTokenKey,
       tokenInfo.accessTokenValidity,
     ),
@@ -48,7 +48,7 @@ export const createTokens = async (
     new JwtPayload(
       tokenInfo.issuer,
       tokenInfo.audience,
-      user._id.toString(),
+      account._id.toString(),
       refreshTokenKey,
       tokenInfo.refreshTokenValidity,
     ),
