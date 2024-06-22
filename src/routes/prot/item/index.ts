@@ -7,7 +7,7 @@ import { RoleCodeEnum } from '../../../database/model/Role';
 import ItemRepo from "../../../database/repository/ItemRepo"
 import validator, { ValidationSourceEnum } from '../../../helpers/validator';
 import { ProtectedRequest } from 'app-request';
-import Item from '../../../database/model/item/Item';
+import Item from '../../../database/model/product/Template';
 import CategoryRoute from './category'
 import AttributeRoute from './attribute'
 

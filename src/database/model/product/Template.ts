@@ -2,8 +2,8 @@ import { Schema, model, Types } from 'mongoose';
 import { MoldTypeEnum } from '../mold/MoldGroup';
 const { String, ObjectId, Boolean } = Schema.Types
 
-export const DOCUMENT_NAME = 'Item';
-export const COLLECTION_NAME = 'items';
+export const DOCUMENT_NAME = 'Product';
+export const COLLECTION_NAME = 'Products';
 
 
 interface attributeOptions {
@@ -11,7 +11,7 @@ interface attributeOptions {
   options: Array<Types.ObjectId>
 }
 
-export enum itemTypeEnum {
+export enum productTypeEnum {
   PRODUCT = 'Product',
   SERVICE = 'Service',
   // 模具
@@ -28,7 +28,7 @@ export enum itemTypeEnum {
 /**
  * Item 是 款式SPU，单品SKU，服务Service， 原料Raw Mat。。。的集合
  */
-export default interface Item {
+export default interface Product {
   _id: Types.ObjectId;
   // 对外产品型号 如： MB-2062
   code: string;
@@ -36,7 +36,7 @@ export default interface Item {
   alias: string;
   //所属的产品类别
   category: Types.ObjectId;
-  etype: itemTypeEnum;
+  etype: productTypeEnum;
   meta?: {
     //是否启用
     enabled: boolean;
@@ -72,7 +72,7 @@ export default interface Item {
   updatedAt?: Date;
 }
 
-const schema = new Schema<Item>(
+const schema = new Schema<Product>(
   {
     code: {
       type: String,
@@ -94,7 +94,7 @@ const schema = new Schema<Item>(
     etype: {
       type: String,
       required:true,
-      enum: Object.values(itemTypeEnum)
+      enum: Object.values(productTypeEnum)
     },
     meta: {
       enabled: {
@@ -180,4 +180,4 @@ const schema = new Schema<Item>(
 schema.index({ code: 1 ,category: 1});
 schema.index({ alias: 1 ,category: 1});
 
-export const ItemModel = model<Item>(DOCUMENT_NAME, schema, COLLECTION_NAME);
+export const ProductModel = model<Product>(DOCUMENT_NAME, schema, COLLECTION_NAME);

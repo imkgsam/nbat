@@ -24,7 +24,8 @@
 			"relations": [
 				"a1c665bd-4b72-4410-a278-4c467080b91d",
 				"44e3f68b-984a-4d95-ba78-a0948c255dbc",
-				"9be7eae5-aabf-4386-8058-dbbc2e7f9054"
+				"9be7eae5-aabf-4386-8058-dbbc2e7f9054",
+				"b88adc8c-12d3-42ab-81cf-f839a2f973a1"
 			],
 			"lines": [
 				"e6938afc-7ffd-4d44-b20c-3c0eba584c11"
@@ -1188,6 +1189,112 @@
 			"beforeScript": "",
 			"afterScript": "",
 			"others": ""
+		},
+		"f913e68a-aa2b-4c33-9224-3a2750224f74": {
+			"id": "f913e68a-aa2b-4c33-9224-3a2750224f74",
+			"visible": true,
+			"name": "pricelist",
+			"desc": "销售价格表",
+			"estimatedSize": "",
+			"cols": [
+				{
+					"id": "52f8d9e9-2c8b-477d-beee-3b1b82bbf462",
+					"name": "_id",
+					"datatype": "ObjectId",
+					"param": "",
+					"pk": true,
+					"nn": true,
+					"list": false,
+					"comment": "",
+					"data": "",
+					"options": "",
+					"estimatedSize": ""
+				}
+			],
+			"relations": [],
+			"lines": [],
+			"keys": [
+				{
+					"id": "0b61c8ff-6388-4dfb-a0a8-ec30a28ff4dc",
+					"name": "Primary",
+					"isPk": true,
+					"cols": [
+						{
+							"id": "84c3cf4a-ccbc-4c17-8ee8-4e4a900d1806",
+							"colid": "52f8d9e9-2c8b-477d-beee-3b1b82bbf462"
+						}
+					]
+				}
+			],
+			"indexes": [],
+			"embeddable": false,
+			"generate": true,
+			"generateCustomCode": true,
+			"customCode": "",
+			"beforeScript": "",
+			"afterScript": "",
+			"others": ""
+		},
+		"6e5b0541-5499-400d-8f12-0b97dc7d02e6": {
+			"id": "6e5b0541-5499-400d-8f12-0b97dc7d02e6",
+			"visible": true,
+			"name": "vendor pricelist",
+			"desc": "供应商价格表",
+			"estimatedSize": "",
+			"cols": [
+				{
+					"id": "1ef81205-8c56-4c01-8080-dab683b73752",
+					"name": "_id",
+					"datatype": "ObjectId",
+					"param": "",
+					"pk": true,
+					"nn": true,
+					"list": false,
+					"comment": "",
+					"data": "",
+					"options": "",
+					"estimatedSize": ""
+				},
+				{
+					"id": "2f03a9c2-fa98-4744-812b-4636973e04f9",
+					"name": "Supplier",
+					"datatype": "ObjectId",
+					"param": "",
+					"pk": false,
+					"nn": true,
+					"list": false,
+					"comment": "",
+					"data": "",
+					"options": "",
+					"estimatedSize": "",
+					"fk": true
+				}
+			],
+			"relations": [
+				"b88adc8c-12d3-42ab-81cf-f839a2f973a1"
+			],
+			"lines": [],
+			"keys": [
+				{
+					"id": "2ffc74d4-d59c-4fad-b797-b656706c0fcc",
+					"name": "Primary",
+					"isPk": true,
+					"cols": [
+						{
+							"id": "1a3d856b-75b3-41c7-9e01-cb1b364dfce6",
+							"colid": "1ef81205-8c56-4c01-8080-dab683b73752"
+						}
+					]
+				}
+			],
+			"indexes": [],
+			"embeddable": false,
+			"generate": true,
+			"generateCustomCode": true,
+			"customCode": "",
+			"beforeScript": "",
+			"afterScript": "",
+			"others": ""
 		}
 	},
 	"relations": {
@@ -1568,6 +1675,33 @@
 			"generateCustomCode": true,
 			"customCode": "",
 			"relationColor": "transparent"
+		},
+		"b88adc8c-12d3-42ab-81cf-f839a2f973a1": {
+			"id": "b88adc8c-12d3-42ab-81cf-f839a2f973a1",
+			"visible": true,
+			"name": "Entity_vendor pricelist",
+			"desc": "",
+			"type": "identifying",
+			"parent_key": "cc3b8ea0-de1f-4998-b07d-55cc109a6977",
+			"parent": "023ff548-250d-47ed-a7a6-0d971a17aee5",
+			"child": "6e5b0541-5499-400d-8f12-0b97dc7d02e6",
+			"c_mp": "true",
+			"c_mch": "true",
+			"c_p": "one",
+			"c_ch": "many",
+			"c_cp": "",
+			"c_cch": "",
+			"cols": [
+				{
+					"id": "af04e90d-4ab1-4740-ba5e-0955c9e4e306",
+					"parentcol": "517fb21e-d5c6-41e9-9903-d4d9a8088057",
+					"childcol": "2f03a9c2-fa98-4744-812b-4636973e04f9"
+				}
+			],
+			"generate": true,
+			"generateCustomCode": true,
+			"customCode": "",
+			"relationColor": "transparent"
 		}
 	},
 	"notes": {},
@@ -1622,7 +1756,7 @@
 		"replaceSpace": "_",
 		"color": "transparent",
 		"sideSelections": true,
-		"isDirty": false,
+		"isDirty": true,
 		"storedin": {
 			"major": 8,
 			"minor": 5,
@@ -1639,7 +1773,7 @@
 		"companyUrl": "",
 		"def_coltopk": true,
 		"def_others": "",
-		"lastSaved": 1718265623426
+		"lastSaved": 1718503821797
 	},
 	"otherObjects": {},
 	"diagrams": {
@@ -1649,7 +1783,7 @@
 			"id": "d33568d2-31ae-4858-9848-b08e9688efc8",
 			"keysgraphics": true,
 			"linegraphics": "detailed",
-			"zoom": 0.6,
+			"zoom": 0.9,
 			"background": "transparent",
 			"lineColor": "transparent",
 			"isOpen": true,
@@ -1882,6 +2016,32 @@
 					"y": 811,
 					"gHeight": 99,
 					"gWidth": 244,
+					"color": "#ffffff",
+					"background": "#03a9f4",
+					"resized": false,
+					"autoExpand": true,
+					"backgroundOpacity": "10",
+					"collapsed": false
+				},
+				"f913e68a-aa2b-4c33-9224-3a2750224f74": {
+					"referencedItemId": "f913e68a-aa2b-4c33-9224-3a2750224f74",
+					"x": 1599,
+					"y": 224,
+					"gHeight": 45,
+					"gWidth": 176,
+					"color": "#ffffff",
+					"background": "#03a9f4",
+					"resized": false,
+					"autoExpand": true,
+					"backgroundOpacity": "10",
+					"collapsed": false
+				},
+				"6e5b0541-5499-400d-8f12-0b97dc7d02e6": {
+					"referencedItemId": "6e5b0541-5499-400d-8f12-0b97dc7d02e6",
+					"x": 1814,
+					"y": 495,
+					"gHeight": 63,
+					"gWidth": 207,
 					"color": "#ffffff",
 					"background": "#03a9f4",
 					"resized": false,

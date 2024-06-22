@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { JoiObjectId } from '../../../helpers/validator';
-import { itemTypeEnum } from '../../../database/model/item/Item'
+import { itemTypeEnum } from '../../../database/model/product/Template'
 
 
 const attributeItem = Joi.object().keys({

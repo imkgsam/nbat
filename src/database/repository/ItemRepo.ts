@@ -1,17 +1,17 @@
 import { Types } from 'mongoose';
-import Item, { ItemModel } from '../model/item/Item';
+import Item, { ProductModel } from '../model/product/Template';
 
 async function create(newOne: Item): Promise<Item> {
-  return await ItemModel.create(newOne);
+  return await ProductModel.create(newOne);
 }
 async function findAll(): Promise<Item[]> {
-  return ItemModel.find({}).lean().exec()
+  return ProductModel.find({}).lean().exec()
 }
 async function enable(id: string): Promise<Item | null> {
-  return ItemModel.findByIdAndUpdate(id, { 'meta.enabled': true }, { new: true }).lean().exec();
+  return ProductModel.findByIdAndUpdate(id, { 'meta.enabled': true }, { new: true }).lean().exec();
 }
 async function disable(id: string): Promise<Item | null> {
-  return ItemModel.findByIdAndUpdate(id, { 'meta.enabled': false }, { new: true }).lean().exec();
+  return ProductModel.findByIdAndUpdate(id, { 'meta.enabled': false }, { new: true }).lean().exec();
 }
 async function filters(filters: any): Promise<Item[]> {
   if(Object.keys(filters).includes('meta')){
@@ -20,17 +20,17 @@ async function filters(filters: any): Promise<Item[]> {
     }
     delete filters.meta
   }
-  return ItemModel.find(filters).lean().exec()
+  return ProductModel.find(filters).lean().exec()
 }
 async function deleteOne(id: string): Promise<Item | null> {
   return null
 }
 async function update(updateOne: Item): Promise<Item | null> {
-  return ItemModel.findByIdAndUpdate(updateOne._id, { $set: updateOne }, { new: true }).lean().exec();
+  return ProductModel.findByIdAndUpdate(updateOne._id, { $set: updateOne }, { new: true }).lean().exec();
 }
 
 async function detail(id: Types.ObjectId | string): Promise<Item | null> {
- return ItemModel.findById(id).populate('attributes').populate('meta.isVariantOf').populate('meta.attributeTags').lean().exec()
+ return ProductModel.findById(id).populate('attributes').populate('meta.isVariantOf').populate('meta.attributeTags').lean().exec()
 }
 
 export default {
