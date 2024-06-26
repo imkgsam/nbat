@@ -24,8 +24,7 @@
 			"relations": [
 				"a1c665bd-4b72-4410-a278-4c467080b91d",
 				"44e3f68b-984a-4d95-ba78-a0948c255dbc",
-				"9be7eae5-aabf-4386-8058-dbbc2e7f9054",
-				"b88adc8c-12d3-42ab-81cf-f839a2f973a1"
+				"9be7eae5-aabf-4386-8058-dbbc2e7f9054"
 			],
 			"lines": [
 				"e6938afc-7ffd-4d44-b20c-3c0eba584c11"
@@ -223,7 +222,9 @@
 					"estimatedSize": ""
 				}
 			],
-			"relations": [],
+			"relations": [
+				"42646c20-b5c5-40e4-bbe0-2c62e18a982c"
+			],
 			"lines": [
 				"caee5a30-ee28-42b6-9c2e-9e2c32e1510d"
 			],
@@ -297,20 +298,6 @@
 					"estimatedSize": ""
 				},
 				{
-					"id": "c6337877-0f81-4f36-9726-6e7ba782e9b3",
-					"name": "Facility",
-					"datatype": "ObjectId",
-					"param": "",
-					"pk": false,
-					"nn": false,
-					"list": false,
-					"comment": "属于哪个facility，当一个facility被创建，会有一个对应的location创建出来",
-					"data": "",
-					"options": "",
-					"estimatedSize": "",
-					"fk": false
-				},
-				{
 					"id": "c45d3288-8701-4462-8b49-b5bf6563f082",
 					"name": "Entity",
 					"datatype": "ObjectId",
@@ -337,10 +324,25 @@
 					"options": "",
 					"estimatedSize": "",
 					"fk": false
+				},
+				{
+					"id": "be391a50-60ac-40d3-a882-36a20b98d4f5",
+					"name": "Facility",
+					"datatype": "ObjectId",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"list": false,
+					"comment": "",
+					"data": "",
+					"options": "",
+					"estimatedSize": "",
+					"fk": true
 				}
 			],
 			"relations": [
-				"c8961810-95ce-4bfb-84d6-0b7270c5d0f8"
+				"c8961810-95ce-4bfb-84d6-0b7270c5d0f8",
+				"42646c20-b5c5-40e4-bbe0-2c62e18a982c"
 			],
 			"lines": [],
 			"keys": [
@@ -1235,15 +1237,15 @@
 			"afterScript": "",
 			"others": ""
 		},
-		"6e5b0541-5499-400d-8f12-0b97dc7d02e6": {
-			"id": "6e5b0541-5499-400d-8f12-0b97dc7d02e6",
+		"e97b03f8-5b44-4830-b896-caf35167a9e8": {
+			"id": "e97b03f8-5b44-4830-b896-caf35167a9e8",
 			"visible": true,
-			"name": "vendor pricelist",
-			"desc": "供应商价格表",
+			"name": "pricelist item",
+			"desc": "",
 			"estimatedSize": "",
 			"cols": [
 				{
-					"id": "1ef81205-8c56-4c01-8080-dab683b73752",
+					"id": "e996e711-58d6-4910-9764-698d000ac3ce",
 					"name": "_id",
 					"datatype": "ObjectId",
 					"param": "",
@@ -1254,35 +1256,19 @@
 					"data": "",
 					"options": "",
 					"estimatedSize": ""
-				},
-				{
-					"id": "2f03a9c2-fa98-4744-812b-4636973e04f9",
-					"name": "Supplier",
-					"datatype": "ObjectId",
-					"param": "",
-					"pk": false,
-					"nn": true,
-					"list": false,
-					"comment": "",
-					"data": "",
-					"options": "",
-					"estimatedSize": "",
-					"fk": true
 				}
 			],
-			"relations": [
-				"b88adc8c-12d3-42ab-81cf-f839a2f973a1"
-			],
+			"relations": [],
 			"lines": [],
 			"keys": [
 				{
-					"id": "2ffc74d4-d59c-4fad-b797-b656706c0fcc",
+					"id": "b66c82fa-82f1-453b-9ec8-b870a2450210",
 					"name": "Primary",
 					"isPk": true,
 					"cols": [
 						{
-							"id": "1a3d856b-75b3-41c7-9e01-cb1b364dfce6",
-							"colid": "1ef81205-8c56-4c01-8080-dab683b73752"
+							"id": "58adbd3b-ad47-4f4a-a5d4-cf21236aa993",
+							"colid": "e996e711-58d6-4910-9764-698d000ac3ce"
 						}
 					]
 				}
@@ -1676,15 +1662,15 @@
 			"customCode": "",
 			"relationColor": "transparent"
 		},
-		"b88adc8c-12d3-42ab-81cf-f839a2f973a1": {
-			"id": "b88adc8c-12d3-42ab-81cf-f839a2f973a1",
+		"42646c20-b5c5-40e4-bbe0-2c62e18a982c": {
+			"id": "42646c20-b5c5-40e4-bbe0-2c62e18a982c",
 			"visible": true,
-			"name": "Entity_vendor pricelist",
+			"name": "Facility_Location",
 			"desc": "",
 			"type": "identifying",
-			"parent_key": "cc3b8ea0-de1f-4998-b07d-55cc109a6977",
-			"parent": "023ff548-250d-47ed-a7a6-0d971a17aee5",
-			"child": "6e5b0541-5499-400d-8f12-0b97dc7d02e6",
+			"parent_key": "c0a2ffb5-c671-45d8-89d3-a5e2c138188e",
+			"parent": "d55fce57-ae76-4bfe-b608-268bae30b68e",
+			"child": "a2280bcf-daf2-4909-a6c1-901f8a9940af",
 			"c_mp": "true",
 			"c_mch": "true",
 			"c_p": "one",
@@ -1693,9 +1679,9 @@
 			"c_cch": "",
 			"cols": [
 				{
-					"id": "af04e90d-4ab1-4740-ba5e-0955c9e4e306",
-					"parentcol": "517fb21e-d5c6-41e9-9903-d4d9a8088057",
-					"childcol": "2f03a9c2-fa98-4744-812b-4636973e04f9"
+					"id": "33c174af-e893-45c9-a8b4-34a99c753e62",
+					"parentcol": "18632d4e-3b82-4137-9ad1-fe9f343e0f45",
+					"childcol": "be391a50-60ac-40d3-a882-36a20b98d4f5"
 				}
 			],
 			"generate": true,
@@ -1773,7 +1759,7 @@
 		"companyUrl": "",
 		"def_coltopk": true,
 		"def_others": "",
-		"lastSaved": 1718503821797
+		"lastSaved": 1718761524960
 	},
 	"otherObjects": {},
 	"diagrams": {
@@ -1783,7 +1769,7 @@
 			"id": "d33568d2-31ae-4858-9848-b08e9688efc8",
 			"keysgraphics": true,
 			"linegraphics": "detailed",
-			"zoom": 0.9,
+			"zoom": 0.6,
 			"background": "transparent",
 			"lineColor": "transparent",
 			"isOpen": true,
@@ -1843,8 +1829,8 @@
 				},
 				"a2280bcf-daf2-4909-a6c1-901f8a9940af": {
 					"referencedItemId": "a2280bcf-daf2-4909-a6c1-901f8a9940af",
-					"x": 1218,
-					"y": 1038,
+					"x": 1654,
+					"y": 693,
 					"gHeight": 135,
 					"gWidth": 248,
 					"color": "#ffffff",
@@ -2025,8 +2011,8 @@
 				},
 				"f913e68a-aa2b-4c33-9224-3a2750224f74": {
 					"referencedItemId": "f913e68a-aa2b-4c33-9224-3a2750224f74",
-					"x": 1599,
-					"y": 224,
+					"x": 1631,
+					"y": 54,
 					"gHeight": 45,
 					"gWidth": 176,
 					"color": "#ffffff",
@@ -2036,12 +2022,12 @@
 					"backgroundOpacity": "10",
 					"collapsed": false
 				},
-				"6e5b0541-5499-400d-8f12-0b97dc7d02e6": {
-					"referencedItemId": "6e5b0541-5499-400d-8f12-0b97dc7d02e6",
-					"x": 1814,
-					"y": 495,
-					"gHeight": 63,
-					"gWidth": 207,
+				"e97b03f8-5b44-4830-b896-caf35167a9e8": {
+					"referencedItemId": "e97b03f8-5b44-4830-b896-caf35167a9e8",
+					"x": 1629,
+					"y": 117,
+					"gHeight": 45,
+					"gWidth": 176,
 					"color": "#ffffff",
 					"background": "#03a9f4",
 					"resized": false,

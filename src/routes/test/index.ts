@@ -2,7 +2,7 @@ import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
 import asyncHandler from '../../helpers/asyncHandler';
 import authorization from '../../auth/authorization';
-import { RoleCodeEnum } from '../../database/model/Role';
+import { RoleCodeEnum } from '../../database/model/workon/Role';
 import mongoose from 'mongoose'
 import { findOneSpotInSequence, findNSpotInSequence } from '../../helpers/utils';
 

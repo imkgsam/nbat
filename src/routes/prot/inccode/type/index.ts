@@ -2,12 +2,12 @@ import express from 'express';
 import { SuccessResponse } from '../../../../core/ApiResponse';
 import asyncHandler from '../../../../helpers/asyncHandler';
 import authorization from '../../../../auth/authorization';
-import { RoleCodeEnum } from '../../../../database/model/Role';
+import { RoleCodeEnum } from '../../../../database/model/workon/Role';
 import validator from '../../../../helpers/validator';
 import schema from '../schema';
 import { ProtectedRequest } from 'app-request';
 import InccodeRepo from '../../../../database/repository/InccodeRepo';
-import InccodeType from '../../../../database/model/inccode/InccodeType';
+import InccodeType from '../../../../database/model/workon/inccode/InccodeType';
 
 const router = express.Router();
 

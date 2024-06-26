@@ -1,6 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 import Account from './Account';
-import { tokenInfo } from '../../config'
+import { tokenInfo } from '../../../config'
 
 export const DOCUMENT_NAME = 'Keystore';
 export const COLLECTION_NAME = 'keystores';

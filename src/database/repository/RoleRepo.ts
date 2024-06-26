@@ -1,4 +1,4 @@
-import Role, { RoleModel } from '../model/Role';
+import Role, { RoleModel } from '../model/workon/Role';
 import { Types } from "mongoose"
 
 async function findByCode(code: string): Promise<Role | null> {

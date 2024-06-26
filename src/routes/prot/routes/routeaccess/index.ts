@@ -2,12 +2,12 @@ import express from 'express';
 import { SuccessResponse, FailureMsgResponse } from '../../../../core/ApiResponse';
 import asyncHandler from '../../../../helpers/asyncHandler';
 import authorization from '../../../../auth/authorization';
-import { RoleCodeEnum } from '../../../../database/model/Role';
+import { RoleCodeEnum } from '../../../../database/model/workon/Role';
 import RouteRepo  from '../../../../database/repository/RouteRepo';
 import validator from '../../../../helpers/validator';
 import RouteSchema from '../schema';
 // import Route from '../../../../database/model/Route';
-import RouteAccess from '../../../../database/model/RouteAccess';
+import RouteAccess from '../../../../database/model/workon/RouteAccess';
 import { ProtectedRequest } from 'app-request';
 
 const router = express.Router();

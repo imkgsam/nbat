@@ -2,13 +2,13 @@ import express from 'express';
 import { SuccessResponse, FailureMsgResponse } from '../../../../core/ApiResponse';
 import asyncHandler from '../../../../helpers/asyncHandler';
 import authorization from '../../../../auth/authorization';
-import { RoleCodeEnum } from '../../../../database/model/Role';
+import { RoleCodeEnum } from '../../../../database/model/workon/Role';
 import validator from '../../../../helpers/validator';
 import schema from '../schema';
 import { ProtectedRequest } from 'app-request';
 import EmployeeRepo from '../../../../database/repository/EmployeeRepo';
 import EntityRepo from '../../../../database/repository/EntityRepo';
-import Entity, { EntityTypeEnum } from '../../../../database/model/Entity';
+import Entity, { EntityTypeEnum } from '../../../../database/model/workon/Entity';
 
 
 const router = express.Router();

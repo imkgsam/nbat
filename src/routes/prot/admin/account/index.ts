@@ -2,14 +2,14 @@ import express from 'express';
 import { SuccessResponse } from '../../../../core/ApiResponse';
 import asyncHandler from '../../../../helpers/asyncHandler';
 import authorization from '../../../../auth/authorization';
-import { RoleCodeEnum } from '../../../../database/model/Role';
+import { RoleCodeEnum } from '../../../../database/model/workon/Role';
 import AccountRepo from '../../../../database/repository/AccountRepo';
 import KeystoreRepo from '../../../../database/repository/KeystoreRepo';
 import schema from './schema'
 
 import validator, { ValidationSourceEnum } from '../../../../helpers/validator';
 import { ProtectedRequest } from 'app-request';
-import Account from '../../../../database/model/Account';
+import Account from '../../../../database/model/workon/Account';
 
 const router = express.Router();
 

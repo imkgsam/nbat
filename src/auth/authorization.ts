@@ -6,7 +6,7 @@ import RoleRepo from '../database/repository/RoleRepo';
 import asyncHandler from '../helpers/asyncHandler';
 import authentication from './authentication';
 
-import { RoleCodeEnum } from '../database/model/Role';
+import { RoleCodeEnum } from '../database/model/workon/Role';
 import { Response, NextFunction } from 'express';
 
 const authorization = (...roleCodes: RoleCodeEnum[]) =>

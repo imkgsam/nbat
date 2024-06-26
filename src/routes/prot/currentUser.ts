@@ -16,9 +16,9 @@ import Logger from '../../core/Logger';
 import { ProtectedRequest } from 'app-request';
 import { SuccessMsgResponse } from '../../core/ApiResponse';
 import authentication from '../../auth/authentication';
-import Account from '../../database/model/Account';
+import Account from '../../database/model/workon/Account';
 import { RoleRequest } from 'app-request';
-import { RoleCodeEnum } from '../../database/model/Role';
+import { RoleCodeEnum } from '../../database/model/workon/Role';
 
 const router = express.Router();
 

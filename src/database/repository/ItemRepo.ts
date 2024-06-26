@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import Item, { ProductModel } from '../model/product/Template';
+import Item, { ProductModel } from '../model/workon/product/Template';
 
 async function create(newOne: Item): Promise<Item> {
   return await ProductModel.create(newOne);

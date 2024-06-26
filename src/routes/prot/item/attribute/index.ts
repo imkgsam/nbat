@@ -3,12 +3,12 @@ import { SuccessResponse,FailureMsgResponse } from '../../../../core/ApiResponse
 import asyncHandler from '../../../../helpers/asyncHandler';
 import AttributeSchema from './schema';
 import authorization from '../../../../auth/authorization';
-import { RoleCodeEnum } from '../../../../database/model/Role';
+import { RoleCodeEnum } from '../../../../database/model/workon/Role';
 import AttributeRepo from "../../../../database/repository/AttributeRepo"
 import validator, { ValidationSourceEnum } from '../../../../helpers/validator';
 import { ProtectedRequest } from 'app-request';
-import Attribute from '../../../../database/model/Attribute';
-import AttributeValue from '../../../../database/model/AttributeValue';
+import Attribute from '../../../../database/model/workon/Attribute';
+import AttributeValue from '../../../../database/model/workon/AttributeValue';
 
 
 const router = express.Router();

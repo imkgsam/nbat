@@ -4,11 +4,11 @@ import asyncHandler from '../../../helpers/asyncHandler';
 import authorization from '../../../auth/authorization';
 import authentication from '../../../auth/authentication';
 
-import { RoleCodeEnum } from '../../../database/model/Role';
+import { RoleCodeEnum } from '../../../database/model/workon/Role';
 import RouteRepo from '../../../database/repository/RouteRepo';
 import validator, { ValidationSourceEnum } from '../../../helpers/validator';
 import RouteSchema from './schema';
-import Route from '../../../database/model/Route';
+import Route from '../../../database/model/workon/Route';
 import { ProtectedRequest } from 'app-request';
 
 import RouteAccess from './routeaccess';

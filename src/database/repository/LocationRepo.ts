@@ -1,4 +1,4 @@
-import Location, { LocationModel } from '../model/Location';
+import Location, { LocationModel } from '../model/workon/Location';
 import { Types } from "mongoose"
 
 async function findAll(): Promise<Location[]> {

@@ -1,5 +1,5 @@
-import Attribute, { AttributeModel } from '../model/Attribute';
-import AttributeValue, { AttributeValueModel } from '../model/AttributeValue';
+import Attribute, { AttributeModel } from '../model/workon/Attribute';
+import AttributeValue, { AttributeValueModel } from '../model/workon/AttributeValue';
 import { Types } from "mongoose"
 
 

@@ -5,7 +5,7 @@ import express from 'express';
 // import { Permission } from '../database/model/ApiKey';
 import account from './account';
 import authorization from '../../../auth/authorization';
-import { RoleCodeEnum } from '../../../database/model/Role';
+import { RoleCodeEnum } from '../../../database/model/workon/Role';
 const router = express.Router();
 
 /*---------------------------------------------------------*/

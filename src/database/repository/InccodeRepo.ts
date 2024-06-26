@@ -1,5 +1,5 @@
-import InccodeItem, { InccodeItemModel } from '../model/inccode/InccodeItem';
-import InccodeType, { InccodeTypeModel } from '../model/inccode/InccodeType';
+import InccodeItem, { InccodeItemModel } from '../model/workon/inccode/InccodeItem';
+import InccodeType, { InccodeTypeModel } from '../model/workon/inccode/InccodeType';
 import { Types } from "mongoose"
 import { genEID } from '../../helpers/utils';
 

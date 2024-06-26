@@ -1,4 +1,4 @@
-import Category, { CategoryModel } from '../model/Category';
+import Category, { CategoryModel } from '../model/workon/Category';
 import { Types } from "mongoose"
 
 

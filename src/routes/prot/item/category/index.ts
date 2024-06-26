@@ -3,11 +3,11 @@ import { FailureMsgResponse, SuccessResponse } from '../../../../core/ApiRespons
 import asyncHandler from '../../../../helpers/asyncHandler';
 import CategorySchema from './schema';
 import authorization from '../../../../auth/authorization';
-import { RoleCodeEnum } from '../../../../database/model/Role';
+import { RoleCodeEnum } from '../../../../database/model/workon/Role';
 import CategoryRepo from "../../../../database/repository/CategoryRepo"
 import validator, { ValidationSourceEnum } from '../../../../helpers/validator';
 import { ProtectedRequest } from 'app-request';
-import Category from '../../../../database/model/Category';
+import Category from '../../../../database/model/workon/Category';
 
 
 const router = express.Router();

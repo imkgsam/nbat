@@ -1,5 +1,5 @@
-import MoldItem, { MoldItemModel } from '../model/mold/MoldItem';
-import MoldGroup, { MoldGroupModel } from '../model/mold/MoldGroup';
+import MoldItem, { MoldItemModel } from '../model/workon/mold/MoldItem';
+import MoldGroup, { MoldGroupModel } from '../model/workon/mold/MoldGroup';
 import { Types } from "mongoose"
 
 

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { JoiObjectId } from '../../../helpers/validator';
-import { MoldGroupStatusEnum } from '../../../database/model/mold/MoldGroup'
+import { MoldGroupStatusEnum } from '../../../database/model/workon/mold/MoldGroup'
 export default {
   Id: Joi.object().keys({
     id: JoiObjectId().required(),

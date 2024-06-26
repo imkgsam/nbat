@@ -1,4 +1,4 @@
-import { RoleCodeEnum } from '../database/model/Role';
+import { RoleCodeEnum } from '../database/model/workon/Role';
 import { RoleRequest } from 'app-request';
 import { Response, NextFunction } from 'express';
 

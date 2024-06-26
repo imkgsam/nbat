@@ -2,12 +2,12 @@ import express from 'express';
 import { SuccessResponse } from '../../../core/ApiResponse';
 import asyncHandler from '../../../helpers/asyncHandler';
 import authorization from '../../../auth/authorization';
-import { RoleCodeEnum } from '../../../database/model/Role';
+import { RoleCodeEnum } from '../../../database/model/workon/Role';
 import validator from '../../../helpers/validator';
 import roleSchema from './schema';
 import { ProtectedRequest } from 'app-request';
 import RoleRepo from '../../../database/repository/RoleRepo';
-import Role from '../../../database/model/Role';
+import Role from '../../../database/model/workon/Role';
 
 const router = express.Router();
 

@@ -1,8 +1,8 @@
 // import Route, { RouteChildren, RouteModel, RouteChildrenModel } from '../model/Route';
-import Route, { RouteModel} from '../model/Route';
-import RouteAccess, { RouteAccessModel} from '../model/RouteAccess';
-import RouteAuth, { RouteAuthModel } from '../model/RouteAuth';
-import Role from '../model/Role'
+import Route, { RouteModel} from '../model/workon/Route';
+import RouteAccess, { RouteAccessModel} from '../model/workon/RouteAccess';
+import RouteAuth, { RouteAuthModel } from '../model/workon/RouteAuth';
+import Role from '../model/workon/Role'
 import RoleRepo from './RoleRepo';
 import { Types } from 'mongoose'
 

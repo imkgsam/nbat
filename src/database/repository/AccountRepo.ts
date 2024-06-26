@@ -1,9 +1,9 @@
-import Account, { AccountModel } from '../model/Account';
-import { RoleModel } from '../model/Role';
+import Account, { AccountModel } from '../model/workon/Account';
+import { RoleModel } from '../model/workon/Role';
 import { InternalError } from '../../core/ApiError';
 import { Types } from 'mongoose';
 import KeystoreRepo from './KeystoreRepo';
-import Keystore from '../model/Keystore';
+import Keystore from '../model/workon/Keystore';
 
 async function findAll(): Promise<Account[]> {
   return AccountModel.find({}).lean().exec();

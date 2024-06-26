@@ -2,7 +2,7 @@ import { Tokens } from 'app-request';
 import { AuthFailureError, InternalError } from '../core/ApiError';
 import JWT, { JwtPayload } from '../core/JWT';
 import { Types } from 'mongoose';
-import Account from '../database/model/Account';
+import Account from '../database/model/workon/Account';
 import { tokenInfo } from '../config';
 import { addMillisToCurrentDate } from '../helpers/utils'
 

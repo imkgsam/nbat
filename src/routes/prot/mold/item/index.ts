@@ -2,12 +2,12 @@ import express from 'express';
 import { SuccessResponse } from '../../../../core/ApiResponse';
 import asyncHandler from '../../../../helpers/asyncHandler';
 import authorization from '../../../../auth/authorization';
-import { RoleCodeEnum } from '../../../../database/model/Role';
+import { RoleCodeEnum } from '../../../../database/model/workon/Role';
 import validator from '../../../../helpers/validator';
 import schema from '../schema';
 import { ProtectedRequest } from 'app-request';
 import MoldRepo from '../../../../database/repository/MoldRepo';
-import MoldItem from '../../../../database/model/mold/MoldItem';
+import MoldItem from '../../../../database/model/workon/mold/MoldItem';
 
 const router = express.Router();
 

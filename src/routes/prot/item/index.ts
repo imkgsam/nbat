@@ -3,11 +3,11 @@ import { SuccessResponse } from '../../../core/ApiResponse';
 import asyncHandler from '../../../helpers/asyncHandler';
 import schema from './schema';
 import authorization from '../../../auth/authorization';
-import { RoleCodeEnum } from '../../../database/model/Role';
+import { RoleCodeEnum } from '../../../database/model/workon/Role';
 import ItemRepo from "../../../database/repository/ItemRepo"
 import validator, { ValidationSourceEnum } from '../../../helpers/validator';
 import { ProtectedRequest } from 'app-request';
-import Item from '../../../database/model/product/Template';
+import Item from '../../../database/model/workon/product/Template';
 import CategoryRoute from './category'
 import AttributeRoute from './attribute'
 

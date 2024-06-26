@@ -1,6 +1,6 @@
-import Account, { AccountModel } from '../model/Account';
-import Employee, { EmployeeModel } from '../model/Employee';
-import Entity, { EntityModel, EntityTypeEnum } from '../model/Entity';
+import Account, { AccountModel } from '../model/workon/Account';
+import Employee, { EmployeeModel } from '../model/workon/Employee';
+import Entity, { EntityModel, EntityTypeEnum } from '../model/workon/Entity';
 import { Types } from 'mongoose';
 import bcrypt from 'bcrypt';
 import InccodeRepo from './InccodeRepo';

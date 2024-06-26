@@ -7,7 +7,7 @@ import Supplier from './supplier'
 import Customer from './customer'
 
 import schema from './schema'
-import { RoleCodeEnum } from '../../../database/model/Role';
+import { RoleCodeEnum } from '../../../database/model/workon/Role';
 import validator from '../../../helpers/validator';
 import authorization from '../../../auth/authorization';
 import authentication from '../../../auth/authentication'
