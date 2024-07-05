@@ -3,7 +3,7 @@ import { SuccessResponse } from '../../core/ApiResponse';
 import { RoleRequest } from 'app-request';
 import AccountRepo from '../../database/repository/AccountRepo';
 import { BadRequestError } from '../../core/ApiError';
-import Account from '../../database/model/workon/Account';
+import Account from '../../database/model/finished/Account';
 import validator from '../../helpers/validator';
 import schema from '../public/schema';
 import asyncHandler from '../../helpers/asyncHandler';
@@ -26,7 +26,7 @@ router.use(authentication, authorization(RoleCodeEnum.ADMIN));
 router.post( '/user/assign', 
   validator(schema.credential),
   asyncHandler(async (req: RoleRequest, res) => {
-    const user = await AccountRepo.findByEmail(req.body.email);
+    const user = await AccountRepo.findOneByEmail(req.body.email);
     if (!user) throw new BadRequestError('Account do not exists');
     const passwordHash = await bcrypt.hash(req.body.password, 10);
     await AccountRepo.updateInfo({

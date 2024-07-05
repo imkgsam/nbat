@@ -35,3 +35,7 @@ export const caching = {
     process.env.CONTENT_CACHE_DURATION_MILLIS || '600000',
   ),
 };
+
+export const verificationCodeInfo = {
+  codeValidity : parseInt(process.env.VERIFICATION_CODE_VALIDITY_SEC || '600')
+}

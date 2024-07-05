@@ -20,10 +20,10 @@ const router = express.Router();
  * login with email and password
  */
 router.post(
-  '/pword',
+  '/login/pword',
   validator(schema.credential),
   asyncHandler(async (req: PublicRequest, res) => {
-    const account = await AccountRepo.findByEmail(req.body.email);
+    const account = await AccountRepo.findOneByEmail(req.body.email);
     if (!account) throw new BadRequestError('Account not available');
     if (!account.meta.enabled) throw new BadRequestError('Account not enabled');
     if (!account.meta.verified) throw new BadRequestError('Account not verified');
@@ -48,6 +48,12 @@ router.post(
 
 /**
  * login with email and email verification code
+ * status: todo
  */
+
+
+
+
+
 
 export default router;

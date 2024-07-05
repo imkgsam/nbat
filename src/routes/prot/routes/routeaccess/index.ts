@@ -7,7 +7,7 @@ import RouteRepo  from '../../../../database/repository/RouteRepo';
 import validator from '../../../../helpers/validator';
 import RouteSchema from '../schema';
 // import Route from '../../../../database/model/Route';
-import RouteAccess from '../../../../database/model/workon/RouteAccess';
+import RouteAccess from '../../../../database/model/workon/route/RouteAccess';
 import { ProtectedRequest } from 'app-request';
 
 const router = express.Router();

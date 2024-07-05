@@ -4,7 +4,7 @@ import asyncHandler from '../../helpers/asyncHandler';
 import authorization from '../../auth/authorization';
 import { RoleCodeEnum } from '../../database/model/workon/Role';
 import mongoose from 'mongoose'
-import { findOneSpotInSequence, findNSpotInSequence } from '../../helpers/utils';
+import { findOneSpotInSequence, findNSpotInSequence, generateNdigitRandomNumber } from '../../helpers/utils';
 
 
 const router = express.Router();
@@ -32,11 +32,9 @@ router.get(
 
 
 router.get(
-  '/findspot',
+  '/tester',
   asyncHandler(async (req, res) => {
-    let arr =[-2]
-    arr.sort((a, b) => a - b)
-    let t = findNSpotInSequence(arr,arr[0],arr[arr.length-1],1)
+    const t = generateNdigitRandomNumber(6)
     return new SuccessResponse('success', t).send(res)
   }))
 

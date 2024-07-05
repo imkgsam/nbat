@@ -7,7 +7,7 @@ import validator, { ValidationSourceEnum } from '../../../helpers/validator';
 import DepartmentSchema from './schema';
 import { ProtectedRequest } from 'app-request';
 import DepartmentRepo from '../../../database/repository/DepartmentRepo';
-import Department from '../../../database/model/workon/Department';
+import Department from '../../../database/model/finished/Department';
 
 const router = express.Router();
 

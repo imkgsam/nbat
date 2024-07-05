@@ -8,7 +8,7 @@ import schema from '../schema';
 import { ProtectedRequest } from 'app-request';
 import EmployeeRepo from '../../../../database/repository/EmployeeRepo';
 import EntityRepo from '../../../../database/repository/EntityRepo';
-import Entity, { EntityTypeEnum } from '../../../../database/model/workon/Entity';
+import Entity, { EntityTypeEnum } from '../../../../database/model/finished/Entity';
 
 
 const router = express.Router();

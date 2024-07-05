@@ -1,17 +1,8 @@
 import { Schema, model, Types } from 'mongoose';
-
 const { Boolean, String, Date: SDate} = Schema.Types
 
 export const DOCUMENT_NAME = 'Role';
 export const COLLECTION_NAME = 'roles';
-
-export enum RoleCodeEnum {
-  LEARNER = 'learner',
-  WRITER = 'writer',
-  EDITOR = 'editor',
-  ADMIN = 'admin',
-}
-
 export default interface Role {
   _id: Types.ObjectId;
   code: string;

@@ -1,9 +1,9 @@
-import Account, { AccountModel } from '../model/workon/Account';
+import Account, { AccountModel } from '../model/finished/Account';
 import { RoleModel } from '../model/workon/Role';
 import { InternalError } from '../../core/ApiError';
 import { Types } from 'mongoose';
 import KeystoreRepo from './KeystoreRepo';
-import Keystore from '../model/workon/Keystore';
+import Keystore from '../model/workon/system/Keystore';
 
 async function findAll(): Promise<Account[]> {
   return AccountModel.find({}).lean().exec();
@@ -44,11 +44,27 @@ async function findById(id: Types.ObjectId): Promise<Account | null> {
     .exec();
 }
 
-async function findByEmail(email: string): Promise<Account | null> {
+async function findOneByEmail(email: string): Promise<Account | null> {
   console.log(email)
   return AccountModel.findOne({ 'binding.email.account': email })
     .select(
       '+binding.email.account +security.password +roles +_id +linkedTo.entity',
+    )
+    .populate({
+      path: 'roles',
+      match: { 'meta.enabled': true },
+      select: { code: 1, _id: 0 },
+    })
+    .lean()
+    .exec();
+}
+
+
+async function findOneByEmailorPhone(account: string): Promise<Account | null> {
+  console.log(account)
+  return AccountModel.findOne({ $or :[{'binding.email.account': account},{'binding.phone.account':account}] })
+    .select(
+      '+binding.email.account +binding.phone.account +security.password +roles +_id +linkedTo.entity',
     )
     .populate({
       path: 'roles',
@@ -143,7 +159,8 @@ export default {
   exists,
   findPrivateProfileById,
   findById,
-  findByEmail,
+  findOneByEmail,
+  findOneByEmailorPhone,
   findFieldsById,
   findPublicProfileById,
   create,

@@ -8,7 +8,7 @@ import { RoleCodeEnum } from '../../../database/model/workon/Role';
 import RouteRepo from '../../../database/repository/RouteRepo';
 import validator, { ValidationSourceEnum } from '../../../helpers/validator';
 import RouteSchema from './schema';
-import Route from '../../../database/model/workon/Route';
+import Route from '../../../database/model/workon/route/Route';
 import { ProtectedRequest } from 'app-request';
 
 import RouteAccess from './routeaccess';

@@ -1,24 +1,19 @@
 import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
-import crypto from 'crypto';
 import AccountRepo from '../../database/repository/AccountRepo';
 import { BadRequestError, AuthFailureError } from '../../core/ApiError';
 import KeystoreRepo from '../../database/repository/KeystoreRepo';
 import EntityRepo from '../../database/repository/EntityRepo';
-import { createTokens } from '../../auth/authUtils';
 import validator from '../../helpers/validator';
 import schema from '../public/schema';
 import asyncHandler from '../../helpers/asyncHandler';
 import bcrypt from 'bcrypt';
 import { getUserData } from '../public/utils';
 import { PublicRequest } from '../../types/app-request';
-import Logger from '../../core/Logger';
 import { ProtectedRequest } from 'app-request';
 import { SuccessMsgResponse } from '../../core/ApiResponse';
 import authentication from '../../auth/authentication';
-import Account from '../../database/model/workon/Account';
-import { RoleRequest } from 'app-request';
-import { RoleCodeEnum } from '../../database/model/workon/Role';
+import Account from '../../database/model/finished/Account';
 
 const router = express.Router();
 
@@ -54,7 +49,7 @@ router.post(
   authentication,
   validator(schema.changePassword),
   asyncHandler(async (req: PublicRequest, res) => {
-    const account = await AccountRepo.findByEmail(req.body.email);
+    const account = await AccountRepo.findOneByEmail(req.body.email);
     if (!account) throw new BadRequestError('User not Found');
     const match = await bcrypt.compare(req.body.oldPassword, account.security.password);
     if (!match) throw new AuthFailureError('Authentication failure');

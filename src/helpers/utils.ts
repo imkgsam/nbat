@@ -2,7 +2,12 @@ import { Request } from 'express';
 import moment from 'moment';
 import Logger from '../core/Logger';
 import {md5} from 'js-md5';
-
+import crypto from 'crypto';
+/**
+ * retrive ip address from request header
+ * @param req 
+ * @returns ip or undifined
+ */
 export function findIpAddress(req: Request) {
   try {
     if (req.headers['x-forwarded-for']) {
@@ -17,9 +22,73 @@ export function findIpAddress(req: Request) {
   }
 }
 
+/**
+ * add mili-sec to current time
+ * @param millis 
+ * @returns Date
+ */
 export function addMillisToCurrentDate(millis: number) {
   return moment().add(millis, 'ms').toDate();
 }
+
+export function generateNdigitRandomNumber(n: number,min?: number,max?: number){
+  if(n<1){
+    throw new Error('N should be greater than 0')
+  }else{
+    let nmin = Math.pow(10,n-1)
+    let nmax = Math.pow(10,n)-1
+    if(n==1) {
+      nmin--
+    }
+    if(min && max && min <= max){
+      if(min > nmin){
+        nmin = min
+      }
+      if(max < nmax){
+        nmax = max
+      }
+    }
+    return crypto.randomInt(nmin,nmax).toString().padEnd(n,'0')
+  }
+}
+
+
+export function generate6DigitRandomNumber(){
+  return generateNdigitRandomNumber(6,100000,999999)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  //员工编号-(唯一识别号, [年]-[h3/1]-[月]-[h3/2]-[日]-[h3/3]-[性别] md5-hash后三位975 陈双鹏2024年01月01日入职男 2490170151 )
 export function genEID(name: string, inaugurationDate: Date, sex: string){
@@ -64,7 +133,7 @@ export function findOneSpotInSequence (arr: any[],min: number): number {
   console.log(arr,min)
   let rt = min
   if(arr && arr.length>0 ){
-    for(var i=1; i< arr.length;i++){
+    for(let i=1; i< arr.length;i++){
       if(arr[i]-arr[i-1] !=1){
         rt = arr[i-1] + 1
         break
@@ -75,9 +144,9 @@ export function findOneSpotInSequence (arr: any[],min: number): number {
 }
 
 export function findNSpotInSequence( arr: any[],min:number,max: number, n:number): number[] {
-  let rt = [] as number[]
+  const rt = [] as number[]
   if(n && n>0 && arr && arr.length > 0){
-    for(var i=1; i< arr.length;i++){
+    for(let i=1; i< arr.length;i++){
       if(arr[i]-arr[i-1] !=1){
         let diff = arr[i] - arr[i-1]
         let start = 1

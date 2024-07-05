@@ -8,7 +8,9 @@ export default interface Department {
   _id: Types.ObjectId;
   // 部门名称
   name: string;
+  // 部门主管
   manager?: Types.ObjectId | string;
+  // 上级部门
   parent?: Types.ObjectId | string;
   meta?:{
     enabled: boolean;
@@ -24,7 +26,7 @@ export default interface Department {
 const schema = new Schema<Department>(
   {
     name: {
-      type: Schema.Types.String,
+      type: String,
       required: true,
       unique: true,
       trim:true,
@@ -32,7 +34,8 @@ const schema = new Schema<Department>(
     },
     manager:{
       type: ObjectId,
-      ref: 'Entity'
+      ref: 'Entity',
+      required: true
     },
     parent:{
       type: ObjectId,
@@ -40,7 +43,7 @@ const schema = new Schema<Department>(
     },
     meta:{
       enabled: {
-        type: Schema.Types.Boolean,
+        type: Boolean,
         default: false,
       }
     },
@@ -54,13 +57,13 @@ const schema = new Schema<Department>(
       required:true
     },
     createdAt: {
-      type: Schema.Types.Date,
+      type: Date,
       required: true,
       default: new Date(),
       select: false
     },
     updatedAt: {
-      type: Schema.Types.Date,
+      type: Date,
       required: true,
       default: new Date(),
       select: false
@@ -72,6 +75,6 @@ const schema = new Schema<Department>(
   },
 );
 
-schema.index({ name: 1,company:1, 'meta.enabled': 1 });
+schema.index({ name: 1, company:1 });
 
 export const DepartmentModel = model<Department>(DOCUMENT_NAME, schema, COLLECTION_NAME);

@@ -1,5 +1,5 @@
 import { model, Schema, Types } from 'mongoose';
-import Role from './Role';
+import Role from '../workon/Role';
 import Entity from './Entity';
 const { Boolean, String, Date: SDate } = Schema.Types;
 

@@ -8,7 +8,7 @@ import validator from '../../../../helpers/validator';
 import schema from '../schema';
 import { ProtectedRequest } from 'app-request';
 import EntityRepo from '../../../../database/repository/EntityRepo';
-import Entity, { EntityTypeEnum } from '../../../../database/model/workon/Entity';
+import Entity, { EntityTypeEnum } from '../../../../database/model/finished/Entity';
 
 const router = express.Router();
 

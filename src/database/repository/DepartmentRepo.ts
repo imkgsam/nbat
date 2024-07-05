@@ -1,4 +1,4 @@
-import Department, { DepartmentModel } from '../model/workon/Department';
+import Department, { DepartmentModel } from '../model/finished/Department';
 import { Types } from "mongoose"
 import EntityRepo from '../repository/EntityRepo'
 

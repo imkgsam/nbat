@@ -1,7 +1,7 @@
 import Employee, { EmployeeModel } from '../model/workon/Employee';
-import Entity, { EntityModel } from '../model/workon/Entity';
+import Entity, { EntityModel } from '../model/finished/Entity';
 import { Types } from 'mongoose';
-import Account, {AccountModel} from '../model/workon/Account';
+import Account, {AccountModel} from '../model/finished/Account';
 import bcrypt from 'bcrypt';
 import RoleRepo from './RoleRepo';
 

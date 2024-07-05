@@ -9,7 +9,7 @@ import schema from './schema'
 
 import validator, { ValidationSourceEnum } from '../../../../helpers/validator';
 import { ProtectedRequest } from 'app-request';
-import Account from '../../../../database/model/workon/Account';
+import Account from '../../../../database/model/finished/Account';
 
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-import Account from '../../database/model/workon/Account';
+import Account from '../../database/model/finished/Account';
 import _ from 'lodash';
 
 export const enum AccessMode {

@@ -7,7 +7,7 @@ import RouteRepo  from '../../../../database/repository/RouteRepo';
 import validator from '../../../../helpers/validator';
 import RouteSchema from '../schema';
 // import Route from '../../../../database/model/Route';
-import RouteAuth from '../../../../database/model/workon/RouteAuth';
+import RouteAuth from '../../../../database/model/workon/route/RouteAuth';
 // import { ProtectedRequest } from 'app-request';
 
 const router = express.Router();
@@ -17,7 +17,7 @@ router.get('/all',
   authorization(RoleCodeEnum.ADMIN),
   asyncHandler(async (req, res) => {
     try{
-      const data = await RouteRepo.RouteAuth.findAll()
+      const data = await RouteRepo.RouteAuth.filters()
       return new SuccessResponse('success', data).send(res);
     }catch(e){
       console.log(e)

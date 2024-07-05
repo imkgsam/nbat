@@ -1,7 +1,7 @@
 import { Request } from 'express';
-import Account from '../database/model/workon/Account';
+import Account from '../database/model/finished/Account';
 import Keystore from '../database/model/workon/Keystore';
-import ApiKey from '../database/model/workon/ApiKey';
+import ApiKey from '../database/model/workon/system/ApiKey';
 
 declare interface PublicRequest extends Request {
   apiKey: ApiKey;

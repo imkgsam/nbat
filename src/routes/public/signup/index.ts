@@ -8,7 +8,7 @@ const router = express.Router();
 //   '/signup/basic',
 //   validator(schema.signup),
 //   asyncHandler(async (req: RoleRequest, res) => {
-//     const user = await AccountRepo.findByEmail(req.body.email);
+//     const user = await AccountRepo.findOneByEmail(req.body.email);
 //     if (user) throw new BadRequestError('User already registered');
 //     const accessTokenKey = crypto.randomBytes(64).toString('hex');
 //     const refreshTokenKey = crypto.randomBytes(64).toString('hex');

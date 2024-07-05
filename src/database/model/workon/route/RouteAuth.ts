@@ -1,11 +1,8 @@
 import { Schema, model, Types } from 'mongoose';
-
 const {  String, Date: SDate} = Schema.Types
 
 export const DOCUMENT_NAME = 'RouteAuth';
 export const COLLECTION_NAME = 'RouteAuths';
-
-
 export default interface RouteAuth {
   _id?: Types.ObjectId;
   name: string;

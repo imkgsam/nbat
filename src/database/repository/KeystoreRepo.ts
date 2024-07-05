@@ -1,6 +1,6 @@
-import Keystore, { KeystoreModel } from '../model/workon/Keystore';
+import Keystore, { KeystoreModel } from '../model/workon/system/Keystore';
 import { Types } from 'mongoose';
-import Account from '../model/workon/Account';
+import Account from '../model/finished/Account';
 
 async function findforKey(client: Account, key: string): Promise<Keystore | null> {
   return KeystoreModel.findOne({

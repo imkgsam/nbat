@@ -1,6 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 import Account from './Account';
-import Employee from './Employee';
+import Employee from '../workon/Employee';
 const { String, Boolean, ObjectId } = Schema.Types
 
 export const DOCUMENT_NAME = 'Entity';
@@ -17,14 +17,14 @@ export enum GenderTypeEnum {
   OTHERS = 'Others'
 }
 
-interface KVMap {
-  mkey: string;
-  mvalue: string;
-}
+// interface KVMap {
+//   mkey: string;
+//   mvalue: string;
+// }
 
 export default interface Entity {
   _id: Types.ObjectId;
-  //主体名称 唯一 必填
+  //主体名称 唯一 必填, 全称， 商业全称
   name: string; 
   //别称 用于公司内部识别 唯一 可选
   alias?: string;
@@ -65,17 +65,21 @@ export default interface Entity {
     //内部备注
     internalNote?: string; 
   };
-  //所有社交方式
-  socialMedias?:KVMap[];
-  //关联的登录账户 可选
-  account?: Types.ObjectId | Account;
-  //关联的员工账户 可选
-  employee?: Types.ObjectId | Employee;
+  // //所有社交方式
+  // socialMedias?:KVMap[];
+  linktedTo?:{
+    //关联的登录账户 可选
+    account?: Types.ObjectId | Account;
+    //关联的员工账户 可选
+    employee?: Types.ObjectId | Employee;
+  },
   meta:{
     //是否开启
     enabled?: boolean;
     //是否已通过认证
     verified?: boolean;
+    // 是否已归档
+    isArchived?: boolean;
     //是否为我司供应商
     isSupplier?: boolean;
     //是否为我司客户
@@ -96,9 +100,7 @@ const schema = new Schema<Entity>(
     name: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
-      index: true
     },
     alias: {
       type: String,
@@ -107,7 +109,6 @@ const schema = new Schema<Entity>(
     etype: {
       type: String,
       required:true,
-      default: EntityTypeEnum.PERSON,
       enum: Object.values(EntityTypeEnum)
     },
     scompany:{
@@ -166,17 +167,19 @@ const schema = new Schema<Entity>(
         type: String,trim: true
       }, 
     },
-    socialMedias:[{
-      mkey: { type: String, trim:true},
-      mvalue: { type: String, trim: true}
-    }],
-    account: {
-      type: ObjectId,
-      ref: 'Account'
-    },
-    employee: {
-      type: ObjectId,
-      ref: 'Employee'
+    // socialMedias:[{
+    //   mkey: { type: String, trim:true},
+    //   mvalue: { type: String, trim: true}
+    // }],
+    linktedTo:{
+      account: {
+        type: ObjectId,
+        ref: 'Account'
+      },
+      employee: {
+        type: ObjectId,
+        ref: 'Employee'
+      },
     },
     meta:{
       enabled: {
@@ -184,6 +187,9 @@ const schema = new Schema<Entity>(
         default: false,
       },
       verified:{
+        type: Boolean
+      },
+      isArchived:{
         type: Boolean
       },
       isSupplier:{
@@ -218,7 +224,5 @@ const schema = new Schema<Entity>(
     timestamps: true
   },
 );
-
-schema.index({ name: 1});
 
 export const EntityModel = model<Entity>(DOCUMENT_NAME, schema, COLLECTION_NAME);
