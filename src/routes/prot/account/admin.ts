@@ -5,11 +5,10 @@ import authorization from '../../../auth/authorization';
 import { RoleCodeEnum } from '../../../database/model/workon/Role';
 import AccountRepo from '../../../database/repository/AccountRepo';
 import schema from './schema'
-
 import validator, { ValidationSourceEnum } from '../../../helpers/validator';
 import { ProtectedRequest } from 'app-request';
 import Account from '../../../database/model/finished/Account';
-import KeystoreRepo from 'src/database/repository/KeystoreRepo';
+import KeystoreRepo from '../../../database/repository/KeystoreRepo';
 
 const router = express.Router();
 

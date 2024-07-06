@@ -82,7 +82,7 @@ async function disable(id: Types.ObjectId): Promise<Department | null> {
   return DepartmentModel.findOneAndUpdate({ _id: id, 'meta.enabled': true},{'meta.enabled':false},{ new: true }).lean().exec();
 }
 
-async function filters( filters: any ): Promise<Department[]> {
+async function filters( filters: any={} ): Promise<Department[]> {
   return DepartmentModel.find(filters);
 }
 
