@@ -2,8 +2,6 @@ import express from 'express';
 import { SuccessResponse, FailureMsgResponse } from '../../../core/ApiResponse';
 import asyncHandler from '../../../helpers/asyncHandler';
 import authorization from '../../../auth/authorization';
-import authentication from '../../../auth/authentication';
-
 import { RoleCodeEnum } from '../../../database/model/workon/Role';
 import RouteRepo from '../../../database/repository/RouteRepo';
 import validator, { ValidationSourceEnum } from '../../../helpers/validator';
@@ -44,7 +42,6 @@ router.get('/get-async-routes',
 );
 
 router.get('/get-async-routes2',
-  authentication,
   asyncHandler(async (req: ProtectedRequest, res) => {
     let k = await RouteRepo.Route.getAsyncRoutes(req.account._id, req.account.roles.map(each => each._id))
     return new SuccessResponse('ok',k).send(res);

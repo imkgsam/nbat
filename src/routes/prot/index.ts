@@ -18,8 +18,7 @@ import account from './account';
 import employee from './employee';
 import mold from './mold';
 import location from './location';
-import admin from './admin'
-
+import authentication from '../../auth/authentication';
 
 const router = express.Router();
 
@@ -29,11 +28,13 @@ const router = express.Router();
 /*---------------------------------------------------------*/
 // router.use(permission(Permission.GENERAL));
 /*---------------------------------------------------------*/
+router.use('/token', token);
 
-
+//----------------------------------------------------------------
+router.use(authentication);
+//----------------------------------------------------------------
 
 router.use('/user', user);
-router.use('/token', token);
 router.use('/credential', credential);
 router.use('/profile', profile);
 router.use('/roles',roles);
@@ -47,6 +48,5 @@ router.use('/employee',employee)
 router.use('/account',account)
 router.use('/mold',mold)
 router.use('/location',location)
-router.use('/admin',admin)
 
 export default router;

@@ -12,7 +12,6 @@ import { getUserData } from '../public/utils';
 import { PublicRequest } from '../../types/app-request';
 import { ProtectedRequest } from 'app-request';
 import { SuccessMsgResponse } from '../../core/ApiResponse';
-import authentication from '../../auth/authentication';
 import Account from '../../database/model/finished/Account';
 
 const router = express.Router();
@@ -21,7 +20,6 @@ const router = express.Router();
  * 获取当前用户的详细资料
  */
 router.get( '/detail',
-  authentication,
   asyncHandler(async (req: ProtectedRequest, res) => {
     console.log(req.account._id)
     const entity = await EntityRepo.findEntityDetailedInfoByUserId(req.account._id);
@@ -34,7 +32,6 @@ router.get( '/detail',
  */
 router.delete(
   '/logout',
-  authentication,
   asyncHandler(async (req: ProtectedRequest, res) => {
     await KeystoreRepo.remove(req.keystore._id);
     new SuccessMsgResponse('Logout success').send(res);
@@ -46,7 +43,6 @@ router.delete(
  */
 router.post(
   '/password/change',
-  authentication,
   validator(schema.changePassword),
   asyncHandler(async (req: PublicRequest, res) => {
     const account = await AccountRepo.findOneByEmail(req.body.email);

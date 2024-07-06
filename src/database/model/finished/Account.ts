@@ -44,7 +44,9 @@ export default interface Account {
     entity: Entity;
   },
   meta:{
+    //是否已认证
     verified?: boolean;
+    //是否允许登录
     enabled?: boolean;
   },
   createdAt?: Date;

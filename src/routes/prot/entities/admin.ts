@@ -15,15 +15,37 @@ import EntityRepo from '../../../database/repository/EntityRepo';
 
 const router = express.Router();
 
+//权限控制
+router.use(authorization(RoleCodeEnum.ADMIN))
 
 
-// router.put('/',
-//   validator(DepartmentSchema.update),
-//   asyncHandler(async (req: ProtectedRequest, res) => {
-//     const updatedDepartment = await DepartmentRepo.update({...req.body} as Department);
-//     return new SuccessResponse('Department updated', updatedDepartment).send(res);
-//   }),
-// );
+/**
+ * 启用Entity
+ */
+router.post( '/enable',
+  validator(schema.Id),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const updatedOne = await EntityRepo.enable(req.body.id)
+    if(updatedOne){
+      new SuccessResponse('Entity enabled successfully', updatedOne).send(res);
+    }else{
+      new FailureMsgResponse('Entity enable failure').send(res)
+    }
+  }),
+);
+
+
+router.post( '/disable',
+  validator(schema.Id),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const updatedOne = await EntityRepo.disable(req.body.id)
+    if(updatedOne){
+      new SuccessResponse('Entity disabled successfully', updatedOne).send(res)
+    }else{
+      new FailureMsgResponse('Entity disabled failure').send(res)
+    }
+  }),
+);
 
 
 router.use('/employee',Employee)

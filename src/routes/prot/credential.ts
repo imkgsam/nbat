@@ -11,12 +11,11 @@ import bcrypt from 'bcrypt';
 import _ from 'lodash';
 import { RoleCodeEnum } from '../../database/model/workon/Role';
 import authorization from '../../auth/authorization';
-import authentication from '../../auth/authentication';
 import KeystoreRepo from '../../database/repository/KeystoreRepo';
 const router = express.Router();
 
 //----------------------------------------------------------------
-router.use(authentication, authorization(RoleCodeEnum.ADMIN));
+router.use(authorization(RoleCodeEnum.ADMIN));
 //----------------------------------------------------------------
 
 

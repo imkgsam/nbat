@@ -10,6 +10,8 @@ import { VerificationMethodsEnum, OperationsEnum } from '../../../database/model
 import { generate6DigitRandomNumber } from '../../../helpers/utils';
 import { sendMail } from '../../../services/email';
 import { sendSMSText } from '../../../services/sms';
+import { BadRequestError, AuthFailureError } from '../../../core/ApiError';
+import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
@@ -32,16 +34,16 @@ router.post(
             return new FailureMsgResponse('Account not available').send(res)
         }
         if (!foundAccount.meta.enabled || !foundAccount.meta.verified) {
-            return new FailureMsgResponse('Account not enabled or verified').send(res)
+            return new FailureMsgResponse('Account not enabled or verified, could not proceed').send(res)
         }
         const code = generate6DigitRandomNumber()
-        await VerificationCodeRepo.findOneorCreate(account, code, OperationsEnum.ForgetPassword, method)
+        const vcobj = await VerificationCodeRepo.findOneorCreate(account, code, OperationsEnum.ForgetPassword, method)
         switch (method) {
             case VerificationMethodsEnum.Email:
-                await sendMail(account, `Your one-time Verification code is ${code}`)
+                await sendMail(account, `Your one-time Verification code is ${vcobj.code}`)
                 break
             case VerificationMethodsEnum.Phone:
-                await sendSMSText(account, `Your one-time Verification code is ${code}`)
+                await sendSMSText(account, `Your one-time Verification code is ${vcobj.code}`)
                 break
         }
         return new SuccessResponse('Operation success')
@@ -76,9 +78,16 @@ router.post(
         const { method, account, code, newPassword } = req.body
         const vc = await VerificationCodeRepo.findOneAndRemove(account, code, OperationsEnum.ForgetPassword, method)
         if (vc) {
-            new SuccessResponse('Operation Success').send(res)
+            const foundAccount = await AccountRepo.findOneByEmailorPhone(account);
+            if (!foundAccount) throw new BadRequestError('User not Found');
+            const newPasswordHash = await bcrypt.hash(newPassword, 10);
+            const newAccount = await AccountRepo.changePassword(account,newPasswordHash)
+            if(newAccount)
+                return new SuccessResponse('Operation Success').send(res)
+            else
+                return new FailureMsgResponse('Operation failed').send(res)
         } else {
-            new FailureMsgResponse('Invalid Code').send(res)
+            return new FailureMsgResponse('Invalid Code').send(res)
         }
     })
 )

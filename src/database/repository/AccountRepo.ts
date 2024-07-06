@@ -5,11 +5,12 @@ import { Types } from 'mongoose';
 import KeystoreRepo from './KeystoreRepo';
 import Keystore from '../model/workon/system/Keystore';
 
-async function findAll(): Promise<Account[]> {
-  return AccountModel.find({}).lean().exec();
+
+async function findOneBy( filters: object={}): Promise<Account | null> {
+  return AccountModel.findOne(filters).lean().exec()
 }
 
-async function filters(filters: object): Promise<Account[]> {
+async function filters(filters: object={}): Promise<Account[]> {
   return AccountModel.find(filters).lean().exec();
 }
 
@@ -142,8 +143,8 @@ async function updateInfo(account: Account): Promise<any> {
     .exec();
 }
 
-async function changePassword(email: string,newPassword: string,): Promise< Account | null> {
-  return AccountModel.findOneAndUpdate({ email: email }, { $set: { password: newPassword } }, {new: true}).lean().exec();
+async function changePassword(account: string,newPassword: string,): Promise< Account | null> {
+  return AccountModel.findOneAndUpdate({ $or :[{'binding.email.account': account},{'binding.phone.account':account}] }, { $set: { password: newPassword } }, {new: true}).lean().exec();
 }
 
 
@@ -156,6 +157,7 @@ async function enable(id: Types.ObjectId): Promise<Account | null> {
 }
 
 export default {
+  findOneBy,
   exists,
   findPrivateProfileById,
   findById,
@@ -167,7 +169,6 @@ export default {
   update,
   updateInfo,
   changePassword,
-  findAll,
   filters,
   disable,
   enable

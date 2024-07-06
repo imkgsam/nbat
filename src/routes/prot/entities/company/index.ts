@@ -2,7 +2,6 @@ import express from 'express';
 import { SuccessResponse } from '../../../../core/ApiResponse';
 import asyncHandler from '../../../../helpers/asyncHandler';
 import authorization from '../../../../auth/authorization';
-import authentication from '../../../../auth/authentication'
 import { RoleCodeEnum } from '../../../../database/model/workon/Role';
 import validator from '../../../../helpers/validator';
 import schema from '../schema';

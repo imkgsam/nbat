@@ -2,7 +2,6 @@ import express from 'express';
 import { SuccessResponse } from '../../../../core/ApiResponse';
 import asyncHandler from '../../../../helpers/asyncHandler';
 import authorization from '../../../../auth/authorization';
-import authentication from '../../../../auth/authentication'
 import { RoleCodeEnum } from '../../../../database/model/workon/Role';
 import validator from '../../../../helpers/validator';
 import schema from '../schema';
@@ -13,7 +12,6 @@ import Entity, { EntityTypeEnum } from '../../../../database/model/finished/Enti
 const router = express.Router();
 
 router.get( '/detailedinfo4currentuser',
-  authentication,
   asyncHandler(async (req: ProtectedRequest, res) => {
     console.log(req.account._id)
     const entity = await EntityRepo.findEntityDetailedInfoByUserId(req.account._id);

@@ -3,6 +3,11 @@ const { Boolean, String, Date: SDate} = Schema.Types
 
 export const DOCUMENT_NAME = 'Role';
 export const COLLECTION_NAME = 'roles';
+
+export enum RoleCodeEnum {
+  ADMIN = 'admin',
+}
+
 export default interface Role {
   _id: Types.ObjectId;
   code: string;

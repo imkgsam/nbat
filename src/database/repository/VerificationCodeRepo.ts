@@ -31,12 +31,16 @@ async function findOneAndRemove(account: string, code: string, operation: string
  * @param method 
  * @returns 
  */
-async function findOneorCreate(account: string, code: string, operation: string, method: string): Promise<VerificationCode> {
+async function findOneorCreate(account: string, code: string, operation: string, method: string, id:string=''): Promise<VerificationCode> {
   const found = await VerificationCodeModel.findOne({ account, operation, method })
   if (found) {
     return found
   } else {
-    return VerificationCodeModel.create({ account, code, method, operation })
+    if(id){
+      return VerificationCodeModel.create({ account, code, method, operation, accountId:id })
+    }else{
+      return VerificationCodeModel.create({ account, code, method, operation })
+    }
   }
 }
 
