@@ -17,6 +17,20 @@ const router = express.Router();
 
 
 
+
+
+/**
+ * role: everyone
+ * 获取当前登录用户的Entity 详情
+ */
+router.get( '/detailedinfo4currentuser',
+    asyncHandler(async (req: ProtectedRequest, res) => {
+      console.log(req.account._id)
+      const entity = await EntityRepo.findEntityDetailedInfoByUserId(req.account._id);
+      return new SuccessResponse('success', entity).send(res);
+    }),
+  );
+
 // router.put('/',
 //   validator(DepartmentSchema.update),
 //   asyncHandler(async (req: ProtectedRequest, res) => {

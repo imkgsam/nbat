@@ -11,13 +11,7 @@ import Entity, { EntityTypeEnum } from '../../../../database/model/finished/Enti
 
 const router = express.Router();
 
-router.get( '/detailedinfo4currentuser',
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    console.log(req.account._id)
-    const entity = await EntityRepo.findEntityDetailedInfoByUserId(req.account._id);
-    return new SuccessResponse('success', entity).send(res);
-  }),
-);
+
 
 // router.get( '/employee/all',
 //   authorization(RoleCodeEnum.ADMIN),

@@ -20,7 +20,8 @@ router.use(authorization(RoleCodeEnum.ADMIN))
 
 
 /**
- * 启用Entity
+ * role: Admin
+ * 根据 ID启用Entity
  */
 router.post( '/enable',
   validator(schema.Id),
@@ -35,6 +36,10 @@ router.post( '/enable',
 );
 
 
+/**
+ * role: Admin
+ * 根据ID 停用Entity
+ */
 router.post( '/disable',
   validator(schema.Id),
   asyncHandler(async (req: ProtectedRequest, res) => {
@@ -46,12 +51,5 @@ router.post( '/disable',
     }
   }),
 );
-
-
-router.use('/employee',Employee)
-router.use('/company',Company)
-router.use('/person',Person)
-router.use('/supplier',Supplier)
-router.use('/customer',Customer)
 
 export default router;

@@ -193,12 +193,9 @@ const Employee = {
 async function enable(id: Types.ObjectId): Promise<Entity | null> {
   return EntityModel.findByIdAndUpdate(id, { 'meta.enabled': true }, { new: true },).lean().exec();
 }
-
-
 async function disable(id: Types.ObjectId): Promise<Entity | null> {
   return EntityModel.findByIdAndUpdate(id, { 'meta.enabled': false }, { new: true },).lean().exec();
 }
-
 async function verify(id: Types.ObjectId): Promise<Entity | null> {
   return EntityModel.findOneAndUpdate(
     { _id: id, 'meta.verified': false },

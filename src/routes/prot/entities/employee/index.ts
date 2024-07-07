@@ -15,8 +15,8 @@ const router = express.Router();
 
 
 /**
- * 获取所有员工
- * 完整列表
+ * role: Admin
+ * 获取所有员工完整列表
  */
 router.get( '/all',
   authorization(RoleCodeEnum.ADMIN),
@@ -27,8 +27,8 @@ router.get( '/all',
 )
 
 /**
- * 获取所有公开的员工
- * 完整列表
+ * role: Admin
+ * 获取所有公开的员工 列表
  */
 router.get( '/allpublic',
   authorization(RoleCodeEnum.ADMIN),
@@ -39,8 +39,8 @@ router.get( '/allpublic',
 )
 
 /**
- * 筛选员工
- * 按页返回
+ * role: Admin
+ * 按页返回 筛选员工
  */
 router.post( '/pfilters',
   validator(schema.Employee.filters),

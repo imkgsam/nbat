@@ -14,13 +14,11 @@ const router = express.Router();
 router.use(authorization(RoleCodeEnum.ADMIN))
 
 
-router.get( '/all',
-  asyncHandler(async (req, res) => {
-    const departments = await DepartmentRepo.findAll();
-    return new SuccessResponse('success', departments).send(res);
-  }),
-);
 
+/**
+ * role: Admin
+ * 获取所有已启用的部门
+ */
 router.get( '/allpublic',
   asyncHandler(async (req, res) => {
     const rts = await DepartmentRepo.filters({'meta.enabled':true});
@@ -28,6 +26,11 @@ router.get( '/allpublic',
   }),
 );
 
+
+/**
+ * role: Admin
+ * 根据id获取部门详情
+ */
 router.get( '/detail',
   validator(DepartmentSchema.Id, ValidationSourceEnum.QUERY),
   asyncHandler(async (req, res) => {
@@ -37,6 +40,12 @@ router.get( '/detail',
   }),
 );
 
+
+/**
+ * role: Admin
+ * 创建新的部门
+ * status: n2c
+ */
 router.post( '/',
   validator(DepartmentSchema.create),
   asyncHandler(async (req: ProtectedRequest, res) => {
@@ -52,6 +61,11 @@ router.post( '/',
   }),
 );
 
+
+/**
+ * role: Admin
+ * 根据ID删除部门
+ */
 router.post( '/delete',
   validator(DepartmentSchema.Id),
   asyncHandler(async (req: ProtectedRequest, res) => {
@@ -60,6 +74,11 @@ router.post( '/delete',
   }),
 );
 
+
+/**
+ * role: Admin
+ * 根据ID 启用部门
+ */
 router.post( '/enable',
   validator(DepartmentSchema.Id),
   asyncHandler(async (req: ProtectedRequest, res) => {
@@ -72,14 +91,11 @@ router.post( '/enable',
   }),
 );
 
-router.put('/',
-  validator(DepartmentSchema.update),
-  asyncHandler(async (req: ProtectedRequest, res) => {
-    const updatedDepartment = await DepartmentRepo.update({...req.body} as Department);
-    return new SuccessResponse('Department updated', updatedDepartment).send(res);
-  }),
-);
 
+/**
+ * role: Admin
+ * 根据ID 停用部门
+ */
 router.post( '/disable',
   validator(DepartmentSchema.Id),
   asyncHandler(async (req: ProtectedRequest, res) => {
@@ -91,5 +107,19 @@ router.post( '/disable',
     }
   }),
 );
+
+
+/**
+ * role: Admin
+ * 更新部门详情
+ */
+router.put('/',
+  validator(DepartmentSchema.update),
+  asyncHandler(async (req: ProtectedRequest, res) => {
+    const updatedDepartment = await DepartmentRepo.update({...req.body} as Department);
+    return new SuccessResponse('Department updated', updatedDepartment).send(res);
+  }),
+);
+
 
 export default router;
