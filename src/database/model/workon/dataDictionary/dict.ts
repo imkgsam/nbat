@@ -4,17 +4,10 @@ const {  String, Date: SDate, ObjectId, Boolean} = Schema.Types
 export const DOCUMENT_NAME = 'Dictionary';
 export const COLLECTION_NAME = 'Dictionaries';
 
-export enum DictTypeEnum {
-  String = 'string',
-  Number = 'number',
-  Boolean = 'boolean'
-}
-
 export default interface Dictionary {
   _id: Types.ObjectId;
   name: string; // 字典名称 唯一
   code: string; // 字典代号 唯一
-  dtype: DictTypeEnum, // 字典类型，可以是数字，可以是string，也可以是boolean
   meta:{
     systemDep: boolean; // 是否是系统依赖字典， 如果是的话，不可删除
     enabled: boolean; // 是否启用

@@ -8,9 +8,15 @@ export enum RoleCodeEnum {
   ADMIN = 'admin',
 }
 
+export enum RoleTypeEnum {
+  // 角色分类： 采购类
+  PURCHASE = 'purchasing',
+}
+
 export default interface Role {
   _id: Types.ObjectId;
   code: string;
+  rtype: RoleTypeEnum;
   meta:{
     enabled: boolean;
   };
@@ -25,6 +31,11 @@ const schema = new Schema<Role>(
       required: true,
       trim: true,
       unique: true
+    },
+    code: {
+      type: String,
+      required: true,
+      enum: Object.values(RoleTypeEnum)
     },
     meta:{
       enabled: {
@@ -49,6 +60,6 @@ const schema = new Schema<Role>(
   },
 );
 
-schema.index({ code: 1, 'meta.enabled': 1 });
+schema.index({ code: 1});
 
 export const RoleModel = model<Role>(DOCUMENT_NAME, schema, COLLECTION_NAME);
