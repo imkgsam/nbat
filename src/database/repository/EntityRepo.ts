@@ -60,8 +60,6 @@ async function findAllwithFilters(filters: object = {}): Promise<Entity[]> {
 }
 
 
-
-
 async function findOneVECompanyByName(name: string): Promise<Entity | null> {
   return EntityModel.findOne({ name: name, etype: EntityTypeEnum.COMPANY, 'meta.enabled': true, 'meta.verified': true })
     .lean()
